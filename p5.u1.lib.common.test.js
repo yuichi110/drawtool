@@ -1,30 +1,68 @@
 class LibCommonTest{
 
-  static settings(){
+  static preload(){
     main_width = 800
     main_height = 800
-    main_guidebug = false
+    main_guiDebug = true
     main_loglevel = LOGLEVEL_INFO
   }
 
   static setup(pgb){
+    //drawTest, drawMoveRect
     this.pg_redRect = getPG_rect(52, 52, 10, BLACK, 2, 255, RED, 255,
                                  10, 30, 'AB', 18, WHITE, 255)
     this.pg_redBall = getPG_ellipse(10, 10, TRANSPARENT, 2, 255, RED, 255)
 
+    // drawBigArrow
     this.pg_bigArrow1 = getPG_bigArrow(400, 200, 50, 50, BLACK, 10, 255, RED, 255, false)
     this.pg_bigArrow2 = getPG_bigArrow(400, 200, 50, 50, BLACK, 2, 255, WHITE, 255, true)
 
+    // drawCylinder
     this.pg_cylinder1 = getPG_cylinder(200, 200, 50, BLACK, 2, 255, CONCRETE, WHITE, 255,
                                        50, 130, 'HELLO', 32, WHITE, 255)
     this.pg_cylinder2 = getPG_cylinder(200, 200, 50, TRANSPARENT, 2, 255, BLACK, CONCRETE, 255)
 
+    // drawFlow
     this.flow1 = new Flow([100, 200, 300, 400, 500], [100, 200, 100, 200, 100], 300, 100)
     this.flow2 = new Flow([100, 200, 300, 400, 500, 600, 700], [200, 300, 200, 300, 200, 300, 200], 300, 100)
+
+    // drawSerialBox
+    this.pg_hrects1 = getPG_horizontalRects([100, 75, 50, 50], 50, BLACK, 2, 255,
+                                          [CONCRETE, CONCRETE, RED, CONCRETE], [255,255,255,255],
+                                          [10, 10, 10, 10], 30, ['AA', 'BB', 'CC', 'DD'], 24,
+                                          [WHITE, BLACK, WHITE, WHITE], [255,255,255,255])
+
+    this.pg_hrects2 = getPG_horizontalRects([100, 75, 50, 50], 50, TRANSPARENT, 0, 255,
+                                          [RED, BLUE, RED, BLUE], [255,255,255,255],
+                                          [10, 10, 10, 10], 30, ['AA', 'BB', 'CC', 'DD'], 24,
+                                          [WHITE, WHITE, WHITE, WHITE], [255,255,255,255])
+
+    this.pg_vrects1 = getPG_verticalRects(200, [100, 75, 50, 50], BLACK, 2, 255,
+                                         [CONCRETE, CONCRETE, RED, CONCRETE], [255,255,255,255],
+                                         [50, 50, 50, 50], [70, 50, 20, 20], ['AA', 'BB', 'CC', 'DD'], 24,
+                                         [WHITE, BLACK, WHITE, WHITE], [255,255,255,255])
+
+    this.pg_vrects2 = getPG_verticalRects(200, [100, 75, 50, 50], TRANSPARENT, 0, 255,
+                                         [RED, BLUE, RED, BLUE], [255,255,255,255],
+                                         [50, 50, 50, 50], [70, 50, 20, 20], ['AA', 'BB', 'CC', 'DD'], 24,
+                                         [WHITE, WHITE, WHITE, WHITE], [255,255,255,255])
+
+    let columnWidthArray = [50, 100, 50, 100]
+    let rawHeightArray = [50, 100, 50, 50]
+    let fColorTable = [[CONCRETE, CONCRETE, CONCRETE, RED], [CONCRETE, CONCRETE, CONCRETE, BLUE], [CONCRETE, CONCRETE, CONCRETE, GREEN], [CONCRETE, CONCRETE, CONCRETE, WHITE]]
+    let fAlphaTable = [[255, 255, 255, 255], [255, 255, 255, 255], [255, 255, 255, 255], [255, 255, 255, 255]]
+    let txTable = [[10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10], [10, 10, 10, 10]]
+    let tyArray = [20, 70, 20, 20]
+    let textTable = [['AA', 'BB', 'CC', 'DD1'], ['AA', 'BB', 'CC', 'DD2'], ['AA', 'BB', 'CC', 'DD3'], ['AA', 'BB', 'CC', 'DD4']]
+    let tColorTable = [[WHITE, WHITE, WHITE, WHITE], [WHITE, WHITE, WHITE, WHITE], [WHITE, WHITE, WHITE, WHITE], [WHITE, BLACK, WHITE, BLACK]]
+    let tAlphaTable = fAlphaTable
+    this.pg_table1 = getPG_table(columnWidthArray, rawHeightArray, BLACK, 2, 255,
+                                 fColorTable, fAlphaTable,
+                                 txTable, tyArray, textTable, 24, tColorTable, tAlphaTable)
   }
 
   static draw(pgb){
-    switch(3){
+    switch(8){
       case 1:
         this.drawTest(pgb); break
       case 2:
@@ -37,6 +75,10 @@ class LibCommonTest{
         this.drawBigArrow(pgb); break
       case 6:
         this.drawCylinder(pgb); break
+      case 7:
+        this.drawSerialRects(pgb); break
+      case 8:
+        this.drawTable(pgb); break
     }
   }
 
@@ -85,7 +127,14 @@ class LibCommonTest{
     pgb.image(this.pg_cylinder2, 100, 300)
   }
 
-  static drawSerialBox(pgb){
-    
+  static drawSerialRects(pgb){
+    pgb.image(this.pg_hrects1, 100, 100)
+    pgb.image(this.pg_hrects2, 400, 100)
+    pgb.image(this.pg_vrects1, 100, 200)
+    pgb.image(this.pg_vrects2, 400, 200)
+  }
+
+  static drawTable(pgb){
+    pgb.image(this.pg_table1, 100, 100)
   }
 }

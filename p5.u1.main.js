@@ -1,25 +1,43 @@
-const MODULE_LIB_COMMON_TEST = 1
-const MODULE_LIB_NETWORK_TEST = 2
-const MODULE_NETWORK1 = 101
-const RUN_MODULE = MODULE_LIB_COMMON_TEST
-
-const CANVAS_PARENT_ELEMENT = 'p5js-canvas-here'
-
-const LOGLEVEL_DEBUG = 1
-const LOGLEVEL_INFO = 2
-const LOGLEVEL_LOG = 3
-const LOGLEVEL_WARN = 4
-const LOGLEVEL_ERROR = 5
+/*
+* Main module.
+* P5JS based drawing program start from here.
+*
+* Specifies which module needs to be called at setup() and draw() by using switch.
+* Each module need to have
+*  - preload() : overwrite default parameter. Do font things etc.
+*  - setup()    : make static items such as PGraphics
+*  - draw()     : update background pgraphics image which is passed as argument
+*
+* 2017/11/26
+* @author Yuichi Ito yuichi@yuichi.com
+*/
 
 /*
-* Global Params.
-* Please update at each Class setup methods. Not in Main module.
+* Please add new module class here as Symbol.
+* They are switched at setup() and draw() function in this main module.
+*/
+const MODULE_LIB_COMMON_TEST =  Symbol('module lib.common.test')
+const MODULE_LIB_NETWORK_TEST = Symbol('module lib.network.test')
+const MODULE_NETWORK01 =        Symbol('module network01')
+const RUN_MODULE = MODULE_LIB_NETWORK_TEST
+
+const LOGLEVEL_DEBUG = Symbol('log level debug')
+const LOGLEVEL_INFO =  Symbol('log level info')
+const LOGLEVEL_LOG =   Symbol('log level log')
+const LOGLEVEL_WARN =  Symbol('log level warn')
+const LOGLEVEL_ERROR = Symbol('log level error')
+
+/*
+* Global Parameters.
+* Please update at each Class settings() methods.
+* Not in Main module.
 */
 let main_width
 let main_height
 let main_background
 let main_frameRate
 let main_pixelDensity
+let main_canvasParent
 
 let main_save
 let main_save_background
@@ -41,60 +59,67 @@ let main_drawMouseXY_textSize
 let main_drawMouseXY_x
 let main_drawMouseXY_y
 
-function setup() {
+function preload(){
   // set default params.
-  main_width = 1600
-  main_height = 900
-  main_background = 255
-  main_frameRate = 50
-  main_pixelDensity = 1 // AVOID RETINA MODE
+  main_width =        1600
+  main_height =       900
+  main_background =   255
+  main_frameRate =    50
+  main_pixelDensity = 1 // ALWAYS AVOID RETINA DISPLAY MODE
+  main_canvasParent = 'p5js-canvas-here'
 
-  main_save = false
+  main_save =            false
   main_save_background = true
-  main_save_prefix = 'p5-'
+  main_save_prefix =     'p5-'
 
-  main_loglevel = LOGLEVEL_INFO
-  main_guidebug = false
-  main_drawGrid = false
-  main_drawGrid_color = GRAY
-  main_drawGrid_weight = 1
+  main_loglevel = LOGLEVEL_LOG
+  main_guiDebug = false
+
+  main_drawGrid =              false
+  main_drawGrid_color =        GRAY
+  main_drawGrid_weight =       1
   main_drawGrid_strongWeight = 2
-  main_drawGrid_xPitch = 50
+  main_drawGrid_xPitch =       50
   main_drawGrid_xStrongPitch = 400
-  main_drawGrid_yPitch = 50
+  main_drawGrid_yPitch =       50
   main_drawGrid_yStrongPitch = 300
-  main_drawMouseXY = false
-  main_drawMouseXY_color = BLACK
+
+  main_drawMouseXY =          false
+  main_drawMouseXY_color =    BLACK
   main_drawMouseXY_textSize = 32
-  main_drawMouseXY_x = main_width - 200
-  main_drawMouseXY_y = main_height - 50
+  main_drawMouseXY_x =        main_width - 200
+  main_drawMouseXY_y =        main_height - 50
 
   /*
-  * UPDATE DEFAULT PARAMETER
-  * PLEASE ADD NEW MODULE CLASS HERE
+  * Update global parameters
+  * Call static preload() methods on the module.
+  * Please add new module here.
   */
   switch(RUN_MODULE){
     case MODULE_LIB_COMMON_TEST:
-      LibCommonTest.settings()
+      LibCommonTest.preload()
       break
     case MODULE_LIB_NETWORK_TEST:
-      LibNetworkTest.settings()
+      LibNetworkTest.preload()
       break
     default:
-      console.log('ERROR')
+      console.error(`${RUN_MODULE} is not in preload switch`)
   }
+}
 
+function setup() {
   _Main.setLogLevel()
   frameRate(main_frameRate)
   pixelDensity(main_pixelDensity)
   _main_canvas = createCanvas(main_width, main_height)
-  _main_canvas.parent(CANVAS_PARENT_ELEMENT)
+  _main_canvas.parent(main_canvasParent)
   _Main.centerCanvas();
   _main_pgb = createGraphics(width, height)
 
   /*
-  * SETUP EACH MODULE
-  * PLEASE ADD NEW MODULE CLASS HERE
+  * Setup each module. For example creating static items.
+  * Call static settings() methods on the module.
+  * Please add new module here.
   */
   switch(RUN_MODULE){
     case MODULE_LIB_COMMON_TEST:
@@ -104,17 +129,19 @@ function setup() {
       LibNetworkTest.setup(_main_pgb)
       break
     default:
-      console.log('ERROR')
+      console.error(`${RUN_MODULE} is not in setup switch`)
   }
 }
 
 function draw() {
-  // initialize all
+  // Initialize background and background pgraphics (makes it transparent).
   background(main_background)
   _main_pgb.clear()
 
   /*
-  * PLEASE ADD NEW MODULE CLASS HERE
+  * Draw image to the background pgraphics (transparent).
+  * Call static draw() methods on the module.
+  * Please add new module here.
   */
   switch(RUN_MODULE){
     case MODULE_LIB_COMMON_TEST:
@@ -124,7 +151,7 @@ function draw() {
       LibNetworkTest.draw(_main_pgb)
       break
     default:
-      console.log('ERROR')
+      console.error(`${RUN_MODULE} is not in draw switch`)
   }
 
   if(main_drawGrid){
@@ -134,21 +161,29 @@ function draw() {
     _Main.drawMouseXY(_main_pgb)
   }
   if(main_save){
+    // You can choose with/without background color by "main_save_background".
+    // Without background color means, background is transparent.
+    // File format png.
+    //
+    // File name PREFIX-XXXXXX.png
+    // - define PREFIX as global parameter "main_save_prefix"
+    // - XXXXXXX is frame count
     _Main.save(_main_pgb)
   }
 
   image(_main_pgb, 0, 0);
 }
 
-function windowResized() {
-  _Main.centerCanvas();
-}
-
 /*
-* LOCAL. Please don't touch them.
+* LOCAL Variables.
+* Please don't touch them.
 */
 let _main_pgb;
 let _main_canvas
+
+function windowResized() {
+  _Main.centerCanvas();
+}
 
 class _Main{
 
@@ -161,29 +196,31 @@ class _Main{
   }
 
   static setLogLevel(){
+    // Overwrite logging functions to suppress useless logging.
     switch(main_loglevel){
       case LOGLEVEL_ERROR:
-        console.debug = function(){}
-        console.info = function(){}
-        console.log = function(){}
-        console.warn = function(){}
+        console.debug = function(){/* no logging */}
+        console.info = function(){/* no logging */}
+        console.log = function(){/* no logging */}
+        console.warn = function(){/* no logging */}
         break
       case LOGLEVEL_WARN:
-        console.debug = function(){}
-        console.info = function(){}
-        console.log = function(){}
+        console.debug = function(){/* no logging */}
+        console.info = function(){/* no logging */}
+        console.log = function(){/* no logging */}
         break
       case LOGLEVEL_LOG:
-        console.debug = function(){}
-        console.info = function(){}
+        console.debug = function(){/* no logging */}
+        console.info = function(){/* no logging */}
         break
       case LOGLEVEL_INFO:
-        console.debug = function(){}
+        console.debug = function(){/* no logging */}
         break
       default:
         break
     }
   }
+
   static drawGrid(pgb){
 
   }

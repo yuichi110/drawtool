@@ -1,32 +1,58 @@
-const TRANSPARENT = 0;
-const BLACK = 1
-const WHITE = 2
-const RED = 3
-const BLUE = 4
-const GREEN = 5
-const GRAY = 6
+/*
+* Common utility module.
+*
+* (1) Sugar coting for
+*  - Getting Pgraphics
+*  - Drawing Pgraphics
+*  - Setting Pgraphics style
+*
+* (2) Animation
+*  - Move pgraphics item on the background pgraphics
+*  - Flowing animation
+*
+* (3) Utility for other specific utility modules
+*  - drawing serial boxes
+*  - drawing table
+*  - other
+*
+* 2017/11/26
+* @author Yuichi Ito yuichi@yuichi.com
+*/
 
-const TURQUOISE = 100;
-const EMERALD = 101;
-const PETERRIVER = 102;
-const AMETHYST = 103;
-const WETASPHALT = 104;
-const GREENSEA = 105;
-const NEPHRITIS = 106;
-const BELIZEHOLE = 107;
-const WISTERIA = 108;
-const MIDNIGHTBLUE = 109;
-const SUNFLOWER = 110;
-const CARROT = 111;
-const ALIZARIN = 112;
-const CLOUDS = 113;
-const CONCRETE = 114;
-const ORANGE = 115;
-const PUMPKIN = 116;
-const POMEGRANATE = 117;
-const SILVER = 118;
-const ASBESTOS = 119;
+const TRANSPARENT = Symbol('transparent');
+const BLACK =       Symbol('black')
+const WHITE =       Symbol('white')
+const RED =         Symbol('red')
+const BLUE =        Symbol('blue')
+const GREEN =       Symbol('green')
+const GRAY =        Symbol('gray')
 
+const TURQUOISE =    Symbol('turquoise');
+const EMERALD =      Symbol('emerald');
+const PETERRIVER =   Symbol('peterriver');
+const AMETHYST =     Symbol('amethyst');
+const WETASPHALT =   Symbol('wetasphalt');
+const GREENSEA =     Symbol('greensea');
+const NEPHRITIS =    Symbol('nepheritis');
+const BELIZEHOLE =   Symbol('belizehole');
+const WISTERIA =     Symbol('wisteria');
+const MIDNIGHTBLUE = Symbol('midnightblue');
+const SUNFLOWER =    Symbol('sunflower');
+const CARROT =       Symbol('carrot');
+const ALIZARIN =     Symbol('alizarin');
+const CLOUDS =       Symbol('clouds');
+const CONCRETE =     Symbol('concrete');
+const ORANGE =       Symbol('orange');
+const PUMPKIN =      Symbol('pumpkin');
+const POMEGRANATE =  Symbol('pomegrante');
+const SILVER =       Symbol('silver');
+const ASBESTOS =     Symbol('asbestos');
+
+/*
+* Font
+*/
+
+ 
 /*
 * Animation
 */
@@ -38,7 +64,7 @@ function movePG(pgb, pg,
   if(currentFrame < startFrame) return;
   if(endFrame < currentFrame) return;
 
-  if(main_guidebug){
+  if(main_guiDebug){
     setPG_style(pgb, RED, 2, 255, RED, 255)
     pgb.line(x1, y1, x2, y2)
     pgb.ellipse(x1, y1, 10, 10)
@@ -71,7 +97,7 @@ function movePG_bezier(pgb, pg,
   if(currentFrame < startFrame) return;
   if(endFrame < currentFrame) return;
 
-  if(main_guidebug){
+  if(main_guiDebug){
     setPG_style(pgb, BLUE, 2, 255, BLUE, 255)
     pgb.line(x1, y1, x2, y2)
     pgb.line(x3, y3, x4, y4);
@@ -353,11 +379,10 @@ function getPG_horizontalRects(widthArray, height_,
   if(sColor == TRANSPARENT){
     sWeight = 0
   }
-
   let xArray = new Array(widthArray.length);
+  let y = ceil(sWeight/2);
   let width_ = 0;
   let w = 0;
-  let y = ceil(sWeight/2);
   let h = height_ - ceil(sWeight) - 1;
 
   // update width and x positions
@@ -368,8 +393,7 @@ function getPG_horizontalRects(widthArray, height_,
       xArray[i] = ceil(sWeight/2);
     }else{
       // sum of previous rects width + X
-      // for example, 3rd box -> 1st width + 2nd width + 3rd X
-      xArray[i] = w + xArray[i];
+      xArray[i] = w + xArray[0];
     }
 
     if(widthArray.length == 0){
@@ -383,23 +407,138 @@ function getPG_horizontalRects(widthArray, height_,
   }
 
   pg = createGraphics(width_ + 1 , height_);
-  setPG_stroke(pg, sColor, sWeight, sAlpha);
-
   for(let i=0; i<widthArray.length; i++){
     // rect
-    setPG_fill(pg, fColorArray[i], 255);
+    setPG_style(pg, sColor, sWeight, sAlpha, fColorArray[i], 255);
     pg.rect(xArray[i], y, widthArray[i], h);
-
     // text
-    if(!tStringArray[i] != ''){
-      drawPG_text(pg, xArray[i] + txArray[i], tY, tStringArray[i], tSize, tColorArray[i], 255);
+    if(tStringArray[i] != ''){
+      drawPG_text(pg, xArray[i] + txArray[i], ty,
+      tStringArray[i], tSize, tColorArray[i], 255);
     }
   }
 
-  pg.endDraw();
   return pg;
 }
 
+function getPG_verticalRects(width_, heightArray,
+                             sColor, sWeight, sAlpha,
+                             fColorArray, fAlphaArray,
+                             txArray, tyArray, tStringArray, tSize, tColorArray, tAlphaArray){
+
+  if(sColor == TRANSPARENT){
+    sWeight = 0
+  }
+
+  let x = ceil(sWeight/2);
+  let yArray = new Array(heightArray.length)
+  let w = width_ - ceil(sWeight) - 1;
+  let height_ = 0
+  let h = 0
+
+  // update height and y positions
+  for(let i=0; i<heightArray.length; i++){
+    height_ += heightArray[i];
+
+    if(i==0){
+      yArray[i] = ceil(sWeight/2);
+    }else{
+      // sum of previous rects height + Y
+      yArray[i] = h + yArray[0];
+    }
+
+    if(heightArray.length == 0){
+      // if box array has only 1 box, 1st box height is shorter.
+      heightArray[0] = heightArray[0] - ceil(sWeight);
+    }else if(i==0 || i==heightArray.length-1){
+      // if not, 1st and last box is little bit shorter
+      heightArray[i] = heightArray[i] - ceil(sWeight/2) - 1;
+    }
+    h += heightArray[i];
+  }
+
+  pg = createGraphics(width_ + 1 , height_);
+  //console.log(width_)
+  for(let i=0; i<heightArray.length; i++){
+    // rect
+    setPG_style(pg, sColor, sWeight, sAlpha, fColorArray[i], 255);
+    pg.rect(x, yArray[i], w, heightArray[i]);
+    // text
+    if(tStringArray[i] != ''){
+      drawPG_text(pg, x + txArray[i], yArray[i] + tyArray[i],
+      tStringArray[i], tSize, tColorArray[i], 255);
+    }
+  }
+
+  return pg;
+}
+
+function getPG_table(columnWidthArray, rawHeightArray,
+                      sColor, sWeight, sAlpha, fColorTable, fAlphaTable,
+                      txTable, tyArray, textTable, tSize, tColorTable, tAlphaTable){
+
+  if(sColor == TRANSPARENT){
+    sWeight = 0
+  }
+  let xArray = new Array(columnWidthArray.length);
+  let yArray = new Array(rawHeightArray.length)
+  let width_ = 0;
+  let w = 0;
+  let height_ = 0
+  let h = 0
+
+  // update width and x positions
+  for(let i=0; i<columnWidthArray.length; i++){
+    width_ += columnWidthArray[i];
+    if(i==0){
+      xArray[i] = ceil(sWeight/2);
+    }else{
+      xArray[i] = w + xArray[0];
+    }
+
+    if(columnWidthArray.length == 0){
+      columnWidthArray[0] = columnWidthArray[0] - ceil(sWeight);
+    }else if(i==0 || i==columnWidthArray.length-1){
+      columnWidthArray[i] = columnWidthArray[i] - ceil(sWeight/2) - 1;
+    }
+    w += columnWidthArray[i];
+  }
+
+  // update height and y positions
+  for(let i=0; i<rawHeightArray.length; i++){
+    height_ += rawHeightArray[i];
+    if(i==0){
+      yArray[i] = ceil(sWeight/2);
+    }else{
+      yArray[i] = h + yArray[0];
+    }
+
+    if(rawHeightArray.length == 0){
+      rawHeightArray[0] = rawHeightArray[0] - ceil(sWeight);
+    }else if(i==0 || i==rawHeightArray.length-1){
+      rawHeightArray[i] = rawHeightArray[i] - ceil(sWeight/2) - 1;
+    }
+    h += rawHeightArray[i];
+  }
+
+  pg = createGraphics(width_ + 1 , height_);
+  //console.log(width_)
+  for(let raw=0; raw<rawHeightArray.length; raw++){
+    for(let column=0; column<columnWidthArray.length; column++){
+      // rect
+      setPG_style(pg, sColor, sWeight, sAlpha, fColorTable[raw][column], 255);
+      pg.rect(xArray[column], yArray[raw], columnWidthArray[column], rawHeightArray[raw]);
+
+      // text
+      if(textTable[raw][column] != ''){
+        drawPG_text(pg, xArray[column] + txTable[raw][column], yArray[raw] + tyArray[raw],
+        textTable[raw][column], tSize, tColorTable[raw][column], 255);
+      }
+    }
+  }
+
+  return pg
+}
 
 /*
 * Style
@@ -628,7 +767,7 @@ class Flow{
       return
     }
 
-    if(main_guidebug){
+    if(main_guiDebug){
       setPG_style(pgb, RED, 10, 255, TRANSPARENT, 0)
       for(let anchorFrame of this.anchorFrameArray){
         let [x, y] = this.frameArray[anchorFrame]
