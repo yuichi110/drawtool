@@ -39,25 +39,29 @@ class LibNetworkTest{
     this.pg_bpsData = Network_BriefPacketSmall.getPG_Data(BLACK, 2, 255, CONCRETE, BLACK)
 
     // network gear icon
-    this.pg_GearIconL2Switch = Network_GearIcon.getPG_l2switch(200, BLACK);
-    this.pg_GearIconRouter = Network_GearIcon.getPG_router(200, BLACK);
-    this.pg_GearIconL3Switch = Network_GearIcon.getPG_l3switch(200, BLACK);
-    this.pg_GearIconPC = Network_GearIcon.getPG_pc(200, BLACK);
-    this.pg_GearIconFirewall = Network_GearIcon.getPG_firewall(200, BLACK);
-    this.pg_GearIconAp = Network_GearIcon.getPG_ap(200, BLACK);
+    let iconSize = 200
+    this.pg_GearIconL2Switch = Network_GearIcon.getPG_l2switch(iconSize, BLACK);
+    this.pg_GearIconRouter = Network_GearIcon.getPG_router(iconSize, BLACK);
+    this.pg_GearIconL3Switch = Network_GearIcon.getPG_l3switch(iconSize, BLACK);
+    this.pg_GearIconPC = Network_GearIcon.getPG_pc(iconSize, BLACK);
+    this.pg_GearIconFirewall = Network_GearIcon.getPG_firewall(iconSize, BLACK);
+    this.pg_GearIconAp = Network_GearIcon.getPG_accesspoint(iconSize, BLACK);
+    this.pg_GearIconLb = Network_GearIcon.getPG_loadbalancer(iconSize, BLACK);
+    this.pg_GearIconStorage = Network_GearIcon.getPG_storage(iconSize, BLACK);
+    this.pg_GearIconServer = Network_GearIcon.getPG_server(iconSize, BLACK);
   }
 
   static draw(pgb){
-    switch(3){
+    switch(4){
       case 1:
         this.drawBriefPackets(pgb); break
       case 2:
         this.drawBriefPacketSmalls(pgb); break
       case 3:
-        this.drawGearIcon(pgb); break
-        /*
+        this.drawGearIcon1(pgb); break
       case 4:
-        this.drawLine(pgb); break
+        this.drawGearIcon2(pgb); break
+        /*
       case 5:
         this.drawBigArrow(pgb); break
       case 6:
@@ -106,12 +110,18 @@ class LibNetworkTest{
     pgb.image(this.pg_bpsData, 700, 300)
   }
 
-  static drawGearIcon(pgb){
+  static drawGearIcon1(pgb){
     pgb.image(this.pg_GearIconL2Switch, 100, 100);
     pgb.image(this.pg_GearIconRouter, 100, 400);
     pgb.image(this.pg_GearIconL3Switch, 400, 100);
     pgb.image(this.pg_GearIconPC, 400, 400)
     pgb.image(this.pg_GearIconFirewall, 700, 100)
     pgb.image(this.pg_GearIconAp, 700, 400)
+  }
+
+  static drawGearIcon2(pgb){
+    pgb.image(this.pg_GearIconLb, 100, 100)
+    pgb.image(this.pg_GearIconStorage, 100, 400)
+    pgb.image(this.pg_GearIconServer, 400, 100)
   }
 }

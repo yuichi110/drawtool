@@ -732,7 +732,7 @@ class Network_GearIcon{
     pg.translate(iconSize/2, iconSize/2);
 
     let base = iconSize/15.0;
-    pg.ellipse(0, 0, base * 5, base * 5);
+    pg.ellipse(0, 0, base * 4.5, base * 4.5);
 
     // Draw outside way arrow
     let x1 = base * 3.5
@@ -750,8 +750,8 @@ class Network_GearIcon{
     let x7 = x1
     let y7 = y6
 
-    let angleArray1 = [45, 90, 90, 90];
-    for(let angle of angleArray1){
+    let angleArray = [45, 90, 90, 90];
+    for(let angle of angleArray){
       pg.rotate(radians(angle));
       pg.beginShape()
       pg.vertex(x1, y1)
@@ -776,8 +776,12 @@ class Network_GearIcon{
     let base = iconSize/15.0;
 
     // draw monitor and frame
+    let r = int(iconSize / 20)
+    if(r > 10){
+      r = 10 // MAX
+    }
     setPG_style(pg, iconColor, base, 255, TRANSPARENT, 0);
-    pg.rect(base, base * 1.5, base * 13, base * 10, 10);
+    pg.rect(base, base * 1.5, base * 13, base * 10, r);
 
     // draw other frames
     setPG_style(pg, TRANSPARENT, 0, 0, iconColor, 255)
@@ -836,7 +840,7 @@ class Network_GearIcon{
     return pg
   }
 
-  static getPG_ap(iconSize, iconColor){
+  static getPG_accesspoint(iconSize, iconColor){
     let pg = createGraphics(iconSize , iconSize)
     if(main_guiDebug){
       pg.background(127)
@@ -844,18 +848,211 @@ class Network_GearIcon{
     let base = iconSize/15.0;
 
     pg.push()
+    // make bottom center (0, 0) and rotate 180 degree
     pg.translate(iconSize/2, iconSize)
     pg.rotate(radians(180))
 
+    // draw circle
     setPG_style(pg, TRANSPARENT, 0, 0, iconColor, 255);
-    pg.ellipse(0, base * 3, base * 3, base * 3)
+    pg.ellipse(0, base * 3.5, base * 3, base * 3)
 
-    // draw monitor and frame
-    setPG_style(pg, iconColor, base, 255, TRANSPARENT, 0);
-    pg.bezier(-base * 2, base * 4, -base, base * 7, base, base * 7, base * 2, base * 4);
-    pg.bezier(-base * 4, base * 8, -base * 2, base * 11, base * 2, base * 11, base * 4, base * 8);
+    // draw arcs
+    setPG_style(pg, iconColor, base * 1.2, 255, TRANSPARENT, 0);
+    pg.bezier(-base * 2, base * 6,   -base,     base * 7.5,
+               base    , base * 7.5,  base * 2, base * 6);
+    pg.bezier(-base * 4, base * 7.5, -base * 2, base * 10.5,
+               base * 2, base * 10.5, base * 4, base * 7.5);
+    pg.bezier(-base * 6, base * 9,   -base * 3, base * 13.5,
+               base * 3, base * 13.5, base * 6, base * 9);
 
     return pg
+  }
+
+  static getPG_loadbalancer(iconSize, iconColor){
+    let pg = createGraphics(iconSize , iconSize)
+    if(main_guiDebug){
+      pg.background(127)
+    }
+    setPG_style(pg, TRANSPARENT, 0, 0, iconColor, 255);
+    pg.push();
+    pg.translate(iconSize/2, iconSize/2);
+
+    let base = iconSize/15.0;
+    pg.ellipse(0, 0, base * 3, base * 3);
+
+    // Left side
+    let x1 = base * -6.5
+    let y1 = -base * 0.75
+    let x2 = base * -4
+    let y2 = y1
+    let x3 = x2
+    let y3 = -base * 2
+    let x4 = base * -2 // arrow top
+    let y4 = 0
+    let x5 = x3
+    let y5 = -y3
+    let x6 = x2
+    let y6 = -y2
+    let x7 = x1
+    let y7 = y6
+    pg.beginShape()
+    pg.vertex(x1, y1)
+    pg.vertex(x2, y2)
+    pg.vertex(x3, y3)
+    pg.vertex(x4, y4)
+    pg.vertex(x5, y5)
+    pg.vertex(x6, y6)
+    pg.vertex(x7, y7)
+    pg.endShape(CLOSE)
+
+    // right side angle 0
+    x1 = base * 2.5
+    y1 = -base * 0.75
+    x2 = base * 4.5
+    y2 = y1
+    x3 = x2
+    y3 = -base * 2
+    x4 = base * 6.5
+    y4 = 0
+    x5 = x3
+    y5 = -y3
+    x6 = x2
+    y6 = -y2
+    x7 = x1
+    y7 = y6
+    pg.beginShape()
+    pg.vertex(x1, y1)
+    pg.vertex(x2, y2)
+    pg.vertex(x3, y3)
+    pg.vertex(x4, y4)
+    pg.vertex(x5, y5)
+    pg.vertex(x6, y6)
+    pg.vertex(x7, y7)
+    pg.endShape(CLOSE)
+
+    // right side angle 60 and 300. little bit longer
+    x1 = base * 2.5
+    y1 = -base * 0.75
+    x2 = base * 5.5
+    y2 = y1
+    x3 = x2
+    y3 = -base * 2
+    x4 = base * 7.5
+    y4 = 0
+    x5 = x3
+    y5 = -y3
+    x6 = x2
+    y6 = -y2
+    x7 = x1
+    y7 = y6
+    let angleArray = [50, -100];
+    for(let angle of angleArray){
+      pg.rotate(radians(angle));
+      pg.beginShape()
+      pg.vertex(x1, y1)
+      pg.vertex(x2, y2)
+      pg.vertex(x3, y3)
+      pg.vertex(x4, y4)
+      pg.vertex(x5, y5)
+      pg.vertex(x6, y6)
+      pg.vertex(x7, y7)
+      pg.endShape(CLOSE)
+    }
+
+    return pg
+  }
+
+  static getPG_storage(iconSize, iconColor){
+    let pg = createGraphics(iconSize , iconSize)
+    if(main_guiDebug){
+      pg.background(127)
+    }
+    setPG_style(pg, TRANSPARENT, 0, 0, iconColor, 255);
+
+    let base = iconSize/15.0;
+
+    pg.push()
+    pg.translate(iconSize/2, 0)
+    pg.ellipse(0, base * 3, base * 12, base * 4)
+
+    let yArray = [4.5, 7.5, 10.5]
+    for(let y of yArray){
+      pg.beginShape()
+      pg.vertex(-base * 6, base * y)
+      pg.bezierVertex(-base * 3, base * (y + 2), base * 3, base * (y + 2),
+                      base * 6, base * y)
+      pg.vertex(base * 6, base * (y + 2))
+      pg.bezierVertex(base * 3, base * (y + 4), base * -3, base * (y + 4),
+                      base * -6, base * (y + 2))
+      pg.endShape(CLOSE)
+    }
+
+    pg.pop()
+    return pg
+  }
+
+  static getPG_server(iconSize, iconColor){
+    let pg = createGraphics(iconSize , iconSize)
+    if(main_guiDebug){
+      pg.background(127)
+    }
+    let base = iconSize/15.0;
+    let outsideR = int(iconSize / 20)
+    if(outsideR > 10){
+      outsideR = 10 // MAX
+    }
+
+    let sw = 1.5
+    let w = 12
+    let h = 3
+    let yArray = [1.5, 6, 10.5]
+    for(let y of yArray){
+      pg.push()
+      pg.translate(base * sw, base * y)
+
+      // outside
+      setPG_style(pg, iconColor, base * 0.5, 255, TRANSPARENT, 0);
+      pg.rect(0, 0, base * w, base * h, outsideR);
+
+      // inside
+      setPG_style(pg, TRANSPARENT, 0, 0, iconColor, 255)
+      pg.beginShape()
+      pg.vertex(0, 0)
+      pg.vertex(base * w, 0)
+      pg.vertex(base * w, base * h)
+      pg.vertex(0, base * h)
+
+      // crop
+      let cw = 0.75
+      let ch = 2
+      let cropXArray = [1.5, 3, 4.5, 6, 7.5]
+      for(let cropX of cropXArray){
+        pg.beginContour()
+        pg.vertex(base * cropX,        base * 0.5)
+        pg.vertex(base * cropX,        base * (0.5 + ch))
+        pg.vertex(base * (cropX + cw), base * (0.5 + ch))
+        pg.vertex(base * (cropX + cw), base * 0.5)
+        pg.endContour()
+      }
+
+      cw = 1
+      ch = 0.5
+      cropXArray = [9, 10.5]
+      for(let cropX of cropXArray){
+        pg.beginContour()
+        pg.vertex(base * cropX,        base * 1.75)
+        pg.vertex(base * cropX,        base * (1.75 + ch))
+        pg.vertex(base * (cropX + cw), base * (1.75 + ch))
+        pg.vertex(base * (cropX + cw), base * 1.75)
+        pg.endContour()
+      }
+
+      pg.endShape(CLOSE)
+      pg.pop()
+    }
+
+    return pg
+
   }
 }
 
