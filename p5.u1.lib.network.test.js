@@ -3,7 +3,7 @@ class LibNetworkTest{
   static preload(){
     main_width = 1200
     main_height = 800
-    main_guiDebug = true
+    main_guiDebug = false
     main_loglevel = LOGLEVEL_INFO
   }
 
@@ -49,10 +49,19 @@ class LibNetworkTest{
     this.pg_GearIconLb = Network_GearIcon.getPG_loadbalancer(iconSize, BLACK);
     this.pg_GearIconStorage = Network_GearIcon.getPG_storage(iconSize, BLACK);
     this.pg_GearIconServer = Network_GearIcon.getPG_server(iconSize, BLACK);
+
+    this.gear = new Network_Gear(100, 100, 10,
+                            BLACK, 2, 255, CARROT, 255,
+                            12, BLACK, 2, 255)
+    this.gear.setPortsColor([GREEN, EMERALD], [EMERALD], [EMERALD, EMERALD, EMERALD], [EMERALD, EMERALD])
+    this.gear.setIcon(NETWORK_GEAR_ROUTER, 10, 10, 80, WHITE)
+    this.gear.setPortColor(BOTTOM, 1, RED)
+    //this.gear.setText(20, 50, 'Hello', 32, BLACK, 255, false)
+
   }
 
   static draw(pgb){
-    switch(4){
+    switch(5){
       case 1:
         this.drawBriefPackets(pgb); break
       case 2:
@@ -61,9 +70,9 @@ class LibNetworkTest{
         this.drawGearIcon1(pgb); break
       case 4:
         this.drawGearIcon2(pgb); break
-        /*
       case 5:
-        this.drawBigArrow(pgb); break
+        this.drawGear(pgb); break
+        /*
       case 6:
         this.drawCylinder(pgb); break
       case 7:
@@ -123,5 +132,12 @@ class LibNetworkTest{
     pgb.image(this.pg_GearIconLb, 100, 100)
     pgb.image(this.pg_GearIconStorage, 100, 400)
     pgb.image(this.pg_GearIconServer, 400, 100)
+  }
+
+  static drawGear(pgb){
+    //pgb.noStroke()
+    //pgb.fill(127, 255)
+    //pgb.rect(100, 100, 100, 100)
+    pgb.image(this.gear.getPG(), 100, 100)
   }
 }

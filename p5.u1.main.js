@@ -44,7 +44,7 @@ let main_save_background
 let main_save_prefix
 
 let main_loglevel
-let main_guidebug
+let main_guiDebug
 let main_drawGrid
 let main_drawGrid_color
 let main_drawGrid_weight

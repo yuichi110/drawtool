@@ -2,14 +2,26 @@
 * Utility module for drawing network object.
 *
 * Classes
-*  - Network_BreifPacket : draw brief packet
-*  - Network_BreifPacketSmall : draw small brief packet
-*
-*
+*  - Network_BreifPacket : draw brief packet.
+*  - Network_BreifPacketSmall : draw small brief packet.
+*  - Network_GearIcon : provide size and color, get gear icon pgraphics.
+*  - Network_Gear : Gear image in the topology. Having ports and icon
+*  - Network_TopologyManager : Put gears on the topology and connect them
 *
 * 2017/11/26
 * @author Yuichi Ito yuichi@yuichi.com
 */
+
+
+const NETWORK_GEAR_ROUTER = Symbol('router')
+const NETWORK_GEAR_L2SWITCH = Symbol('l2switch')
+const NETWORK_GEAR_L3SWITCH = Symbol('l3switch')
+const NETWORK_GEAR_FIREWALL = Symbol('firewall')
+const NETWORK_GEAR_AP = Symbol('ap')
+const NETWORK_GEAR_LOADBALANCER = Symbol('load balancer')
+const NETWORK_GEAR_PC = Symbol('pc')
+const NETWORK_GEAR_SERVER = Symbol('server')
+const NETWORK_GEAR_STORAGE = Symbol('storage')
 
 
 /**************
@@ -1061,6 +1073,324 @@ class Network_GearIcon{
 *
 **************/
 
-class Nework_Asset{
+class Network_Gear{
+  constructor(width_, height_, r,
+              sColor, sWeight, sAlpha, fColor, fAlpha,
+              portSize, portSColor, portSWeight, portSAlpha){
+
+    this.width = width_
+    this.height = height_
+    this.r = r
+    this.sColor = sColor
+    this.sWeight = sWeight
+    this.sAlpha = sAlpha
+    this.fColor = fColor
+    this.fAlpha = fAlpha
+    this.portSize = portSize
+    this.portSColor = portSColor
+    this.portSWeight = portSWeight
+    this.portSAlpha = portSAlpha
+
+    this.leftPortsColorArray = []
+    this.bottomPortsColorArray = []
+    this.rightPortsColorArray = []
+    this.topPortsColorArray = []
+
+    this.isDrawText = false
+    this.tX = 0
+    this.tY = 0
+    this.tString = ''
+    this.tSize = 0
+    this.tColor = TRANSPARENT
+    this.tAlpha = 0
+    this.isTextVertical = false
+
+    this.isDrawIcon = false
+    this.iconPGraphics = null
+    this.iconType = 0
+    this.iconSize = 0
+    this.iconColor = 0
+    this.iconX = 0
+    this.iconY = 0
+
+    this.PADDING_X = 5
+    this.PADDING_Y = 5
+
+    let w = this.PADDING_X * 2 + portSize + width_  // Left + Right = (portSize/2) * 2
+    let h = this.PADDING_Y * 2 + portSize + height_
+    this.pg = createGraphics(w, h)
+  }
+
+  removeIcon(){
+    this.isDrawIcon = false
+  }
+
+  setIcon(iconType, iconX, iconY, iconSize, iconColor){
+    this.isDrawIcon = true
+    this.iconX = iconX
+    this.iconY = iconY
+
+    let exactSame = (this.iconType == iconType && this.iconSize == iconSize &&
+                     this.iconColor == iconColor)
+    if(!exactSame){
+      // need to update icon. create new icon pgraphics.
+      // It will create new canvas on the browser. Please avoid updating icon image many times.
+      this.iconType = iconType
+      this.iconSize = iconSize
+      this.iconColor = iconColor
+
+      switch(iconType){
+        case NETWORK_GEAR_ROUTER:
+          this.iconPGraphics = Network_GearIcon.getPG_router(iconSize, iconColor)
+          break
+        case NETWORK_GEAR_L2SWITCH:
+          this.iconPGraphics = Network_GearIcon.getPG_l2switch(iconSize, iconColor)
+          break
+        case NETWORK_GEAR_L3SWITCH:
+          this.iconPGraphics = Network_GearIcon.getPG_l3switch(iconSize, iconColor)
+          break
+        case NETWORK_GEAR_FIREWALL:
+          this.iconPGraphics = Network_GearIcon.getPG_firewall(iconSize, iconColor)
+          break
+        case NETWORK_GEAR_AP:
+          this.iconPGraphics = Network_GearIcon.getPG_accesspoint(iconSize, iconColor)
+          break
+        case NETWORK_GEAR_LOADBALANCER:
+          this.iconPGraphics = Network_GearIcon.getPG_loadbalancer(iconSize, iconColor)
+          break
+        case NETWORK_GEAR_PC:
+          this.iconPGraphics = Network_GearIcon.getPG_pc(iconSize, iconColor)
+          break
+        case NETWORK_GEAR_SERVER:
+          this.iconPGraphics = Network_GearIcon.getPG_server(iconSize, iconColor)
+          break
+        case NETWORK_GEAR_STORAGE:
+          this.iconPGraphics = Network_GearIcon.getPG_storage(iconSize, iconColor)
+          break
+        default:
+          console.error("ERROR")
+          this.isDrawIcon = false
+      }
+    }else{
+      // use last image to reserve resource
+    }
+  }
+
+  setText(tX, tY, tString, tSize, tColor, tAlpha, isTextVertical){
+    this.isDrawText = true
+    this.tX = tX
+    this.tY = tY
+    this.tString = tString
+    this.tSize = tSize
+    this.tColor = tColor
+    this.tAlpha = tAlpha
+    this.isTextVertical = isTextVertical
+  }
+
+  removeText(){
+    this.isDrawText = false
+  }
+
+  getInternalBodyXY(){
+    let x = this.PADDING_X + this.portSize/2
+    let y = this.PADDING_Y + this.portSize/2
+    return [x, y]
+  }
+
+  setPortsColor(leftPortsColorArray, bottomPortsColorArray,
+                rightPortsColorArray, topPortsColorArray){
+
+    this.leftPortsColorArray = leftPortsColorArray
+    this.bottomPortsColorArray = bottomPortsColorArray
+    this.rightPortsColorArray = rightPortsColorArray
+    this.topPortsColorArray = topPortsColorArray
+  }
+
+  setPortColor(position, n, color){
+    if(n <= 0){
+        console.error('Port count start from 1')
+    }
+
+    switch(position){
+      case LEFT:
+        if(n <= this.leftPortsColorArray.length){
+          this.leftPortsColorArray[n-1] = color
+        }
+        break
+      case BOTTOM:
+        if(n <= this.bottomPortsColorArray.length){
+          this.bottomPortsColorArray[n-1] = color
+        }
+        break
+      case RIGHT:
+        if(n <= this.rightPortsColorArray.length){
+          this.rightPortsColorArray[n-1] = color
+        }
+        break
+      case TOP:
+        if(n <= this.topPortsColorArray.length){
+          this.topPortsColorArray[n-1] = color
+        }
+        break
+      default:
+        console.error('ERROR')
+    }
+  }
+
+  getPortCount(position){
+    switch(position){
+      case LEFT:
+        return this.leftPortsColorArray.length
+      case BOTTOM:
+        return this.bottomPortsColorArray.length
+      case RIGHT:
+        return this.rightPortsColorArray.length
+      case TOP:
+        return this.topPortsColorArray.length
+      default:
+        console.error('ERROR')
+        return 0
+    }
+  }
+
+  getPortXY(position, n){
+    // Return center of port rectangle coordinate.
+    // Not left top coordinate.
+    let length = 0
+    let distance = 0
+    let x = 0
+    let y = 0
+    switch(position){
+      case LEFT:
+        // distance between ports
+        // (bodyHeight - sumOfPortSize) / numOfPorts
+        length = this.leftPortsColorArray.length
+        distance = (this.height - (this.portSize * length))/(length + 1)
+        // center of port
+        x = this.PADDING_X + this.portSize/2
+        // padding + half of port size (top) + sum of distance + sum of previous portsize + center
+        // -> padding + size/2 + distance * n + size * (n-1) + size/2
+        // -> padding + distance * n + size * n
+        y = this.PADDING_Y + (distance + this.portSize) * n
+        return [x, y]
+
+      case BOTTOM:
+        length = this.bottomPortsColorArray.length
+        distance = (this.width - (this.portSize * length))/(length + 1)
+        x = this.PADDING_X + (distance + this.portSize) * n
+        y = this.PADDING_Y + this.portSize/2 + this.height
+        return [x, y]
+
+      case RIGHT:
+        length = this.rightPortsColorArray.length
+        distance = (this.height - (this.portSize * length))/(length + 1)
+        x = this.PADDING_X + this.portSize/2 + this.width
+        y = this.PADDING_Y + (distance + this.portSize) * n
+        return [x, y]
+
+      case TOP:
+        length = this.topPortsColorArray.length
+        distance = (this.width - (this.portSize * length))/(length + 1)
+        x = this.PADDING_X + (distance + this.portSize) * n
+        y = this.PADDING_Y + this.portSize/2
+        return [x, y]
+
+      default:
+        console.error('ERROR')
+        return [x, y]
+    }
+  }
+
+  getPG(){
+    // make Pgraphics transparent first
+    let pg = this.pg
+    pg.clear()
+    if(main_guiDebug){
+      pg.background(127)
+    }
+
+    // draw body
+    setPG_style(pg, this.sColor, this.sWeight, this.sAlpha, this.fColor, this.fAlpha)
+    let bodyX = this.PADDING_X + this.portSize/2
+    let bodyY = this.PADDING_Y + this.portSize/2
+    pg.rectMode(CORNER)
+    pg.rect(bodyX, bodyY, this.width, this.height, this.r)
+
+    setPG_stroke(pg, this.portSColor, this.portSWeight, this.portSAlpha)
+    pg.rectMode(CENTER)
+
+    // left ports
+    for(let i=0; i<this.leftPortsColorArray.length; i++){
+      let fColor = this.leftPortsColorArray[i]
+      let [x, y] = this.getPortXY(LEFT, i+1)
+      setPG_fill(pg, fColor, 255)
+      pg.rect(x, y, this.portSize, this.portSize)
+    }
+
+    // bottom ports
+    for(let i=0; i<this.bottomPortsColorArray.length; i++){
+      let fColor = this.bottomPortsColorArray[i]
+      let [x, y] = this.getPortXY(BOTTOM, i+1)
+      setPG_fill(pg, fColor, 255)
+      pg.rect(x, y, this.portSize, this.portSize)
+    }
+
+    // right ports
+    for(let i=0; i<this.rightPortsColorArray.length; i++){
+      let fColor = this.rightPortsColorArray[i]
+      let [x, y] = this.getPortXY(RIGHT, i+1)
+      setPG_fill(pg, fColor, 255)
+      pg.rect(x, y, this.portSize, this.portSize)
+    }
+
+    // top ports
+    for(let i=0; i<this.topPortsColorArray.length; i++){
+      let fColor = this.topPortsColorArray[i]
+      let [x, y] = this.getPortXY(TOP, i+1)
+      setPG_fill(pg, fColor, 255)
+      pg.rect(x, y, this.portSize, this.portSize)
+    }
+
+    // draw Icon
+    if(this.isDrawIcon){
+      let [x, y] = this.getInternalBodyXY()
+      x += this.iconX
+      y += this.iconY
+      pg.image(this.iconPGraphics, x, y)
+    }
+
+    // draw Text
+    if(this.isDrawText){
+      setPG_style(pg, TRANSPARENT, 0, 0, this.tColor, 255)
+      let [x, y] = this.getInternalBodyXY()
+      x += this.tX
+      y += this.tY
+
+      if(!this.isTextVertical){
+        drawPG_text(pg, x, y, this.tString, this.tSize, this.tColor, 255)
+      }else{
+        pg.push()
+        pg.translate(x, y)
+        pg.rotate(radians(90))
+        drawPG_text(pg, 0, 0, this.tString, this.tSize, this.tColor, 255)
+        pg.pop()
+      }
+    }
+
+    return pg
+  }
+}
+
+
+/*
+* TopologyManager
+*/
+
+class TopologyManager{
+  
+  constructor(){
+
+  }
+
 
 }
