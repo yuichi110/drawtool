@@ -1121,6 +1121,16 @@ class Network_Gear{
     this.pg = createGraphics(w, h)
   }
 
+  getBodyXY(){
+    let x = this.PADDING_X + this.portSize/2
+    let y = this.PADDING_Y + this.portSize/2
+    return [x, y]
+  }
+
+  getBodyWidthHeight(){
+    return [this.width, this.height]
+  }
+
   removeIcon(){
     this.isDrawIcon = false
   }
@@ -1191,11 +1201,7 @@ class Network_Gear{
     this.isDrawText = false
   }
 
-  getInternalBodyXY(){
-    let x = this.PADDING_X + this.portSize/2
-    let y = this.PADDING_Y + this.portSize/2
-    return [x, y]
-  }
+
 
   setPortsColor(leftPortsColorArray, bottomPortsColorArray,
                 rightPortsColorArray, topPortsColorArray){
@@ -1353,7 +1359,7 @@ class Network_Gear{
 
     // draw Icon
     if(this.isDrawIcon){
-      let [x, y] = this.getInternalBodyXY()
+      let [x, y] = this.getBodyXY()
       x += this.iconX
       y += this.iconY
       pg.image(this.iconPGraphics, x, y)
@@ -1362,7 +1368,7 @@ class Network_Gear{
     // draw Text
     if(this.isDrawText){
       setPG_style(pg, TRANSPARENT, 0, 0, this.tColor, 255)
-      let [x, y] = this.getInternalBodyXY()
+      let [x, y] = this.getBodyXY()
       x += this.tX
       y += this.tY
 
@@ -1386,11 +1392,221 @@ class Network_Gear{
 * TopologyManager
 */
 
-class TopologyManager{
-  
-  constructor(){
+class Network_TopologyManager{
 
+  constructor(width_, height_){
+    this.width = width_
+    this.height = height_
+
+    // image Pgraphics before drawing topology
+    this.pgUnderItemArray = new Array()
+    // image Pgraphics after drawing topology
+    this.pgOverItemArray = new Array()
+
+    this.gearMap = new Map()
+    this.gearTextMap = new Map()
+
+    this.cableMap = new Map()
+    this.topologyTextMap = new Map()
+
+    this.hasUpdateAfterLastDraw = false
   }
 
+  hasUpdate(){
+    return this.hasUpdateAfterLastDraw
+  }
 
+  addPgUnder(name, pg, x, y){
+    name = name.toLowerCase()
+    this.pgUnderItemArray.push([name, pg, x, y])
+
+    this.hasUpdateAfterLastDraw = true
+  }
+
+  removePgUnder(name){
+    name = name.toLowerCase()
+
+    this.hasUpdateAfterLastDraw = true
+  }
+
+  addPgOver(name, pg, x, y){
+    name = name.toLowerCase()
+    this.pgOverItemArray.push([name, pg, x, y])
+
+    this.hasUpdateAfterLastDraw = true
+  }
+
+  removePgOver(name){
+    name = name.toLowerCase()
+
+    this.hasUpdateAfterLastDraw = true
+  }
+
+  addGear(name, gear, x, y){
+    name = name.toLowerCase()
+    let [bodyX, bodyY] = gear.getBodyXY()
+    x = x - bodyX
+    y = y - bodyY
+    this.gearMap.set(name, [gear, x, y])
+
+    this.hasUpdateAfterLastDraw = true
+  }
+
+  removeGear(name){
+    name = name.toLowerCase()
+    if(!this.gearMap.has(name)){
+      return
+    }
+    this.gearMap.delete(name)
+
+    this.hasUpdateAfterLastDraw = true
+  }
+
+  getGearCenterXY(name){
+    name = name.toLowerCase()
+    if(!this.gearMap.has(name)){
+      return [-1, -1]
+    }
+
+    let [gear, x, y] = this.gearMap.get(name)
+    let [bodyX, bodyY] = gear.getBodyXY()
+    let [bodyWidth, bodyHeight] = gear.getBodyWidthHeight()
+    x = x + bodyX + bodyWidth/2
+    y = y + bodyY + bodyHeight/2
+    return [x, y]
+  }
+
+  addGearText(gearName, textTag, x, y, tString, tSize, tColor, tAlpha){
+    gearName = gearName.toLowerCase()
+    textTag = textTag.toLowerCase()
+
+    if(!this.gearMap.has(gearName)){
+      return
+    }
+    if(!this.gearTextMap.has(gearName)){
+      this.gearTextMap.set(gearName, new Map())
+    }
+    let textMap = this.gearTextMap.get(gearName)
+    textMap.set(textTag, [x, y, tString, tSize, tColor, tAlpha])
+
+    this.hasUpdateAfterLastDraw = true
+  }
+
+  removeGearText(gearName, textTag){
+    gearName = gearName.toLowerCase()
+    textTag = textTag.toLowerCase()
+    if(!this.gearTextMap.has(gearName)){
+      return
+    }
+    let textMap = this.gearTextMap.get(gearName)
+    if(!textMap.has(textTag)){
+      return
+    }
+    textMap.delete(textTag)
+
+    this.hasUpdateAfterLastDraw = true
+  }
+
+  addTopologyText(textTag, x, y, tString, tSize, tColor, tAlpha){
+    textTag = textTag.toLowerCase()
+    this.topologyTextMap.set(textTag, [x, y, tString, tSize, tColor, tAlpha])
+  }
+
+  connectGears(name1, position1, n1, name2, position2, n2, sColor, sWeight, sAlpha){
+    name1 = name1.toLowerCase()
+    name2 = name2.toLowerCase()
+
+    if(!this.gearMap.has(name1)){
+      return
+    }
+    if(!this.gearMap.has(name2)){
+      return
+    }
+
+    let [gear1, x1, y1] = this.gearMap.get(name1)
+    let [px1, py1] = gear1.getPortXY(position1, n1)
+    if(px1 == -1 || py1 == -1){
+      return
+    }
+    x1 = x1 + px1
+    y1 = y1 + py1
+
+    let [gear2, x2, y2] = this.gearMap.get(name2)
+    let [px2, py2] = gear2.getPortXY(position2, n2)
+    if(px2 == -1 || py2 == -1){
+      return
+    }
+    x2 = x2 + px2
+    y2 = y2 + py2
+
+    let connectionName = name1 + position1 + n1 + name2 + position2 + n2
+    let cableInfo = [name1, position1, n1, x1, y1,
+                     name2, position2, n2, x2, y2,
+                     sColor, sWeight, sAlpha]
+    this.cableMap.set(connectionName, cableInfo)
+
+    this.hasUpdateAfterLastDraw = true
+  }
+
+  disconnectGears(name1, position1, n1, name2, position2, n2){
+    name1 = name1.toLowerCase()
+    name2 = name2.toLowerCase()
+    connectionName = name1 + position1 + n1 + name2 + position2 + n2
+
+    //if()
+
+    this.hasUpdateAfterLastDraw = true
+  }
+
+  drawPG(pg){
+    pg.clear()
+    pg.background(127)
+
+    // draw underground images
+    for(let [name, itemPg, x, y] of this.pgUnderItemArray){
+      pg.image(itemPg, x, y)
+    }
+
+    // draw cables
+    for(let [connectionName, cableInfo] of this.cableMap){
+      let [name1, position1, n1, x1, y1,
+           name2, position2, n2, x2, y2,
+           sColor, sWeight, sAlpha] = cableInfo
+      drawPG_line(pg, x1, y1, x2, y2, sColor, sWeight, sAlpha)
+    }
+
+    // draw assets
+    for(let [name, [gear, x, y]] of this.gearMap){
+      let gearPg = gear.getPG()
+      pg.image(gearPg, x, y)
+    }
+
+    // draw overground images
+    for(let [name, itemPg, x, y] of this.pgOverItemArray){
+      pg.image(itemPg, x, y)
+    }
+
+    // draw asset texts
+    for(let [gearName, textMap] of this.gearTextMap){
+      if(!this.gearMap.has(gearName)){
+        continue
+      }
+      let [gear, gx, gy] = this.gearMap.get(gearName)
+      let [bodyX, bodyY] = gear.getBodyXY()
+      gx = gx + bodyX
+      gy = gy + bodyY
+      for(let [textTag, [x, y, tString, tSize, tColor, tAlpha]] of textMap){
+        x = gx + x
+        y = gy + y
+        drawPG_text(pg, x, y, tString, tSize, tColor, tAlpha)
+      }
+    }
+
+    // draw topology texts
+    for(let [textTag, [x, y, tString, tSize, tColor, tAlpha]] of this.topologyTextMap){
+      drawPG_text(pg, x, y, tString, tSize, tColor, tAlpha)
+    }
+
+    this.hasUpdateAfterLastDraw = false
+  }
 }

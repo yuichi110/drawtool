@@ -58,10 +58,41 @@ class LibNetworkTest{
     this.gear.setPortColor(BOTTOM, 1, RED)
     //this.gear.setText(20, 50, 'Hello', 32, BLACK, 255, false)
 
+    this.setup_topology()
+  }
+
+  static setup_topology(){
+    this.topology = new Network_TopologyManager(500, 500)
+
+    let pg1 = getPG_rect(200, 400, 10, RED, 7, 255, TRANSPARENT, 255)
+    this.topology.addPgUnder('red-area', pg1, 10, 10)
+
+    let pg2 = getPG_ellipse(20, 40, BLACK, 2, 255, TRANSPARENT, 255)
+    this.topology.addPgOver('channel', pg2, 220, 120)
+
+    let router = new Network_Gear(100, 100, 10,
+                                BLACK, 2, 255, CARROT, 255,
+                                12, BLACK, 2, 255)
+    router.setPortsColor([], [], [EMERALD, EMERALD], [])
+    router.setIcon(NETWORK_GEAR_ROUTER, 10, 10, 80, WHITE)
+    this.topology.addGear('router', router, 100, 100)
+
+    this.topology.addGearText('router', 'name', 0, -10, 'Router01', 24, BLACK, 255)
+
+    let l2switch = new Network_Gear(100, 100, 10,
+                                BLACK, 2, 255, PETERRIVER, 255,
+                                12, BLACK, 2, 255)
+    l2switch.setPortsColor([EMERALD], [], [], [])
+    l2switch.setIcon(NETWORK_GEAR_L2SWITCH, 10, 10, 80, WHITE)
+    this.topology.addGear('l2switch', l2switch, 300, 100)
+
+    this.topology.connectGears('router', RIGHT, 1, 'l2switch', LEFT, 1, BLACK, 2, 255)
+
+    this.topology.addTopologyText('image-01', 30, 30, 'Hello World', 24, BLACK, 255)
   }
 
   static draw(pgb){
-    switch(5){
+    switch(6){
       case 1:
         this.drawBriefPackets(pgb); break
       case 2:
@@ -72,9 +103,9 @@ class LibNetworkTest{
         this.drawGearIcon2(pgb); break
       case 5:
         this.drawGear(pgb); break
-        /*
       case 6:
-        this.drawCylinder(pgb); break
+        this.drawTopology(pgb); break
+        /*
       case 7:
         this.drawSerialRects(pgb); break
       case 8:
@@ -140,4 +171,10 @@ class LibNetworkTest{
     //pgb.rect(100, 100, 100, 100)
     pgb.image(this.gear.getPG(), 100, 100)
   }
+
+  static drawTopology(pgb){
+    this.topology.drawPG(pgb)
+
+  }
+
 }
