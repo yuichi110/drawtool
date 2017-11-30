@@ -12,6 +12,7 @@
 * @author Yuichi Ito yuichi@yuichi.com
 */
 
+
 /*
 * Please add new module class here as Symbol.
 * They are switched at setup() and draw() function in this main module.
@@ -19,7 +20,7 @@
 const MODULE_LIB_COMMON_TEST =  Symbol('module lib.common.test')
 const MODULE_LIB_NETWORK_TEST = Symbol('module lib.network.test')
 const MODULE_NETWORK01 =        Symbol('module network01')
-const MODULE_WATCHMAN =         Symbol('module watchman')
+const MODULE_WATCHMAN =         Symbol('module watchman')  // needs web server
 const RUN_MODULE = MODULE_WATCHMAN
 
 const LOGLEVEL_DEBUG = Symbol('log level debug')
@@ -27,6 +28,7 @@ const LOGLEVEL_INFO =  Symbol('log level info')
 const LOGLEVEL_LOG =   Symbol('log level log')
 const LOGLEVEL_WARN =  Symbol('log level warn')
 const LOGLEVEL_ERROR = Symbol('log level error')
+
 
 /*
 * Global Parameters.
