@@ -8,41 +8,24 @@ class Watchman{
 
   static setup(){
     console.log('watchman')
-    setTimeout(this._setInterval, _watchman_SCHEDULER_START_AFTER)
+    //_watchman_a = 'javascript'
+    this.worker = new Worker('/static/p5.u1.watchman.worker.js')
+    this.worker.addEventListener('message', this.receiveEvent)
+    this.worker.postMessage('START')
   }
 
   static draw(){
-
-  }
-
-  static _setInterval(){
-    setInterval(_watchman_taskScheduler.run, _watchman_SCHEDULER_INTERVAL)
-  }
-
-  static _run(){
-    if(typeof this.instance === 'undefined'){
-      this.instance = new _watchman_TaskScheduler()
+    /*
+    if(frameCount % 10 == 0){
+      this.worker.postMessage('Hello')
     }
+    */
+  }
 
-    this.instance.run()
+  static receiveEvent(message){
+    //console.log(_watchman_a)
+    console.log(message.data);
   }
 }
 
-let a = 10
-
-class _watchman_TaskScheduler{
-  constructor(){
-    
-  }
-
-  run(){
-    console.log(a)
-    a++
-  }
-}
-
-function _watchman_callTaskScheduler(){
-  _watchman_taskScheduler.run()
-}
-
-let _watchman_taskScheduler =
+//let _watchman_a
