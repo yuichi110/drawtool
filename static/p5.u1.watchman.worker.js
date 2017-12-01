@@ -32,11 +32,12 @@ importScripts('/static/jquery.nodom.js')
 */
 self.addEventListener('message', (message) => {
   switch(message.data){
-
-    // start interval update checker.
-    // it will be called only 1 time when Watchman started.
-    case 'START':
-      setInterval(intervalTask, 1000)
+    // start interval status checker
+    case WATCHMAN_REQUEST_INITIALIZE:
+      setInterval(checkStatusUpdate, WATCHMAN_STATUS_CHECK_INTERVAL)
+      setTimeout(function(){
+        setInterval(checkGearUpdate, WATCHMAN_GEAR_CHECK_INTERVAL)
+      }, WATCHMAN_GEAR_CHECK_INTERVAL * 3)
       break
 
     // Click Event
@@ -57,27 +58,64 @@ self.addEventListener('message', (message) => {
 * To avoid 2 or more tasks are run same time, having "_handlingTask" flag.
 * Please use callback to communicate with rest server
 */
-let _handlingTask = false
-function intervalTask(){
-  if(_handlingTask){
-    console.log('Scheduler: handling something now. Skip interval task')
-    return
-  }else{
-    _handlingTask = true
-  }
-
-  watchman_print('web worker thread')
-
-  self.postMessage('' + new Date())
-  $.get('/api/test', function(data){
-    console.log('get done')
+let _timestamp_statusTopology = 0
+let _timestamp_statusOperation = 0
+let _gearMap = new Map()
+function checkStatusUpdate(){
+  $.get('/api/status/topology', function(data){
+    if(data['result'] == false){
+      return
+    }
+    let lastTimestamp = parseFloat(data['data']['last'])
+    if(lastTimestamp > _timestamp_statusTopology){
+      _timestamp_statusTopology = lastTimestamp
+      getTopology()
+    }
   })
 
-  _handlingTask = false
+  $.get('/api/status/operation', function(data){
+    if(data['result'] == false){
+      return
+    }
+    let lastTimestamp = parseFloat(data['data']['last'])
+    if(lastTimestamp > _timestamp_statusOperation){
+      _timestamp_statusOperation = lastTimestamp
+      getOperation()
+    }
+  })
 }
 
 function getTopology(){
   $.get('/api/topology', function(data){
     console.log('get done')
+
+    let gearArray = new Array()
+    for(gear of gearArray){
+      getGear(gear)
+    }
   })
+}
+
+function getOperation(){
+
+}
+
+
+/**
+*   Update Gear status
+**/
+
+function checkGearUpdate(){
+  for(let gear of _gearSet){
+    getGear(gear)
+  }
+}
+
+function getGear(name){
+  let waitTime = Math.random() *  WATCHMAN_GEAR_CHECK_INTERVAL
+  setTimeout(function(){
+    $.get('/api/gear/' + name), function(data){
+      //
+    }
+  }, waitTime)
 }

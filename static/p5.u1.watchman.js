@@ -11,9 +11,7 @@
 * @author Yuichi Ito yuichi@yuichi.com
 */
 
-const _WATCHMAN_WORKER_PATH = '/static/p5.u1.watchman.worker.js'
-const _WATCHMAN_START = 'START'
-const _WATCHMAN_CLICK = 'CLICK'
+
 
 let _watchman_worker
 let _watchman_drawingTaskArray
@@ -21,19 +19,21 @@ let _watchman_drawingTaskArray
 class Watchman{
   static preload(){
     // make web-worker. Please take care js file path.
-    _watchman_worker = new Worker(_WATCHMAN_WORKER_PATH)
+    _watchman_worker = new Worker(WATCHMAN_WORKER_PATH)
     _watchman_drawingTaskArray = new Array()
   }
 
   static setup(){
-    console.log('watchman')
+    //console.log('watchman')
     _watchman_worker.addEventListener('message', this.receiveEvent)
-    _watchman_worker.postMessage('START')
+    //_watchman_worker.postMessage(WATCHMAN_REQUEST_INITIALIZE)
+
+    _watchman_worker.postMessage(WATCHMAN_REQUEST_START_CHECKER)
   }
 
   static draw(pgb){
     this.handleTask(pgb)
-    watchman_print('draw thread')
+    //watchman_print('draw thread')
   }
 
   static handleTask(pgb){
