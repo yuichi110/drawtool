@@ -26,9 +26,7 @@ class Watchman{
   static setup(){
     //console.log('watchman')
     _watchman_worker.addEventListener('message', this.receiveEvent)
-    //_watchman_worker.postMessage(WATCHMAN_REQUEST_INITIALIZE)
-
-    _watchman_worker.postMessage(WATCHMAN_REQUEST_START_CHECKER)
+    _watchman_worker.postMessage(WATCHMAN_REQUEST_INITIALIZE)
   }
 
   static draw(pgb){

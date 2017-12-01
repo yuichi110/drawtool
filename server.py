@@ -56,6 +56,7 @@ def api_status_topology():
     }
     return make_response(jsonify(result), 200)
 
+
 @app.route('/api/status/operation', methods=['GET'])
 def api_status_operation():
     result = {
@@ -91,22 +92,42 @@ def api_topology():
     }
     return make_response(jsonify(result), 200)
 
-def api_gear():
+# operation
+
+@app.route('/api/operation', methods=['GET'])
+def api_operation():
     result = {
         'result':True,
-        'data':{
-            'name':'router01',
-            'status':'up',
-            'management':'10.0.0.1',
-            'nics':[
-                {'name':'e0', 'status':'up', 'type':'l3', 'ip':'10.0.0.1'},
-            ]
-            # cpu
-            # memory
-            # disk
+        'data':{},
         }
-    }
     return make_response(jsonify(result), 200)
+
+@app.route('/api/gear/router01', methods=['GET'])
+def api_gear():
+    exist = True
+    if(exist):
+        result = {
+            'result':True,
+            'data':{
+                'name':'router01',
+                'status':'up',
+                'management':'10.0.0.1',
+                'nics':[
+                    {'name':'e0', 'status':'up', 'type':'l3', 'ip':'10.0.0.1'},
+                ]
+                # cpu
+                # memory
+                # disk
+            }
+        }
+        return make_response(jsonify(result), 200)
+    else:
+        result = {
+            'result':False,
+            'data':{},
+            'error':'gear "{}" does not exist'.format('gearname')
+        }
+        return make_response(jsonify(result), 404)
 
 ########################################
 ## REST API FROM INTERNAL TASK THREAD ##
