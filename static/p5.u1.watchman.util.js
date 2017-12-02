@@ -10,6 +10,7 @@
 * @author Yuichi Ito yuichi@yuichi.com
 */
 
+const WATCHMAN_TOPOLOGY_JSON = '/static/p5.u1.watchman.topology.json'
 const WATCHMAN_WORKER_PATH = '/static/p5.u1.watchman.worker.js'
 const WATCHMAN_STATUS_CHECK_INTERVAL = 1000
 const WATCHMAN_GEAR_CHECK_INTERVAL = 5000
@@ -22,6 +23,12 @@ const WATCHMAN_RESPONSE_TOPOLOGY = 'topology'
 const WATCHMAN_RESPONSE_GEAR = 'gear'
 const WATCHMAN_RESPONSE_LINE = 'line'
 const WATCHMAN_RESPONSE_OPERATION = 'operation'
+
+/*
+const WATCHMAN_RESPONSE_ADD_GEAR = 'add_gear'
+const WATCHMAN_RESPONSE_REMOVE_GEAR = 'remove_gear'
+const WATCHMAN_RESPONSE_ = 'aaa'
+*/
 
 function watchman_print(t){
   console.log('watchman_print: ' + t)

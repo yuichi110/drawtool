@@ -1,0 +1,48 @@
+{
+    "width":1920,
+    "height":1080,
+
+    "gears":{
+        "router01":{
+            "size":75,
+            "color":"orange", "icon":"router",
+            "x":100, "y":100,
+            "left-nics":[],
+            "bottom-nics":[],
+            "right-nics":["e0"],
+            "top-nics":[],
+            "texts":[],
+            "type":"cisco-ios", "mgmt":"10.0.0.100",
+            "user":"admin", "password":"cisco123", "enable":"cisco123"
+        },
+
+        "switch01":{
+            "size":75,
+            "color":"peterriver", "icon":"l2switch",
+            "x":250, "y":100,
+            "left-nics":["e0"],
+            "bottom-nics":[],
+            "right-nics":[],
+            "top-nics":[],
+            "texts":[],
+            "type":"cisco-ios", "mgmt":"10.0.0.100",
+            "user":"admin", "password":"cisco123", "enable":"cisco123"
+        }
+    },
+
+    "lines":[
+
+    ],
+
+    "texts":[
+
+    ],
+
+    "underObjects":[
+
+    ],
+
+    "overObjects":[
+
+    ]
+}

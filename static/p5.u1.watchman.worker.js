@@ -17,6 +17,14 @@
 * @author Yuichi Ito yuichi@yuichi.com
 */
 
+// Usable only in this module. Please don't move them to util.
+const LOGLEVEL_DEBUG = Symbol('log level debug')
+const LOGLEVEL_INFO =  Symbol('log level info')
+const LOGLEVEL_LOG =   Symbol('log level log')
+const LOGLEVEL_WARN =  Symbol('log level warn')
+const LOGLEVEL_ERROR = Symbol('log level error')
+const LOGLEVEL = LOGLEVEL_LOG
+
 // shared util lib with Watchman
 importScripts('/static/p5.u1.watchman.util.js')
 
@@ -26,6 +34,8 @@ importScripts('/static/p5.u1.watchman.util.js')
 importScripts('/static/jquery.nodom.js')
 
 
+let watchman_gearCheck = true
+
 /*
 * Message receiver
 * Handle message from Watchman
@@ -34,13 +44,16 @@ self.addEventListener('message', (message) => {
   switch(message.data){
     // start interval status checker
     case WATCHMAN_REQUEST_INITIALIZE:
+      console.log('start watchman worker : initialize')
       // start interval of status checker function.
       setInterval(checkStatusUpdate, WATCHMAN_STATUS_CHECK_INTERVAL)
-      // start interval of gear chcker function after 3 times of gear check interval.
+      // start interval of gear chcker function after 2 times of gear check interval.
       setTimeout(function(){
         setInterval(checkGearUpdate, WATCHMAN_GEAR_CHECK_INTERVAL)
-      }, WATCHMAN_GEAR_CHECK_INTERVAL * 3)
+      }, WATCHMAN_GEAR_CHECK_INTERVAL * 2)
       break
+
+    case WATCHMAN_REQUEST_INITIALIZE_NO_GEARS:
 
     // Click Event
     case 'CLICK':
@@ -64,9 +77,9 @@ let _timestamp_statusTopology = 0
 let _timestamp_statusOperation = 0
 let _gearMap = new Map()
 function checkStatusUpdate(){
-  console.log('checkStatusUpdate()')
+  console.debug('checkStatusUpdate()')
 
-  $.get('/api/status/topology', function(data){
+  jqGet('/api/status/topology', function(data){
     if(data['result'] == false){
       return
     }
@@ -79,7 +92,7 @@ function checkStatusUpdate(){
     }
   })
 
-  $.get('/api/status/operation', function(data){
+  jqGet('/api/status/operation', function(data){
     if(data['result'] == false){
       return
     }
@@ -93,51 +106,70 @@ function checkStatusUpdate(){
   })
 }
 
+let cache_size
+let cache_gears
+let cache_lines
+let cache_texts
+let cache_underObjects
+let cache_overObjects
 function getTopology(){
-  console.log('getTopology()')
+  console.debug('getTopology()')
 
-  $.get('/api/topology', function(data){
-    let gears = data['data']['gears']
-    let gearNameSet = new Set()
-    for(let gear of gears){
-        gearNameSet.add(gear['name'])
+  jqGet('/api/topology', function(data){
+    if(!data['result']){
+      return
     }
 
-    // Add gears which are not yet registered.
-    // And check current status.
-    for(let gearName of gearNameSet){
-      if(!_gearMap.has(gearName)){
-        // Register gear in this function
-        getGear(gearName)
-      }else{
-        // Already registered assets are ignored.
-        // They are checked intervally by checkGearUpdate().
-      }
-    }
+    let w = data['data']['width']
+    let h = data['data']['height']
+    let gears = data['data']['gears']  // map
+    let lines = data['data']['lines']  // array
+    let texts = data['data']['texts']  // array
+    let underObjects = data['data']['underObjects'] // array
+    let overObjects = data['data']['overObjects'] // array
 
-    // Make delete gears list.
-    let removeGearArray = new Array()
-    for(let [gearName, value] of _gearMap){
-      if(!gearNameSet.has(gearName)){
-        // Topology doesn't have this gear.
-        // Add it to delete list
-        removeGearArray.push(gearName)
-      }{
-        // Topology has this gear.
-        // Will not remove it.
-      }
-    }
-
-    // Delete gears
-    for(let gearName of removeGearArray){
-      _gearMap.delete(gearName)
+    if(watchman_gearCheck){
+      updateGearMap(gears)
     }
   })
 }
 
+function updateGearMap(gears){
+
+  // (1) Add gears which are not yet registered.
+  //     And check current status.
+  for(let gearName in gears){
+    if(!_gearMap.has(gearName)){
+      // Register gear in this function
+      getGear(gearName)
+    }else{
+      // Already registered assets are ignored.
+      // They are checked intervally by checkGearUpdate().
+    }
+  }
+
+  // (2) Make delete gears list.
+  let removeGearArray = new Array()
+  for(let [gearName, value] of _gearMap){
+    if(!gearName in gears){
+      // Topology doesn't have this gear.
+      // Add it to delete list
+      removeGearArray.push(gearName)
+    }{
+      // Topology has this gear.
+      // Will not remove it.
+    }
+  }
+
+  // (3) Remove gears from _gearMap
+  for(let gearName of removeGearArray){
+    _gearMap.delete(gearName)
+  }
+}
+
 function getOperation(){
-  console.log('getOperation()')
-  $.get('/api/operation', function(data){
+  console.debug('getOperation()')
+  jqGet('/api/operation', function(data){
 
   })
 }
@@ -148,20 +180,67 @@ function getOperation(){
 **/
 
 function checkGearUpdate(){
-  console.log('checkGearUpdate()')
+  console.debug('checkGearUpdate()')
   for(let [name, value] of _gearMap){
     getGear(name)
   }
 }
 
 function getGear(name){
-  console.log('getGear()')
+  console.debug('getGear() : ' + name)
   let waitTime = Math.random() *  WATCHMAN_GEAR_CHECK_INTERVAL
 
   setTimeout(function(){
     gear_url = '/api/gear/' + name
-    $.get(gear_url, function(data){
+    jqGet(gear_url, function(data){
+      console.debug('getGear() getResponse: ' + name)
       _gearMap.set(name, data)
     })
   }, waitTime)
+}
+
+function jqGet(getUrl, successFunction, errorFunction){
+  if(typeof errorFunction === 'undefined'){
+    $.ajax({
+      type: 'GET',
+      url: getUrl,
+      success: successFunction,
+      error: function(){
+        console.error('get failed : "' + getUrl + '"')
+      }
+    })
+  }else{
+    $.ajax({
+      type: 'GET',
+      url: getUrl,
+      success: successFunction,
+      error: errorFunction
+    })
+  }
+}
+
+function setLogLevel(){
+  // Overwrite logging functions to suppress useless logging.
+  switch(LOGLEVEL){
+    case LOGLEVEL_ERROR:
+      console.debug = function(){/* no logging */}
+      console.info = function(){/* no logging */}
+      console.log = function(){/* no logging */}
+      console.warn = function(){/* no logging */}
+      break
+    case LOGLEVEL_WARN:
+      console.debug = function(){/* no logging */}
+      console.info = function(){/* no logging */}
+      console.log = function(){/* no logging */}
+      break
+    case LOGLEVEL_LOG:
+      console.debug = function(){/* no logging */}
+      console.info = function(){/* no logging */}
+      break
+    case LOGLEVEL_INFO:
+      console.debug = function(){/* no logging */}
+      break
+    default:
+      break
+  }
 }

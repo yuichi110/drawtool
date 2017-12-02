@@ -14,21 +14,31 @@
 '''
 
 from flask import *
+import requests
 import json
 import time
+import threading
+
+#import topology
+import db
+
+
 
 DEBUG = True
 HOST = '0.0.0.0'
 PORT = 8080
+TOPOLOGY_PATH = 'http://0.0.0.0:{}/static/p5.u1.watchman.topology.json'.format(PORT)
+TOPOLOGY_INITIAL_DICT = {}
+TOPOLOGY_GET_AFTER_SEC = 3
 
 def get_current_time():
     return '{0:.4f}'.format(time.time())
 
 app = Flask(__name__)
 t = get_current_time()
-print(t)
 timestamp_last_topology_update = t
 timestamp_last_operation_update = t
+topology = TOPOLOGY_INITIAL_DICT
 
 #################
 ## STATIC FILE ##
@@ -73,24 +83,20 @@ def api_status_operation():
 
 @app.route('/api/topology', methods=['GET'])
 def api_topology():
-    result = {
-        'result':True,
-        'data':{
-            'width':1920,
-            'height':1080,
-            'gears':[
-                {
-                'name':'router01', 'size':100, 'color':'orange',
-                'x':100, 'y':100,
-                'left-nics':['e0'],
-                'bottom-nics':[],
-                'right-nics':[],
-                'top-nics':[],
-                },
-            ]
+    if topology == TOPOLOGY_INITIAL_DICT:
+        result = {
+            'result':False,
+            'data':topology,
+            'error':"failed to load topology definition at '{}'".format(TOPOLOGY_PATH)
         }
-    }
-    return make_response(jsonify(result), 200)
+        return make_response(jsonify(result), 500)
+
+    else:
+        result = {
+            'result':True,
+            'data':topology
+        }
+        return make_response(jsonify(result), 200)
 
 # operation
 
@@ -102,25 +108,18 @@ def api_operation():
         }
     return make_response(jsonify(result), 200)
 
-@app.route('/api/gear/router01', methods=['GET'])
-def api_gear():
-    exist = True
-    if(exist):
+# gear get
+
+@app.route('/api/gear/<string:gear_name>', methods=['GET'])
+def api_gear(gear_name):
+    d = db.get_gear(gear_name)
+    if d['exist']:
         result = {
             'result':True,
-            'data':{
-                'name':'router01',
-                'status':'up',
-                'management':'10.0.0.1',
-                'nics':[
-                    {'name':'e0', 'status':'up', 'type':'l3', 'ip':'10.0.0.1'},
-                ]
-                # cpu
-                # memory
-                # disk
-            }
+            'data':d['data']
         }
         return make_response(jsonify(result), 200)
+
     else:
         result = {
             'result':False,
@@ -133,6 +132,23 @@ def api_gear():
 ## REST API FROM INTERNAL TASK THREAD ##
 ########################################
 
+@app.route('/iapi/gear/<string:gear_name>', methods=['POST'])
+def iapi_gear(gear_name):
+    return make_response(jsonify({}), 200)
+
+def updateTopology():
+    global topology
+    time.sleep(TOPOLOGY_GET_AFTER_SEC)
+    try:
+        topology = requests.get(TOPOLOGY_PATH).json()
+        print('Successed to load topology json file "{}"'.format(TOPOLOGY_PATH))
+
+    except e:
+        topology = TOPOLOGY_INITIAL_DICT
+        print('Failed to load topology json file "{}"'.format(TOPOLOGY_PATH))
+        print(e)
+
 if __name__ == '__main__':
     app.debug = DEBUG
+    threading.Thread(target=updateTopology).start()
     app.run(host=HOST, port=PORT)

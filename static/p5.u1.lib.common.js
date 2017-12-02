@@ -48,11 +48,14 @@ const POMEGRANATE =  Symbol('pomegrante');
 const SILVER =       Symbol('silver');
 const ASBESTOS =     Symbol('asbestos');
 
+// return on string parse error
+const UNDEFINED_COLOR = Symbol('undefined')
+
 /*
 * Font
 */
 
- 
+
 /*
 * Animation
 */
@@ -672,6 +675,68 @@ function setPG_fill(pg, fColor, fAlpha){
       pg.fill(127, 140, 141, fAlpha); break;
     default:
       console.error(`setPG_fill: Color ${fColor} is not defined`);
+  }
+}
+
+function getColorSymbol(tColor){
+  tColor = tColor.toLowerCase()
+  switch(tColor){
+    case 'transparent':
+      return TRANSPARENT
+    case 'black':
+      return BLACK
+    case 'white':
+      return WHITE
+    case 'red':
+      return RED
+    case 'green':
+      return GREEN
+    case 'blue':
+      return BLUE
+
+    case 'turquoise':
+      return TURQUOISE
+    case 'emerald':
+      return EMERALD
+    case 'peterriver':
+      return PETERRIVER
+    case 'amethyst':
+      return AMETHYST
+    case 'wetasphalt':
+      return WETASPHALT
+    case 'greensea':
+      return GREENSEA
+    case 'nephritis':
+      return NEPHRITIS
+    case 'belizehole':
+      return BELIZEHOLE
+    case 'wisteria':
+      return WISTERIA
+    case 'midnightblue':
+      return MIDNIGHTBLUE
+    case 'sunflower':
+      return SUNFLOWER
+    case 'carrot':
+      return CARROT
+    case 'alizarin':
+      return ALIZARIN
+    case 'clouds':
+      return CLOUDS
+    case 'concrete':
+      return CONCRETE
+    case 'orange':
+      return ORANGE
+    case 'pumpkin':
+      return PUMPKIN
+    case 'pomegrante':
+      return POMEGRANATE
+    case 'silver':
+      return SILVER
+    case 'asbestos':
+      return ASBESTOS
+    default:
+      console.error(`getColorSymbol: Color ${tColor} is not defined`);
+      return UNDEFINED_COLOR
   }
 }
 

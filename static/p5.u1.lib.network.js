@@ -12,17 +12,45 @@
 * @author Yuichi Ito yuichi@yuichi.com
 */
 
-
 const NETWORK_GEAR_ROUTER = Symbol('router')
 const NETWORK_GEAR_L2SWITCH = Symbol('l2switch')
 const NETWORK_GEAR_L3SWITCH = Symbol('l3switch')
 const NETWORK_GEAR_FIREWALL = Symbol('firewall')
-const NETWORK_GEAR_AP = Symbol('ap')
+const NETWORK_GEAR_AP = Symbol('accesspoint')
 const NETWORK_GEAR_LOADBALANCER = Symbol('load balancer')
 const NETWORK_GEAR_PC = Symbol('pc')
 const NETWORK_GEAR_SERVER = Symbol('server')
 const NETWORK_GEAR_STORAGE = Symbol('storage')
+const NETWORK_GEAR_UNDEFINED = Symbol('undefined')
 
+function getNetworkGearSymbol(textName){
+  textName = textName.toLowerCase()
+  switch(textName){
+    case 'router':
+      return NETWORK_GEAR_ROUTER
+    case 'l2switch':
+      return NETWORK_GEAR_L2SWITCH
+    case 'l3switch':
+      return NETWORK_GEAR_L3SWITCH
+    case 'firewal':
+      return NETWORK_GEAR_FIREWALL
+    case 'accesspoint':
+      return NETWORK_GEAR_AP
+    case 'ap':
+      return NETWORK_GEAR_AP
+    case 'loadbalancer':
+      return NETWORK_GEAR_LOADBALANCER
+    case 'pc':
+      return NETWORK_GEAR_PC
+    case 'server':
+      return NETWORK_GEAR_SERVER
+    case 'storage':
+      return NETWORK_GEAR_STORAGE
+    default:
+      console.error('getNetworkGearSymbol: undefined symbol ' + textName)
+      return NETWORK_GEAR_UNDEFINED
+  }
+}
 
 /**************
 * Get PGraphics of brief packet format.
