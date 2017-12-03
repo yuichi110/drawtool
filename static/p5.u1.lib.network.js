@@ -1425,7 +1425,10 @@ class Network_TopologyManager{
   constructor(width_, height_){
     this.width = width_
     this.height = height_
+    this.clear()
+  }
 
+  clear(){
     // image Pgraphics before drawing topology
     this.pgUnderItemArray = new Array()
     // image Pgraphics after drawing topology
@@ -1637,4 +1640,223 @@ class Network_TopologyManager{
 
     this.hasUpdateAfterLastDraw = false
   }
+}
+
+/////////
+/// JSON To Topology
+////////
+
+function network_validateTopologyJson(jsonUrl){
+  $.ajax({
+    dataType:'json',
+    url:jsonUrl,
+    success: function(data){
+      console.log('=== START CHECKING TOPOLOGY JSON ===')
+
+      // check global
+      let globalKeys = ['width', 'height', 'gears', 'lines',
+                        'texts', 'underObjects', 'overObjects']
+      let globalAllOk = true
+      for(let key of globalKeys){
+        if(!(key in data)){
+          console.error(`global key "${key}" doesn't exist` )
+          globalAllOk = false
+        }
+      }
+      if(globalAllOk){
+        console.log('global keys are OK')
+      }else{
+        console.error('global keys has problem')
+      }
+
+      // check gears
+      let gearsKeys = ['size', 'color', 'icon', 'x', 'y',
+                    'left-nics', 'bottom-nics', 'right-nics', 'top-nics', 'texts']
+      let gearsOptionalKeys = ['type', 'mgmt', 'user', 'password', 'enable']
+      for(let gear in data['gears']){
+        let gearAllOk = true
+        for(let key of gearsKeys){
+          if(!(key in data['gears'][gear])){
+            console.error(`gears key "${key}" doesn't exist in "${gear}"` )
+            gearAllOk = false
+          }
+        }
+
+        let hasOptional = false
+        let missingOptional = false
+        for(let key of gearsOptionalKeys){
+          if(key in data['gears'][gear]){
+            hasOptional = true
+          }else{
+            missingOptional = true
+          }
+        }
+        if(hasOptional && missingOptional){
+          console.error(`gear "${gear}" is missing some optional keys` )
+          gearAllOk = false
+        }
+
+        if(gearAllOk){
+          console.log(`gear "${gear}" keys are OK`)
+        }else{
+          console.error(`gear "${gear}" keys has problem`)
+        }
+      }
+
+      console.log('======')
+    },
+    error: function(xMLHttpRequest, textStatus, errorThrown){
+      console.error('Json load failed')
+      console.error("XMLHttpRequest : " + xMLHttpRequest.status);
+      console.error("textStatus     : " + textStatus);
+      console.error("errorThrown    : " + errorThrown.message);
+    }
+  })
+}
+
+function network_loadTopologyJson_fromUrl(jsonUrl, topology){
+  $.ajax({
+    dataType:'json',
+    url:jsonUrl,
+    success: function(data){
+      network_loadTopologyJson(data, topology)
+    },
+    error: function(xMLHttpRequest, textStatus, errorThrown){
+      console.error('Json load failed')
+      console.error("XMLHttpRequest : " + xMLHttpRequest.status);
+      console.error("textStatus     : " + textStatus);
+      console.error("errorThrown    : " + errorThrown.message);
+    }
+  })
+}
+
+function network_loadTopologyJson(jsonData, topology){
+  // remove all previous objects
+  topology.clear()
+
+  for(let underObject of jsonData['underObjects']){
+    let [pg, x, y] = _network_loadTopologyJson_object(underObject)
+    if(pg != null){
+      topology.addPgUnder('', pg, x, y)
+    }
+  }
+
+  // add gear
+  for(let gearName in jsonData['gears']){
+    let gearMap = jsonData['gears'][gearName]
+    let [gearObject, x, y, texts] = _network_loadTopologyJson_gear(gearMap)
+    topology.addGear(gearName, gearObject, x, y)
+
+    for(let text_ of texts){
+      let [x, y, tString, tSize, tColor, tAlpha] = text_
+      topology.addGearText(gearName, '', x, y, tString, tSize, tColor, tAlpha)
+    }
+  }
+
+  // draw lines
+  for(let line of jsonData['lines']){
+    let [gear1, pos1, num1, gear2, pos2, num2,
+        sColor, sWeight] = _network_loadTopologyJson_line(line)
+    topology.connectGears(gear1, pos1, num1, gear2, pos2, num2,
+                          sColor, sWeight, 255)
+  }
+
+  // draw over
+  for(let overObject of jsonData['overObjects']){
+    let [pg, x, y] = _network_loadTopologyJson_object(overObject)
+    if(pg != null){
+      topology.addPgOver('', pg, x, y)
+    }
+  }
+
+  for(let textObject of jsonData['texts']){
+    let [x, y, tString, tSize, tColor, tAlpha] =
+        _network_loadTopologyJson_text(textObject)
+    topology.addTopologyText('', x, y, tString, tSize, tColor, tAlpha)
+  }
+}
+
+function _network_loadTopologyJson_object(ob){
+  let shape = ob['shape']
+  let x = ob['x']
+  let y = ob['y']
+  let w = ob['width']
+  let h = ob['height']
+  let sColor = getColorSymbol(ob['sColor'])
+  let sWeight = ob['sWeight']
+  let sAlpha = ob['sAlpha']
+  let fColor = getColorSymbol(ob['fColor'])
+  let fAlpha = ob['fAlpha']
+
+  switch(shape){
+    case 'rect':
+      let pg = getPG_rect(w, h, 10, sColor, sWeight, sAlpha, fColor, fAlpha)
+      return [pg, x, y]
+
+    default:
+      return [null, 0, 0]
+  }
+}
+
+function _network_loadTopologyJson_gear(gear){
+  let size = gear['size']
+  let color = getColorSymbol(gear['color'])
+
+  let gearObject = new Network_Gear(size, size, 10,
+                              BLACK, 2, 255, color, 255,
+                              12, BLACK, 2, 255)
+
+  // current implementation ignore port name and set same color.
+  function getColorArray(portNameArray){
+    let colorArray = new Array()
+    for(let portName of portNameArray){
+      colorArray.push(EMERALD)
+    }
+    return colorArray
+  }
+  let left = getColorArray(gear['left-nics'])
+  let bottom = getColorArray(gear['bottom-nics'])
+  let right = getColorArray(gear['right-nics'])
+  let top = getColorArray(gear['top-nics'])
+  gearObject.setPortsColor(left, bottom, right, top)
+
+  let icon = getNetworkGearSymbol(gear['icon'])
+  gearObject.setIcon(icon, 10, 10, size - 20, WHITE)
+
+  let texts = new Array()
+  for(let text_ of gear['texts']){
+    let x = text_['x']
+    let y = text_['y']
+    let tString = text_['text']
+    let tSize = text_['size']
+    let tColor = getColorSymbol(text_['color'])
+    let tAlpha = text_['alpha']
+    texts.push([x, y, tString, tSize, tColor, tAlpha])
+  }
+
+  let x = gear['x']
+  let y = gear['y']
+  return [gearObject, x, y, texts]
+}
+
+function _network_loadTopologyJson_line(line){
+  let gear1 = line['gear1']
+  let pos1 = line['pos1']
+  let num1 = line['num1']
+  let gear2 = line['gear2']
+  let pos2 = line['pos2']
+  let num2 = line['num2']
+  let sColor = getColorSymbol(line['color'])
+  let sWeight = line['weight']
+  return [gear1, pos1, num1, gear2, pos2, num2, sColor, sWeight]
+}
+
+function _network_loadTopologyJson_text(text_){
+  let x = text_['x']
+  let y = text_['y']
+  let tString = text_['text']
+  let tSize = text_['size']
+  let tColor = getColorSymbol(text_['color'])
+  let tAlpha = text_['alpha']
+  return [x, y, tString, tSize, tColor, tAlpha]
 }

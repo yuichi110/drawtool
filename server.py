@@ -30,6 +30,7 @@ PORT = 8080
 TOPOLOGY_PATH = 'http://0.0.0.0:{}/static/p5.u1.watchman.topology.json'.format(PORT)
 TOPOLOGY_INITIAL_DICT = {}
 TOPOLOGY_GET_AFTER_SEC = 3
+TOPOLOGY_GET_INTERVAL_SEC = 30
 
 def get_current_time():
     return '{0:.4f}'.format(time.time())
@@ -136,19 +137,35 @@ def api_gear(gear_name):
 def iapi_gear(gear_name):
     return make_response(jsonify({}), 200)
 
+initialized = False
 def updateTopology():
-    global topology
     time.sleep(TOPOLOGY_GET_AFTER_SEC)
-    try:
-        topology = requests.get(TOPOLOGY_PATH).json()
-        print('Successed to load topology json file "{}"'.format(TOPOLOGY_PATH))
+    global topology
+    '''
+    global initialized
+    print(initialized)
+    if(initialized):
+        return
+    initialized = True
+    '''
+    firstTime = True
+    while(True):
+        try:
+            topology = requests.get(TOPOLOGY_PATH).json()
+            if firstTime:
+                print('Successed to load topology json file "{}"'.format(TOPOLOGY_PATH))
+                firstTime = False
 
-    except e:
-        topology = TOPOLOGY_INITIAL_DICT
-        print('Failed to load topology json file "{}"'.format(TOPOLOGY_PATH))
-        print(e)
+        except Exception as e:
+            topology = TOPOLOGY_INITIAL_DICT
+            print('Failed to load topology json file "{}"'.format(TOPOLOGY_PATH))
+            print(e)
+
+        time.sleep(TOPOLOGY_GET_INTERVAL_SEC)
+
 
 if __name__ == '__main__':
-    app.debug = DEBUG
+    print('start')
     threading.Thread(target=updateTopology).start()
+    #app.debug = DEBUG
     app.run(host=HOST, port=PORT)

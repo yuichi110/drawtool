@@ -11,7 +11,9 @@
             "bottom-nics":[],
             "right-nics":["e0"],
             "top-nics":[],
-            "texts":[],
+            "texts":[
+              {"text":"Router01", "x":0, "y":-10, "size":18, "color":"black", "alpha":255}
+            ],
             "type":"cisco-ios", "mgmt":"10.0.0.100",
             "user":"admin", "password":"cisco123", "enable":"cisco123"
         },
@@ -31,18 +33,21 @@
     },
 
     "lines":[
-
+      {"gear1":"router01", "pos1":"right", "num1":1, "gear2":"switch01", "pos2":"left",
+       "num2":1, "color":"black", "weight":2}
     ],
 
     "texts":[
-
+      {"text":"Hello World", "x":200, "y":200, "size":32, "color":"white", "alpha":255}
     ],
 
     "underObjects":[
-
+      {"shape":"rect", "x":20, "y":20, "width":200, "height":200,
+        "sColor":"black", "sWeight":2, "sAlpha":255, "fColor":"white", "fAlpha":255}
     ],
 
     "overObjects":[
-
+      {"shape":"rect", "x":150, "y":150, "width":200, "height":200,
+        "sColor":"black", "sWeight":2, "sAlpha":255, "fColor":"black", "fAlpha":255}
     ]
 }

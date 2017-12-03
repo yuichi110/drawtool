@@ -16,13 +16,17 @@ const WATCHMAN_STATUS_CHECK_INTERVAL = 1000
 const WATCHMAN_GEAR_CHECK_INTERVAL = 5000
 
 // watchman -> watchman-worker
-const WATCHMAN_REQUEST_INITIALIZE = 'initialize'
+const WATCHMAN_MESSAGE1_INITIALIZE = 'initialize'
+const WATCHMAN_MESSAGE1_INITIALIZE_NO_GEAR_CHECK = "initialize_no_gear_check"
 
 // watchman-worker -> watchman
-const WATCHMAN_RESPONSE_TOPOLOGY = 'topology'
-const WATCHMAN_RESPONSE_GEAR = 'gear'
-const WATCHMAN_RESPONSE_LINE = 'line'
-const WATCHMAN_RESPONSE_OPERATION = 'operation'
+const WATCHMAN_MESSAGE2_REFRESH_TOPOLOGY = 'topology'
+const WATCHMAN_MESSAGE2_ADD_GEAR = 'add_gear'
+const WATCHMAN_MESSAGE2_REMOVE_GEAR = 'remove_gear'
+const WATCHMAN_MESSAGE2_ADD_LINE = 'add_line'
+const WATCHMAN_MESSAGE2_REMOVE_LINE = 'remove_line'
+
+const WATCHMAN_MESSAGE2_OPERATION = 'operation'
 
 /*
 const WATCHMAN_RESPONSE_ADD_GEAR = 'add_gear'

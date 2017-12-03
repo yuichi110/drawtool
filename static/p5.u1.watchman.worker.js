@@ -41,19 +41,26 @@ let watchman_gearCheck = true
 * Handle message from Watchman
 */
 self.addEventListener('message', (message) => {
-  switch(message.data){
+  let [msgType, data] = message.data
+  switch(msgType){
     // start interval status checker
-    case WATCHMAN_REQUEST_INITIALIZE:
+    case WATCHMAN_MESSAGE1_INITIALIZE:
       console.log('start watchman worker : initialize')
       // start interval of status checker function.
       setInterval(checkStatusUpdate, WATCHMAN_STATUS_CHECK_INTERVAL)
+
       // start interval of gear chcker function after 2 times of gear check interval.
       setTimeout(function(){
         setInterval(checkGearUpdate, WATCHMAN_GEAR_CHECK_INTERVAL)
       }, WATCHMAN_GEAR_CHECK_INTERVAL * 2)
       break
 
-    case WATCHMAN_REQUEST_INITIALIZE_NO_GEARS:
+    case WATCHMAN_MESSAGE1_INITIALIZE_NO_GEAR_CHECK:
+      console.log('start watchman worker : initialize no gear check')
+      // start interval of status checker function.
+      watchman_gearCheck = false
+      setInterval(checkStatusUpdate, WATCHMAN_STATUS_CHECK_INTERVAL)
+      break
 
     // Click Event
     case 'CLICK':
@@ -106,6 +113,7 @@ function checkStatusUpdate(){
   })
 }
 
+let getTopologyFirst = true
 let cache_size
 let cache_gears
 let cache_lines
@@ -118,6 +126,13 @@ function getTopology(){
   jqGet('/api/topology', function(data){
     if(!data['result']){
       return
+    }
+
+    // refresh topology at first.
+    if(getTopologyFirst){
+      getTopologyFirst = false
+      let jsonData = data['data']
+      self.postMessage([WATCHMAN_MESSAGE2_REFRESH_TOPOLOGY, jsonData])
     }
 
     let w = data['data']['width']
@@ -244,3 +259,4 @@ function setLogLevel(){
       break
   }
 }
+setLogLevel()
