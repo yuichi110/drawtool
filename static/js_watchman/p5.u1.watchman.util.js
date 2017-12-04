@@ -10,8 +10,8 @@
 * @author Yuichi Ito yuichi@yuichi.com
 */
 
-const WATCHMAN_TOPOLOGY_JSON = '/static/p5.u1.watchman.topology.json'
-const WATCHMAN_WORKER_PATH = '/static/p5.u1.watchman.worker.js'
+const WATCHMAN_TOPOLOGY_JSON = '/static/js_watchman/p5.u1.watchman.topology.json'
+const WATCHMAN_WORKER_PATH = '/static/js_watchman/p5.u1.watchman.worker.js'
 const WATCHMAN_STATUS_CHECK_INTERVAL = 1000
 const WATCHMAN_GEAR_CHECK_INTERVAL = 5000
 

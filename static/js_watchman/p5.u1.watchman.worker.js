@@ -26,12 +26,12 @@ const LOGLEVEL_ERROR = Symbol('log level error')
 const LOGLEVEL = LOGLEVEL_LOG
 
 // shared util lib with Watchman
-importScripts('/static/p5.u1.watchman.util.js')
+importScripts('/static/js_watchman/p5.u1.watchman.util.js')
 
 // import special jquery which doesn't have dom feature.
 // From Github : kpozin/jquery-nodom (based on jquery v1.6.3, MIT License)
 // loading normal jquery will fail because web-worker doesn't have dom attribute.
-importScripts('/static/jquery.nodom.js')
+importScripts('/static/js_lib/jquery.nodom.js')
 
 
 let watchman_gearCheck = true

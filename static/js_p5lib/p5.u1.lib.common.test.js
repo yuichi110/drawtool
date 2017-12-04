@@ -59,10 +59,13 @@ class LibCommonTest{
     this.pg_table1 = getPG_table(columnWidthArray, rawHeightArray, BLACK, 2, 255,
                                  fColorTable, fAlphaTable,
                                  txTable, tyArray, textTable, 24, tColorTable, tAlphaTable)
+
+    this.pg_image = createGraphics(main_width, main_height)
+    drawImage_withColor(this.pg_image, 100, 100)
   }
 
   static draw(pgb){
-    switch(8){
+    switch(9){
       case 1:
         this.drawTest(pgb); break
       case 2:
@@ -79,6 +82,8 @@ class LibCommonTest{
         this.drawSerialRects(pgb); break
       case 8:
         this.drawTable(pgb); break
+      case 9:
+          this.drawImage(pgb); break
     }
   }
 
@@ -136,5 +141,14 @@ class LibCommonTest{
 
   static drawTable(pgb){
     pgb.image(this.pg_table1, 100, 100)
+  }
+
+  static drawImage(pgb){
+    pgb.image(this.pg_image, 0, 0)
+    /*
+    if(frameCount > 100){
+      pgb.image(this.pg_image, 0, 0)
+    }
+    */
   }
 }

@@ -180,7 +180,73 @@ function drawPG_lineArrow(pg, x1, y1, x2, y2, arrowLength,
   pg.pop();
 }
 
+function drawImage_withColor(pgb, x, y, width_, height_, bColor){
+  loadImage('/static/image/test.png', function(img){
+    //img.pixelDensity(1)
+    let img2 = createImage(img.width, img.height)
+    //img2.pixelDensity(1)
+    console.log(img.width)
+    console.log(img.height)
+    img.loadPixels()
+    img2.loadPixels()
+    //let c = color(255, 0, 0)
 
+    //let i = 0
+    let w = img.width * 4
+    let h = img.height
+    for(let x=0; x<w; x+=4){
+      for(let y=0; y<h; y++){
+        let loc = x + y * w
+        /*
+        if(img.pixels[loc] != 0){
+          console.log(img.pixels[loc])
+        }
+        */
+        if(img.pixels[loc+3] != 0){
+          //console.log(img.pixels[loc])
+          img.pixels[loc] = 255
+          // green
+          img.pixels[loc+1] = 0
+          // blue
+          img.pixels[loc+2] = 0
+          // alpha
+          img.pixels[loc+3] = 255
+        }else{
+          img.pixels[loc] = 0
+          img.pixels[loc+1] = 0
+          img.pixels[loc+2] = 0
+          img.pixels[loc+3] = 0
+        }
+        /*
+        // red
+        img.pixels[loc] = img.pixels[loc]
+        // green
+        img.pixels[loc+1] = img.pixels[loc+1]
+        // blue
+        img.pixels[loc+2] = img.pixels[loc+2]
+        // alpha
+        img.pixels[loc+3] = img.pixels[loc+3]
+        */
+        /*
+        //console.log(loc + ' : ' + red(img.pixels[loc]))
+        let r = red(img.pixels[loc])
+        //let g = green(img.pixels[loc])
+        //let b = blue(img.pixels[loc])
+        if(r == 255){
+          img.pixels[loc] = c
+        }
+        */
+        //i++
+      }
+      //img2.updatePixels()
+    }
+    //console.log(i)
+    //img2.updatePixels()
+    img.updatePixels()
+    img.resize(100, 100)
+    pgb.image(img, x, y)
+  })
+}
 
 /*
 function drawPG_dashedline(pg, x1, y1, x2, y2, n, sColor, sWeight, sAlpha){

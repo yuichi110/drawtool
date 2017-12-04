@@ -17,11 +17,14 @@
 * Please add new module class here as Symbol.
 * They are switched at setup() and draw() function in this main module.
 */
+// Library
 const MODULE_LIB_COMMON_TEST =  Symbol('module lib.common.test')
 const MODULE_LIB_NETWORK_TEST = Symbol('module lib.network.test')
-const MODULE_NETWORK01 =        Symbol('module network01')
-const MODULE_WATCHMAN =         Symbol('module watchman')  // needs web server
-const RUN_MODULE = MODULE_WATCHMAN
+// Watch: needs web server
+const MODULE_WATCHMAN =         Symbol('module watchman')
+// Books
+const MODULE_BOOK_NETWORK01_01 = Symbol('module book network01 01')
+const RUN_MODULE = MODULE_LIB_COMMON_TEST
 
 const LOGLEVEL_DEBUG = Symbol('log level debug')
 const LOGLEVEL_INFO =  Symbol('log level info')
@@ -108,9 +111,14 @@ function preload(){
     case MODULE_WATCHMAN:
       Watchman.preload()
       break
+    case MODULE_BOOK_NETWORK01_01:
+      Book_Network01_01.preload()
+      break
     default:
-      console.error(`${RUN_MODULE} is not in preload switch`)
+      console.error(`${RUN_MODULE.toString()} is not in preload switch`)
   }
+
+  console.log(`Module: ${RUN_MODULE.toString()}`)
 }
 
 function setup() {
@@ -137,8 +145,11 @@ function setup() {
     case MODULE_WATCHMAN:
       Watchman.setup(_main_pgb)
       break
+    case MODULE_BOOK_NETWORK01_01:
+      Book_Network01_01.setup(_main_pgb)
+      break
     default:
-      console.error(`${RUN_MODULE} is not in setup switch`)
+      console.error(`${RUN_MODULE.toString()} is not in setup switch`)
   }
 }
 
@@ -162,8 +173,11 @@ function draw() {
     case MODULE_WATCHMAN:
       Watchman.draw(_main_pgb)
       break
+    case MODULE_BOOK_NETWORK01_01:
+      Book_Network01_01.draw(_main_pgb)
+      break
     default:
-      console.error(`${RUN_MODULE} is not in draw switch`)
+      console.error(`${RUN_MODULE.toString()} is not in draw switch`)
   }
 
   if(main_drawGrid){
