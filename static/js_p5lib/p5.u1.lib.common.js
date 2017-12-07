@@ -19,6 +19,10 @@
 * @author Yuichi Ito yuichi@yuichi.com
 */
 
+/******
+* Color
+******/
+
 const TRANSPARENT = Symbol('transparent');
 const BLACK =       Symbol('black')
 const WHITE =       Symbol('white')
@@ -50,6 +54,10 @@ const ASBESTOS =     Symbol('asbestos');
 
 // return on string parse error
 const UNDEFINED_COLOR = Symbol('undefined')
+
+/*****
+* ICON
+*****/
 
 /*
 * Font
@@ -180,72 +188,33 @@ function drawPG_lineArrow(pg, x1, y1, x2, y2, arrowLength,
   pg.pop();
 }
 
-function drawImage_withColor(pgb, x, y, width_, height_, bColor){
-  loadImage('/static/image/test.png', function(img){
-    //img.pixelDensity(1)
-    let img2 = createImage(img.width, img.height)
-    //img2.pixelDensity(1)
-    console.log(img.width)
-    console.log(img.height)
-    img.loadPixels()
-    img2.loadPixels()
-    //let c = color(255, 0, 0)
+function getPG_imageWithColor(url, width_, height_, iColor){
+  let pg = createGraphics(width_, height_)
 
-    //let i = 0
+  loadImage(url, function(img){
+    img.loadPixels()
     let w = img.width * 4
     let h = img.height
     for(let x=0; x<w; x+=4){
       for(let y=0; y<h; y++){
         let loc = x + y * w
-        /*
-        if(img.pixels[loc] != 0){
-          console.log(img.pixels[loc])
-        }
-        */
-        if(img.pixels[loc+3] != 0){
-          //console.log(img.pixels[loc])
-          img.pixels[loc] = 255
-          // green
-          img.pixels[loc+1] = 0
-          // blue
-          img.pixels[loc+2] = 0
-          // alpha
-          img.pixels[loc+3] = 255
-        }else{
-          img.pixels[loc] = 0
-          img.pixels[loc+1] = 0
-          img.pixels[loc+2] = 0
-          img.pixels[loc+3] = 0
-        }
-        /*
-        // red
-        img.pixels[loc] = img.pixels[loc]
-        // green
-        img.pixels[loc+1] = img.pixels[loc+1]
-        // blue
-        img.pixels[loc+2] = img.pixels[loc+2]
-        // alpha
-        img.pixels[loc+3] = img.pixels[loc+3]
-        */
-        /*
-        //console.log(loc + ' : ' + red(img.pixels[loc]))
-        let r = red(img.pixels[loc])
-        //let g = green(img.pixels[loc])
-        //let b = blue(img.pixels[loc])
+        let r = img.pixels[loc]
         if(r == 255){
-          img.pixels[loc] = c
+          //console.log('red')
+        }else if(img.pixels[loc+3] != 0){
+          img.pixels[loc] = 255
+          img.pixels[loc+1] = 0
+          img.pixels[loc+2] = 0
+          img.pixels[loc+3] = 255
         }
-        */
-        //i++
       }
-      //img2.updatePixels()
     }
-    //console.log(i)
-    //img2.updatePixels()
     img.updatePixels()
-    img.resize(100, 100)
-    pgb.image(img, x, y)
+    img.resize(width_, height_)
+    pg.image(img, 0, 0)
   })
+
+  return pg
 }
 
 /*
@@ -330,6 +299,163 @@ function getPG_ellipse(width_, height_,
   return pg
 }
 
+function getPG_curvedArrow(topWidth, topHasArrow, bottomWidth, bottomHasArrow,
+                       height_, bodyWidth, arrowWidth, arrowHeight,
+                       sColor, sWeight, sAlpha, fColor, fAlpha){
+
+  if(sColor == TRANSPARENT){
+    sWeight = 0
+  }
+
+  let h = bodyWidth * 2 + height_ + sWeight + 10
+  let tw = topWidth + bodyWidth
+  if(topHasArrow){
+    tw += arrowWidth
+    h += arrowHeight
+  }
+  let bw = topWidth + bodyWidth
+  if(bottomHasArrow){
+    bw += arrowWidth
+    h += arrowHeight
+  }
+  let w = max(tw, bw) + sWeight + 10
+
+  let pg = createGraphics(w, h)
+  if(main_guiDebug){
+    pg.background(127)
+  }
+  setPG_style(pg, sColor, sWeight, sAlpha, fColor, fAlpha)
+  pg.push()
+  pg.translate(5, 5 + arrowHeight)
+  pg.beginShape()
+
+  // left bottom outside
+  let [x1, y1] = [0, bodyWidth + height_]
+  pg.vertex(x1, y1)
+  let [x2_1, y2_1, x2_2, y2_2, x2_3, y2_3] =
+    [0, height_ + bodyWidth*1.5, bodyWidth/2, bodyWidth*2 + height_, bodyWidth, bodyWidth*2 + height_]
+  pg.bezierVertex(x2_1, y2_1, x2_2, y2_2, x2_3, y2_3)
+
+  // bottom Arrow
+  let [x3, y3] = [bodyWidth + bottomWidth, y2_3]
+  pg.vertex(x3, y3)
+  if(bottomHasArrow){
+    let [bx1, by1] = [x3, y3 + arrowHeight]
+    pg.vertex(bx1, by1)
+    let [bx2, by2] = [x3 + arrowWidth, y3 - bodyWidth/2]
+    pg.vertex(bx2, by2)
+    let [bx3, by3] = [x3, y3 - bodyWidth - arrowHeight]
+    pg.vertex(bx3, by3)
+  }
+  let [x4, y4] = [x3, y3 - bodyWidth]
+  pg.vertex(x4, y4)
+
+  // left bottom inside
+  let [x5, y5] = [bodyWidth * 2, y4]
+  pg.vertex(x5, y5)
+  let [x6_1, y6_1, x6_2, y6_2, x6_3, y6_3] =
+    [bodyWidth, y5, bodyWidth, y4, bodyWidth, y4 - bodyWidth]
+  pg.bezierVertex(x6_1, y6_1, x6_2, y6_2, x6_3, y6_3)
+
+  // left top inside
+  let [x7, y7] = [bodyWidth, bodyWidth * 2]
+  pg.vertex(x7, y7)
+  let [x8_1, y8_1, x8_2, y8_2, x8_3, y8_3] =
+    [bodyWidth, bodyWidth, bodyWidth, bodyWidth, bodyWidth * 2, bodyWidth]
+  pg.bezierVertex(x8_1, y8_1, x8_2, y8_2, x8_3, y8_3)
+
+  // top Arrow
+  let [x9, y9] = [bodyWidth + topWidth, bodyWidth]
+  pg.vertex(x9, y9)
+  if(topHasArrow){
+    let [tx1, ty1] = [x9, bodyWidth + arrowHeight]
+    pg.vertex(tx1, ty1)
+    let [tx2, ty2] = [x9 + arrowWidth, bodyWidth/2]
+    pg.vertex(tx2, ty2)
+    let [tx3, ty3] = [x9, -arrowHeight]
+    pg.vertex(tx3, ty3)
+  }
+  let [x10, y10] = [x9, 0]
+  pg.vertex(x10, y10)
+
+  // left top outside
+  let [x11, y11] = [bodyWidth, 0]
+  pg.vertex(x11, y11)
+  let [x12_1, y12_1, x12_2, y12_2, x12_3, y12_3] = [bodyWidth/2, 0, 0, bodyWidth/2, 0, bodyWidth]
+  pg.bezierVertex(x12_1, y12_1, x12_2, y12_2, x12_3, y12_3)
+
+  pg.endShape(CLOSE)
+  pg.pop()
+
+  return pg
+}
+
+function getPG_curvedArrow2(width_, height_, topHasArrow, bottomHasArrow,
+                       bodyWidth, arrowWidth, arrowHeight,
+                       sColor, sWeight, sAlpha, fColor, fAlpha){
+
+  if(sColor == TRANSPARENT){
+    sWeight = 0
+  }
+  let w = width_ + bodyWidth + arrowWidth + arrowHeight + sWeight
+  let h = height_ + bodyWidth + arrowWidth + arrowHeight + sWeight
+
+  let pg = createGraphics(w + 10, h + 10)
+  if(main_guiDebug){
+    pg.background(127)
+  }
+  setPG_style(pg, sColor, sWeight, sAlpha, fColor, fAlpha)
+  pg.push()
+  pg.translate(5 + arrowHeight, 5 + arrowHeight)
+  pg.beginShape()
+
+  // left bottom Arrow
+  let [x1, y1] = [0, bodyWidth + height_]
+  pg.vertex(x1, y1)
+  if(bottomHasArrow){
+    let [bx1, by1] = [-arrowHeight, y1]
+    pg.vertex(bx1, by1)
+    let [bx2, by2] = [bodyWidth/2, y1 + arrowWidth]
+    pg.vertex(bx2, by2)
+    let [bx3, by3] = [bodyWidth + arrowHeight, y1]
+    pg.vertex(bx3, by3)
+  }
+  let [x2, y2] = [bodyWidth, y1]
+  pg.vertex(x2, y2)
+
+  // left top inside
+  let [x3, y3] = [bodyWidth, bodyWidth * 2]
+  pg.vertex(x3, y3)
+  let [x4_1, y4_1, x4_2, y4_2, x4_3, y4_3] =
+    [bodyWidth, bodyWidth, bodyWidth, bodyWidth, bodyWidth * 2, bodyWidth]
+  pg.bezierVertex(x4_1, y4_1, x4_2, y4_2, x4_3, y4_3)
+
+  // right top Arrow
+  let [x5, y5] = [bodyWidth + width_, bodyWidth]
+  pg.vertex(x5, y5)
+  if(topHasArrow){
+    let [tx1, ty1] = [x5, bodyWidth + arrowHeight]
+    pg.vertex(tx1, ty1)
+    let [tx2, ty2] = [x5 + arrowWidth, bodyWidth/2]
+    pg.vertex(tx2, ty2)
+    let [tx3, ty3] = [x5, -arrowHeight]
+    pg.vertex(tx3, ty3)
+  }
+  let [x6, y6] = [x5, 0]
+  pg.vertex(x6, y6)
+
+  // left top outside
+  let [x7, y7] = [bodyWidth, 0]
+  pg.vertex(x7, y7)
+  let [x8_1, y8_1, x8_2, y8_2, x8_3, y8_3] = [bodyWidth/2, 0, 0, bodyWidth/2, 0, bodyWidth]
+  pg.bezierVertex(x8_1, y8_1, x8_2, y8_2, x8_3, y8_3)
+
+  pg.endShape(CLOSE)
+  pg.pop()
+
+  return pg
+}
+
 function getPG_bigArrow(width_, height_, arrowWidth, arrowHeight,
                         sColor, sWeight, sAlpha, fColor, fAlpha, twoWay=false,
                         tX=0, tY=0, tString='', tSize=18, tColor=TRANSPARENT, tAlpha=255){
@@ -377,6 +503,7 @@ function getPG_bigArrow(width_, height_, arrowWidth, arrowHeight,
 
   return pg
 }
+
 
 
 /*
@@ -803,6 +930,68 @@ function getColorSymbol(tColor){
     default:
       console.error(`getColorSymbol: Color ${tColor} is not defined`);
       return UNDEFINED_COLOR
+  }
+}
+
+function getRGB(symbol){
+  switch(symbol){
+    // BASIC COLORS
+    case TRANSPARENT:
+      return [0, 0, 0, 0]
+    case BLACK:
+      return [0, 0, 0, 255]
+    case WHITE:
+      return [255, 255, 255, 255]
+    case RED:
+      return [255, 0, 0, 255]
+    case GREEN:
+      return [0, 255, 0, 255]
+    case BLUE:
+      return [0, 0, 255, 255]
+
+    // FLAT DESIGN (http://flatuicolors.com/)
+    case TURQUOISE:
+      return [26, 188, 156, 255]
+    case EMERALD:
+      return [46, 204, 113, 255]
+    case PETERRIVER:
+      return [52, 152, 219, 255]
+    case AMETHYST:
+      return [155, 89, 182, 255]
+    case WETASPHALT:
+      return [52, 73, 94, 255]
+    case GREENSEA:
+      return [22, 160, 133, 255]
+    case NEPHRITIS:
+      return [39, 174, 96, 255]
+    case BELIZEHOLE:
+      return [41, 128, 185, 255]
+    case WISTERIA:
+      return [142, 68, 173, 255]
+    case MIDNIGHTBLUE:
+      return [44, 62, 80, 255]
+    case SUNFLOWER:
+      return [241, 196, 15, 255]
+    case CARROT:
+      return [230, 126, 34, 255]
+    case ALIZARIN:
+      return [231, 76, 60, 255]
+    case CLOUDS:
+      return [236, 240, 241, 255]
+    case CONCRETE:
+      return [149, 165, 166, 255]
+    case ORANGE:
+      return [243, 156, 18, 255]
+    case PUMPKIN:
+      return [211, 84, 0, 255]
+    case POMEGRANATE:
+      return [192, 57, 43, 255]
+    case SILVER:
+      return [189, 195, 199, 255]
+    case ASBESTOS:
+      return [127, 140, 141, 255]
+    default:
+      console.error(`setPG_fill: Color ${fColor} is not defined`);
   }
 }
 

@@ -12,6 +12,7 @@ class Book_Network01_01{
   }
 
   static draw(pgb){
-
+    //beginShape();
+    bezier(100, 100, 200, 150, 200, 200, 100, 250)
   }
 }

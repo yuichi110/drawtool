@@ -60,8 +60,19 @@ class LibCommonTest{
                                  fColorTable, fAlphaTable,
                                  txTable, tyArray, textTable, 24, tColorTable, tAlphaTable)
 
+    /*
     this.pg_image = createGraphics(main_width, main_height)
     drawImage_withColor(this.pg_image, 100, 100)
+    */
+    this.pg_image = getPG_imageWithColor('/static/image/server.png', 300, 300, 0)
+
+    this.pg_curvedArrow1 = getPG_curvedArrow(200, true, 100, true,
+                           50, 25, 25, 12,
+                           BLACK, 2, 255, RED, 255)
+
+    this.pg_curvedArrow2 = getPG_curvedArrow2(100, 100, true, true,
+                           25, 25, 12,
+                           BLACK, 2, 255, RED, 255)
   }
 
   static draw(pgb){
@@ -83,7 +94,11 @@ class LibCommonTest{
       case 8:
         this.drawTable(pgb); break
       case 9:
-          this.drawImage(pgb); break
+        this.drawImage(pgb); break
+      case 10:
+        this.drawCurvedArrow(pgb); break
+      default:
+        console.error('error')
     }
   }
 
@@ -144,11 +159,11 @@ class LibCommonTest{
   }
 
   static drawImage(pgb){
-    pgb.image(this.pg_image, 0, 0)
-    /*
-    if(frameCount > 100){
-      pgb.image(this.pg_image, 0, 0)
-    }
-    */
+    pgb.image(this.pg_image, 100, 100)
+  }
+
+  static drawCurvedArrow(pgb){
+    pgb.image(this.pg_curvedArrow1, 100, 100)
+    pgb.image(this.pg_curvedArrow2, 400, 100)
   }
 }

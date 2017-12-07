@@ -23,7 +23,8 @@ import watchman_db
 DEBUG = True
 HOST = '0.0.0.0'
 PORT = 8080
-TOPOLOGY_PATH = 'http://0.0.0.0:{}/static/js_watchman/p5.u1.watchman.topology.json'.format(PORT)
+TOPOLOGY_PATH = '/static/js_watchman/topology/sample.json'
+TOPOLOGY_URL = 'http://0.0.0.0:{}{}'.format(PORT, TOPOLOGY_PATH)
 TOPOLOGY_INITIAL_DICT = {}
 TOPOLOGY_GET_AFTER_SEC = 3
 TOPOLOGY_GET_INTERVAL_SEC = 30
@@ -84,7 +85,7 @@ def api_topology():
         result = {
             'result':False,
             'data':topology,
-            'error':"failed to load topology definition at '{}'".format(TOPOLOGY_PATH)
+            'error':"failed to load topology definition at '{}'".format(TOPOLOGY_URL)
         }
         return make_response(jsonify(result), 500)
 
@@ -139,21 +140,23 @@ def updateTopology():
     firstTime = True
     while(True):
         try:
-            topology = requests.get(TOPOLOGY_PATH).json()
+            topology = requests.get(TOPOLOGY_URL).json()
             if firstTime:
-                print('Successed to load topology json file "{}"'.format(TOPOLOGY_PATH))
+                print('Successed to load topology json file "{}"'.format(TOPOLOGY_URL))
                 firstTime = False
 
         except Exception as e:
             topology = TOPOLOGY_INITIAL_DICT
-            print('Failed to load topology json file "{}"'.format(TOPOLOGY_PATH))
+            print('Failed to load topology json file "{}"'.format(TOPOLOGY_URL))
             print(e)
 
         time.sleep(TOPOLOGY_GET_INTERVAL_SEC)
 
 
 if __name__ == '__main__':
-    print('start')
+    print('Start Watchman Server')
+    print('topology file : {}'.format(TOPOLOGY_URL))
+    print()
     threading.Thread(target=updateTopology).start()
     #app.debug = DEBUG
     app.run(host=HOST, port=PORT)
