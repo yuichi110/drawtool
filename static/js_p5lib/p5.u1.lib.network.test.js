@@ -7,7 +7,9 @@ class LibNetworkTest{
     main_loglevel = LOGLEVEL_INFO
   }
 
-  static setup(pgb){
+  static setup(){
+    this.pgb = createGraphics(width, height)
+
     // brief packet
     this.pg_bpEth1 = Network_BriefPacket.getPG_Eth(BLACK, 2, 255, CONCRETE, BLACK, CONCRETE, BLACK, false)
     this.pg_bpEth2 = Network_BriefPacket.getPG_Eth(BLACK, 2, 255, CONCRETE, BLACK, CONCRETE, BLACK, true)
@@ -91,90 +93,118 @@ class LibNetworkTest{
     this.topology.addTopologyText('image-01', 30, 30, 'Hello World', 24, BLACK, 255)
   }
 
-  static draw(pgb){
-    switch(6){
+  static getDrawPG(){
+    switch(5){
       case 1:
-        this.drawBriefPackets(pgb); break
+        return this.getDrawPG_briefPackets()
       case 2:
-        this.drawBriefPacketSmalls(pgb); break
+        return this.getDrawPG_briefPacketSmalls()
       case 3:
-        this.drawGearIcon1(pgb); break
+        return this.getDrawPG_gearIcon1()
       case 4:
-        this.drawGearIcon2(pgb); break
+        return this.getDrawPG_gearIcon2()
       case 5:
-        this.drawGear(pgb); break
+        return this.getDrawPG_gear()
       case 6:
-        this.drawTopology(pgb); break
+        return this.getDrawPG_topology()
         /*
       case 7:
         this.drawSerialRects(pgb); break
       case 8:
         this.drawTable(pgb); break
         */
+      default:
+        console.error('Switch Error')
     }
   }
 
-  static drawBriefPackets(pgb){
-    pgb.image(this.pg_bpEth1, 100, 100)
-    pgb.image(this.pg_bpEth2, 100, 200)
-    pgb.image(this.pg_bpEthIp1, 100, 300)
-    pgb.image(this.pg_bpEthIp2, 100, 400)
-    pgb.image(this.pg_bpEthIpTcp1, 100, 500)
-    pgb.image(this.pg_bpEthIpTcp2, 100, 600)
+  static getDrawPG_briefPackets(){
+    this.pgb.clear()
+    this.pgb.background(255)
 
-    pgb.image(this.pg_bpIp1, 400, 100)
-    pgb.image(this.pg_bpIp2, 400, 200)
-    pgb.image(this.pg_bpIpTcp1, 400, 300)
-    pgb.image(this.pg_bpIpTcp2, 400, 400)
+    this.pgb.image(this.pg_bpEth1, 100, 100)
+    this.pgb.image(this.pg_bpEth2, 100, 200)
+    this.pgb.image(this.pg_bpEthIp1, 100, 300)
+    this.pgb.image(this.pg_bpEthIp2, 100, 400)
+    this.pgb.image(this.pg_bpEthIpTcp1, 100, 500)
+    this.pgb.image(this.pg_bpEthIpTcp2, 100, 600)
 
-    pgb.image(this.pg_bpTcp1, 700, 100)
-    pgb.image(this.pg_bpTcp2, 700, 200)
-    pgb.image(this.pg_bpData, 700, 300)
+    this.pgb.image(this.pg_bpIp1, 400, 100)
+    this.pgb.image(this.pg_bpIp2, 400, 200)
+    this.pgb.image(this.pg_bpIpTcp1, 400, 300)
+    this.pgb.image(this.pg_bpIpTcp2, 400, 400)
+
+    this.pgb.image(this.pg_bpTcp1, 700, 100)
+    this.pgb.image(this.pg_bpTcp2, 700, 200)
+    this.pgb.image(this.pg_bpData, 700, 300)
+
+    return this.pgb
   }
 
-  static drawBriefPacketSmalls(pgb){
-    pgb.image(this.pg_bpsEth1, 100, 100)
-    pgb.image(this.pg_bpsEth2, 100, 200)
-    pgb.image(this.pg_bpsEthIp1, 100, 300)
-    pgb.image(this.pg_bpsEthIp2, 100, 400)
-    pgb.image(this.pg_bpsEthIpTcp1, 100, 500)
-    pgb.image(this.pg_bpsEthIpTcp2, 100, 600)
+  static getDrawPG_briefPacketSmalls(){
+    this.pgb.clear()
+    this.pgb.background(255)
 
-    pgb.image(this.pg_bpsIp1, 400, 100)
-    pgb.image(this.pg_bpsIp2, 400, 200)
-    pgb.image(this.pg_bpsIpTcp1, 400, 300)
-    pgb.image(this.pg_bpsIpTcp2, 400, 400)
+    this.pgb.image(this.pg_bpsEth1, 100, 100)
+    this.pgb.image(this.pg_bpsEth2, 100, 200)
+    this.pgb.image(this.pg_bpsEthIp1, 100, 300)
+    this.pgb.image(this.pg_bpsEthIp2, 100, 400)
+    this.pgb.image(this.pg_bpsEthIpTcp1, 100, 500)
+    this.pgb.image(this.pg_bpsEthIpTcp2, 100, 600)
 
-    pgb.image(this.pg_bpsTcp1, 700, 100)
-    pgb.image(this.pg_bpsTcp2, 700, 200)
-    pgb.image(this.pg_bpsData, 700, 300)
+    this.pgb.image(this.pg_bpsIp1, 400, 100)
+    this.pgb.image(this.pg_bpsIp2, 400, 200)
+    this.pgb.image(this.pg_bpsIpTcp1, 400, 300)
+    this.pgb.image(this.pg_bpsIpTcp2, 400, 400)
+
+    this.pgb.image(this.pg_bpsTcp1, 700, 100)
+    this.pgb.image(this.pg_bpsTcp2, 700, 200)
+    this.pgb.image(this.pg_bpsData, 700, 300)
+
+    return this.pgb
   }
 
-  static drawGearIcon1(pgb){
-    pgb.image(this.pg_GearIconL2Switch, 100, 100);
-    pgb.image(this.pg_GearIconRouter, 100, 400);
-    pgb.image(this.pg_GearIconL3Switch, 400, 100);
-    pgb.image(this.pg_GearIconPC, 400, 400)
-    pgb.image(this.pg_GearIconFirewall, 700, 100)
-    pgb.image(this.pg_GearIconAp, 700, 400)
+  static getDrawPG_gearIcon1(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
+    this.pgb.image(this.pg_GearIconL2Switch, 100, 100);
+    this.pgb.image(this.pg_GearIconRouter, 100, 400);
+    this.pgb.image(this.pg_GearIconL3Switch, 400, 100);
+    this.pgb.image(this.pg_GearIconPC, 400, 400)
+    this.pgb.image(this.pg_GearIconFirewall, 700, 100)
+    this.pgb.image(this.pg_GearIconAp, 700, 400)
+
+    return this.pgb
   }
 
-  static drawGearIcon2(pgb){
-    pgb.image(this.pg_GearIconLb, 100, 100)
-    pgb.image(this.pg_GearIconStorage, 100, 400)
-    pgb.image(this.pg_GearIconServer, 400, 100)
+  static getDrawPG_gearIcon2(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
+    this.pgb.image(this.pg_GearIconLb, 100, 100)
+    this.pgb.image(this.pg_GearIconStorage, 100, 400)
+    this.pgb.image(this.pg_GearIconServer, 400, 100)
+
+    return this.pgb
   }
 
-  static drawGear(pgb){
-    //pgb.noStroke()
-    //pgb.fill(127, 255)
-    //pgb.rect(100, 100, 100, 100)
-    pgb.image(this.gear.getPG(), 100, 100)
+  static getDrawPG_gear(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
+    this.pgb.image(this.gear.getPG(), 100, 100)
+
+    return this.pgb
   }
 
-  static drawTopology(pgb){
-    this.topology.drawPG(pgb)
+  static getDrawPG_topology(){
+    this.pgb.clear()
+    this.pgb.background(255)
 
+    this.topology.drawPG(this.pgb)
+
+    return this.pgb
   }
 
 }

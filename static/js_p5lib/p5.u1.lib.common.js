@@ -63,6 +63,13 @@ const UNDEFINED_COLOR = Symbol('undefined')
 * Font
 */
 
+function savePG(pg, fname_prefix){
+  let fc = ('000000' + frameCount).slice(-6)
+  let fname = `${fname_prefix}${fc}.png`
+
+  // Save Transparent background image.
+  save(pg, fname)
+}
 
 /*
 * Animation
@@ -456,7 +463,7 @@ function getPG_curvedArrow2(width_, height_, topHasArrow, bottomHasArrow,
   return pg
 }
 
-function getPG_bigArrow(width_, height_, arrowWidth, arrowHeight,
+function getPG_bigArrowR(width_, height_, arrowWidth, arrowHeight,
                         sColor, sWeight, sAlpha, fColor, fAlpha, twoWay=false,
                         tX=0, tY=0, tString='', tSize=18, tColor=TRANSPARENT, tAlpha=255){
 
@@ -504,7 +511,46 @@ function getPG_bigArrow(width_, height_, arrowWidth, arrowHeight,
   return pg
 }
 
+function getPG_bigArrowL(width_, height_, arrowWidth, arrowHeight,
+                        sColor, sWeight, sAlpha, fColor, fAlpha, twoWay=false,
+                        tX=0, tY=0, tString='', tSize=18, tColor=TRANSPARENT, tAlpha=255){
 
+  let pg = createGraphics(width_, height_)
+  setPG_style(pg, sColor, sWeight, sAlpha, fColor, fAlpha)
+  if(sColor == TRANSPARENT){
+    sWeight = 0
+  }
+
+  let x = ceil(sWeight/2);
+  let y = ceil(sWeight/2);
+  let w = width_ - ceil(sWeight) - 1;
+  let h = height_ - ceil(sWeight) - 1;
+
+  pg.push()
+  pg.translate(x, y + h/2)
+  pg.beginShape()
+
+  pg.vertex(0, 0)
+  pg.vertex(arrowWidth, - h/2)
+  pg.vertex(arrowWidth, - h/2 + arrowHeight)
+
+  pg.vertex(w, - h/2 + arrowHeight)
+  pg.vertex(w, h/2 - arrowHeight)
+
+  pg.vertex(arrowWidth, h/2 - arrowHeight)
+  pg.vertex(arrowWidth, h/2)
+
+  pg.endShape(CLOSE)
+  pg.pop()
+
+  if(tString != ''){
+    pg.textSize(tSize)
+    setPG_style(pg, TRANSPARENT, 0, 0, tColor, tAlpha)
+    pg.text(tString, tX, tY)
+  }
+
+  return pg
+}
 
 /*
 * Special shapes

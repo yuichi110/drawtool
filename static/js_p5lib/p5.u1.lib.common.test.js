@@ -7,15 +7,17 @@ class LibCommonTest{
     main_loglevel = LOGLEVEL_INFO
   }
 
-  static setup(pgb){
+  static setup(){
+    this.pgb = createGraphics(width, height)
+
     //drawTest, drawMoveRect
     this.pg_redRect = getPG_rect(52, 52, 10, BLACK, 2, 255, RED, 255,
                                  10, 30, 'AB', 18, WHITE, 255)
     this.pg_redBall = getPG_ellipse(10, 10, TRANSPARENT, 2, 255, RED, 255)
 
     // drawBigArrow
-    this.pg_bigArrow1 = getPG_bigArrow(400, 200, 50, 50, BLACK, 10, 255, RED, 255, false)
-    this.pg_bigArrow2 = getPG_bigArrow(400, 200, 50, 50, BLACK, 2, 255, WHITE, 255, true)
+    this.pg_bigArrow1 = getPG_bigArrowR(400, 200, 50, 50, BLACK, 10, 255, RED, 255, false)
+    this.pg_bigArrow2 = getPG_bigArrowR(400, 200, 50, 50, BLACK, 2, 255, WHITE, 255, true)
 
     // drawCylinder
     this.pg_cylinder1 = getPG_cylinder(200, 200, 50, BLACK, 2, 255, CONCRETE, WHITE, 255,
@@ -75,55 +77,73 @@ class LibCommonTest{
                            BLACK, 2, 255, RED, 255)
   }
 
-  static draw(pgb){
-    switch(9){
+  static getDrawPG(){
+    switch(10){
       case 1:
-        this.drawTest(pgb); break
+        return this.getDrawPG_test()
       case 2:
-        this.drawMoveRect(pgb); break
+        return this.getDrawPG_moveRect()
       case 3:
-        this.drawFlow(pgb); break
+        return this.getDrawPG_flow()
       case 4:
-        this.drawLine(pgb); break
+        return this.getDrawPG_line()
       case 5:
-        this.drawBigArrow(pgb); break
+        return this.getDrawPG_bigArrow()
       case 6:
-        this.drawCylinder(pgb); break
+        return this.getDrawPG_cylinder()
       case 7:
-        this.drawSerialRects(pgb); break
+        return this.getDrawPG_serialRects()
       case 8:
-        this.drawTable(pgb); break
+        return this.getDrawPG_table()
       case 9:
-        this.drawImage(pgb); break
+        return this.getDrawPG_image()
       case 10:
-        this.drawCurvedArrow(pgb); break
+        return this.getDrawPG_curvedArrow()
       default:
-        console.error('error')
+        console.error('Switch Error')
     }
   }
 
-  static drawTest(pgb){
-    pgb.image(this.pg_redRect, 100, 100)
-    pgb.image(this.pg_redBall, 200, 200)
+  static getDrawPG_test(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
+    this.pgb.image(this.pg_redRect, 100, 100)
+    this.pgb.image(this.pg_redBall, 200, 200)
+
+    return this.pgb
   }
 
-  static drawLine(pgb){
-    drawPG_line(pgb, 100, 100, 300, 100, BLACK, 2, 255)
-    drawPG_lineArrow(pgb, 100, 200, 300, 200, 10, BLACK, 2, 255, true, false)
-    drawPG_lineArrow(pgb, 100, 300, 300, 300, 10, BLACK, 2, 255, true, true)
-    drawPG_lineArrow(pgb, 100, 400, 300, 400, 10, BLACK, 2, 255, false, false)
-    drawPG_lineArrow(pgb, 100, 500, 300, 500, 10, BLACK, 2, 255, false, true)
+  static getDrawPG_line(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
+    drawPG_line(this.pgb, 100, 100, 300, 100, BLACK, 2, 255)
+    drawPG_lineArrow(this.pgb, 100, 200, 300, 200, 10, BLACK, 2, 255, true, false)
+    drawPG_lineArrow(this.pgb, 100, 300, 300, 300, 10, BLACK, 2, 255, true, true)
+    drawPG_lineArrow(this.pgb, 100, 400, 300, 400, 10, BLACK, 2, 255, false, false)
+    drawPG_lineArrow(this.pgb, 100, 500, 300, 500, 10, BLACK, 2, 255, false, true)
+
+    return this.pgb
   }
 
-  static drawMoveRect(pgb){
+  static getDrawPG_moveRect(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
     let currentFrame = frameCount % 100;
-    movePG(pgb, this.pg_redRect, 200, 50, 0, 500, 50, 0, currentFrame, 10, 90);
-    movePG(pgb, this.pg_redRect, 200, 200, 0, 500, 200, 720, currentFrame, 10, 90);
-    movePG_bezier(pgb, this.pg_redRect, 200, 350, 0, 400, 450, 300, 200, 500, 350, 0, currentFrame, 10, 90)
-    movePG_bezier(pgb, this.pg_redRect, 200, 500, 0, 400, 600, 300, 350, 500, 500, 720, currentFrame, 10, 90)
+    movePG(this.pgb, this.pg_redRect, 200, 50, 0, 500, 50, 0, currentFrame, 10, 90);
+    movePG(this.pgb, this.pg_redRect, 200, 200, 0, 500, 200, 720, currentFrame, 10, 90);
+    movePG_bezier(this.pgb, this.pg_redRect, 200, 350, 0, 400, 450, 300, 200, 500, 350, 0, currentFrame, 10, 90)
+    movePG_bezier(this.pgb, this.pg_redRect, 200, 500, 0, 400, 600, 300, 350, 500, 500, 720, currentFrame, 10, 90)
+
+    return this.pgb
   }
 
-  static drawFlow(pgb){
+  static getDrawPG_flow(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
     let f = frameCount % 500
     if(f == 50){
       this.flow1.start()
@@ -133,37 +153,69 @@ class LibCommonTest{
       this.flow2.stop()
     }
 
-    this.flow1.draw(pgb, this.pg_redBall)
-    this.flow2.draw(pgb, this.pg_redBall)
+    this.flow1.draw(this.pgb, this.pg_redBall)
+    this.flow2.draw(this.pgb, this.pg_redBall)
+
+    return this.pgb
   }
 
-  static drawBigArrow(pgb){
-    pgb.image(this.pg_bigArrow1, 100, 100)
-    pgb.image(this.pg_bigArrow2, 100, 400)
+  static getDrawPG_bigArrow(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
+    this.pgb.image(this.pg_bigArrow1, 100, 100)
+    this.pgb.image(this.pg_bigArrow2, 100, 400)
+
+    return this.pgb
   }
 
-  static drawCylinder(pgb){
-    pgb.image(this.pg_cylinder1, 100, 100)
-    pgb.image(this.pg_cylinder2, 100, 300)
+  static getDrawPG_cylinder(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
+    this.pgb.image(this.pg_cylinder1, 100, 100)
+    this.pgb.image(this.pg_cylinder2, 100, 300)
+
+    return this.pgb
   }
 
-  static drawSerialRects(pgb){
-    pgb.image(this.pg_hrects1, 100, 100)
-    pgb.image(this.pg_hrects2, 400, 100)
-    pgb.image(this.pg_vrects1, 100, 200)
-    pgb.image(this.pg_vrects2, 400, 200)
+  static getDrawPG_serialRects(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
+    this.pgb.image(this.pg_hrects1, 100, 100)
+    this.pgb.image(this.pg_hrects2, 400, 100)
+    this.pgb.image(this.pg_vrects1, 100, 200)
+    this.pgb.image(this.pg_vrects2, 400, 200)
+
+    return this.pgb
   }
 
-  static drawTable(pgb){
-    pgb.image(this.pg_table1, 100, 100)
+  static getDrawPG_table(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
+    this.pgb.image(this.pg_table1, 100, 100)
+
+    return this.pgb
   }
 
-  static drawImage(pgb){
-    pgb.image(this.pg_image, 100, 100)
+  static getDrawPG_image(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
+    this.pgb.image(this.pg_image, 100, 100)
+
+    return this.pgb
   }
 
-  static drawCurvedArrow(pgb){
-    pgb.image(this.pg_curvedArrow1, 100, 100)
-    pgb.image(this.pg_curvedArrow2, 400, 100)
+  static getDrawPG_curvedArrow(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
+    this.pgb.image(this.pg_curvedArrow1, 100, 100)
+    this.pgb.image(this.pg_curvedArrow2, 400, 100)
+
+    return this.pgb
   }
 }

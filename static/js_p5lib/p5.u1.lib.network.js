@@ -1590,9 +1590,7 @@ class Network_TopologyManager{
   }
 
   drawPG(pg){
-    pg.clear()
-    //pg.background(127)
-
+    
     // draw underground images
     for(let [name, itemPg, x, y] of this.pgUnderItemArray){
       pg.image(itemPg, x, y)

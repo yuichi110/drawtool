@@ -1,37 +1,28 @@
 class Book_Network01_02{
 
   static preload(){
-    main_width = 800
-    main_height = 800
+    main_width = 1920
+    main_height = 1080
+    main_background = 0
     main_guiDebug = false
     main_loglevel = LOGLEVEL_INFO
 
-    this.imageNumber = 1
-    switch(this.imageNumber){
-      case 1:
-        // none
-        break
-
-      default:
-        break
-    }
+    this.save = false
   }
 
   static setup(pgb){
-    switch(this.imageNumber){
-      case 1:
-        this.setup_image1(pgb)
-        break
-      default:
-        break
-    }
+    this.setup_image1()
+    this.setup_image2()
   }
 
-  static draw(pgb){
-    switch(this.imageNumber){
+  static getDrawPG(){
+    let imageNumber = 1
+    let pgb
+    switch(imageNumber){
       case 1:
-        this.draw_image1(pgb)
-        break
+        return this.getDrawPG_image1()
+      case 2:
+        return this.getDrawPG_image2()
       default:
         break
     }
@@ -42,7 +33,9 @@ class Book_Network01_02{
   ***/
 
   static setup_image1(){
-    this.i1_topology = new Network_TopologyManager(width, height)
+    this.i1_pgb = createGraphics(800, 650)
+
+    this.i1_topology = new Network_TopologyManager(this.i1_pgb.width, this.i1_pgb.height)
 
     let pc1 = new Network_Gear(100, 100, 10,
                                BLACK, 2, 255, AMETHYST, 255,
@@ -93,8 +86,20 @@ class Book_Network01_02{
     this.i1_topology.connectGears('pc3', RIGHT, 1, 'sw1', LEFT, 3, BLACK, 2, 255)
   }
 
-  static draw_image1(pgb){
-    this.i1_topology.drawPG(pgb)
+  static getDrawPG_image1(){
+    if(this.i1_topology.hasUpdate()){
+      this.i1_pgb.clear()
+      this.i1_pgb.background(255)
+      this.i1_topology.drawPG(this.i1_pgb)
+    }
+
+    if(this.save){
+      if(frameCount == 100){
+        savePG(this.i1_pgb, 'book_network01_02_image1')
+      }
+    }
+
+    return this.i1_pgb
   }
 
   /***
@@ -102,12 +107,62 @@ class Book_Network01_02{
   ***/
 
   static setup_image2(){
-    this.i2_pgb = createGraphics(width, height)
+    this.i2_pgb = createGraphics(1300, 600)
+    this.i2_pgb.background(255)
 
-    
+    let admin_rect = getPG_rect(850, 425, 20, PUMPKIN, 6, 255)
+    let arrowR = getPG_bigArrowR(75, 40, 25, 10, TRANSPARENT, 0, 0, NEPHRITIS, 255)
+    let arrowL = getPG_bigArrowL(75, 40, 25, 10, TRANSPARENT, 0, 0, NEPHRITIS, 255)
+
+    let w = 160
+    let h = 75
+    let r = 10
+    let tSize = 18
+    let userMode = getPG_rect(w, h, r, TRANSPARENT, 0, 0, BELIZEHOLE, 255,
+                         30, 33, "　ユーザー\nEXECモード", tSize, WHITE, 255)
+    let superMode = getPG_rect(w, h, r, TRANSPARENT, 0, 0, BELIZEHOLE, 255,
+                               30, 33, "　　特権\nEXECモード", tSize, WHITE, 255)
+    let configMode = getPG_rect(w, 380, r, TRANSPARENT, 0, 0, BELIZEHOLE, 255,
+                              8, 200, "コンフィグモード", tSize, WHITE, 255)
+    let configModeInt = getPG_rect(w, h, r, TRANSPARENT, 0, 0, BELIZEHOLE, 255,
+                         8, 33, "インターフェース\nコンフィグモード", tSize, WHITE, 255)
+    let configModeRouting = getPG_rect(w, h, r, TRANSPARENT, 0, 0, BELIZEHOLE, 255,
+                               8, 33, "　ルーティング\nコンフィグモード", tSize, WHITE, 255)
+    let configModeOther = getPG_rect(w, h, r, TRANSPARENT, 0, 0, BELIZEHOLE, 255,
+                              8, 33, "　　その他の\nコンフィグモード", tSize, WHITE, 255)
+
+    this.i2_pgb.image(admin_rect, 330, 75)
+
+    this.i2_pgb.image(userMode, 100, 100)
+    this.i2_pgb.image(arrowR, 295, 100)
+    this.i2_pgb.image(arrowL, 295, 140)
+
+    this.i2_pgb.image(superMode, 400, 100)
+    this.i2_pgb.image(arrowR, 595, 100)
+    this.i2_pgb.image(arrowL, 595, 140)
+
+    this.i2_pgb.image(configMode, 700, 100)
+    this.i2_pgb.image(configModeInt, 1000, 100)
+    this.i2_pgb.image(arrowR, 895, 100)
+    this.i2_pgb.image(arrowL, 895, 140)
+
+    this.i2_pgb.image(configModeRouting, 1000, 250)
+    this.i2_pgb.image(arrowR, 895, 250)
+    this.i2_pgb.image(arrowL, 895, 290)
+
+    this.i2_pgb.image(configModeOther, 1000, 400)
+    this.i2_pgb.image(arrowR, 895, 400)
+    this.i2_pgb.image(arrowL, 895, 440)
+
+    drawPG_text(this.i2_pgb, 375, 475, "管理者権限が必要なモード", 24, PUMPKIN, 255)
   }
 
-  static draw_image2(pgb){
-
+  static getDrawPG_image2(){
+    if(this.save){
+      if(frameCount == 100){
+        savePG(this.i2_pgb, 'book_network01_02_image2')
+      }
+    }
+    return this.i2_pgb
   }
 }

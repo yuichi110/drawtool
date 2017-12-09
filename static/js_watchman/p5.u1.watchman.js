@@ -18,14 +18,14 @@ let _watchman_drawingTaskArray
 class Watchman{
   static preload(){
     main_loglevel = LOGLEVEL_INFO
-    
+
     // make web-worker. Please take care js file path.
     _watchman_worker = new Worker(WATCHMAN_WORKER_PATH)
     _watchman_drawingTaskArray = new Array()
   }
 
-  static setup(pgb){
-    this.watchman_pgb = createGraphics(width, height)
+  static setup(){
+    this.pgb = createGraphics(width, height)
     this.topology = new Network_TopologyManager(width, height)
     //network_validateTopologyJson(WATCHMAN_TOPOLOGY_JSON)
     //network_loadTopologyJson_fromUrl(WATCHMAN_TOPOLOGY_JSON, this.topology)
@@ -34,24 +34,27 @@ class Watchman{
     _watchman_worker.postMessage([WATCHMAN_MESSAGE1_INITIALIZE_NO_GEAR_CHECK, 0])
   }
 
-  static draw(pgb){
+  static getDrawPG(){
     // finish all tasks which is requested by worker
-    this.handleTask(pgb)
+    this.handleTask()
 
     // update background if it has update
     if(this.topology.hasUpdate()){
-      console.log('hasUpdate()')
-      this.topology.drawPG(this.watchman_pgb)
+      this.pgb.clear()
+      this.topology.drawPG(this.pgb)
     }
 
-    pgb.image(this.watchman_pgb, 0, 0)
-    //watchman_print('draw thread')
+    return this.pgb
   }
 
-  static handleTask(pgb){
+  static handleTask(){
+    // do all tasks.
     while(_watchman_drawingTaskArray.length != 0){
+      // pickup drawing task from taskArray.
       let [taskType, data] = _watchman_drawingTaskArray[0]
       console.log('Watchman handleTask: ' + taskType)
+
+      // do it.
       switch(taskType){
         case WATCHMAN_MESSAGE2_REFRESH_TOPOLOGY:
           network_loadTopologyJson(data, this.topology)
@@ -60,9 +63,9 @@ class Watchman{
         default:
           break
       }
+
+      // delete it.
       _watchman_drawingTaskArray.shift()
-      // pickup drawing task from taskArray.
-      // and delete it.
     }
   }
 

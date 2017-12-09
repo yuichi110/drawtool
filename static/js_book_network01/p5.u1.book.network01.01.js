@@ -7,11 +7,11 @@ class Book_Network01_01{
     main_loglevel = LOGLEVEL_INFO
   }
 
-  static setup(pgb){
+  static setup(){
 
   }
 
-  static draw(pgb){
+  static getDrawPG(){
     //beginShape();
     bezier(100, 100, 200, 150, 200, 200, 100, 250)
   }

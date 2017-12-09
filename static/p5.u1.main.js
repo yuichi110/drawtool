@@ -17,14 +17,19 @@
 * Please add new module class here as Symbol.
 * They are switched at setup() and draw() function in this main module.
 */
-// Library
+
+// Library test modules
 const MODULE_LIB_COMMON_TEST =  Symbol('module lib.common.test')
 const MODULE_LIB_NETWORK_TEST = Symbol('module lib.network.test')
+
 // Watch: needs web server
-const MODULE_WATCHMAN =         Symbol('module watchman')
+const MODULE_WATCHMAN = Symbol('module watchman')
+
 // Books
 const MODULE_BOOK_NETWORK01_01 = Symbol('module book network01 01')
 const MODULE_BOOK_NETWORK01_02 = Symbol('module book network01 02')
+
+// CHOOSED RUN MODULE
 const RUN_MODULE = MODULE_BOOK_NETWORK01_02
 
 const LOGLEVEL_DEBUG = Symbol('log level debug')
@@ -132,7 +137,6 @@ function setup() {
   _main_canvas = createCanvas(main_width, main_height)
   _main_canvas.parent(main_canvasParent)
   _Main.centerCanvas();
-  _main_pgb = createGraphics(width, height)
 
   /*
   * Setup each module. For example creating static items.
@@ -141,19 +145,19 @@ function setup() {
   */
   switch(RUN_MODULE){
     case MODULE_LIB_COMMON_TEST:
-      LibCommonTest.setup(_main_pgb)
+      LibCommonTest.setup()
       break
     case MODULE_LIB_NETWORK_TEST:
-      LibNetworkTest.setup(_main_pgb)
+      LibNetworkTest.setup()
       break
     case MODULE_WATCHMAN:
-      Watchman.setup(_main_pgb)
+      Watchman.setup()
       break
     case MODULE_BOOK_NETWORK01_01:
-      Book_Network01_01.setup(_main_pgb)
+      Book_Network01_01.setup()
       break
     case MODULE_BOOK_NETWORK01_02:
-      Book_Network01_02.setup(_main_pgb)
+      Book_Network01_02.setup()
       break
     default:
       console.error(`${RUN_MODULE.toString()} is not in setup switch`)
@@ -163,58 +167,42 @@ function setup() {
 function draw() {
   // Initialize background and background pgraphics (makes it transparent).
   background(main_background)
-  _main_pgb.clear()
+  let drawPG
 
-  /*
-  * Draw image to the background pgraphics (transparent).
-  * Call static draw() methods on the module.
-  * Please add new module here.
-  */
   switch(RUN_MODULE){
     case MODULE_LIB_COMMON_TEST:
-      LibCommonTest.draw(_main_pgb)
+      drawPG = LibCommonTest.getDrawPG()
       break
     case MODULE_LIB_NETWORK_TEST:
-      LibNetworkTest.draw(_main_pgb)
+      drawPG = LibNetworkTest.getDrawPG()
       break
     case MODULE_WATCHMAN:
-      Watchman.draw(_main_pgb)
+      drawPG = Watchman.getDrawPG()
       break
     case MODULE_BOOK_NETWORK01_01:
-      Book_Network01_01.draw(_main_pgb)
+      drawPG = Book_Network01_01.getDrawPG()
       break
     case MODULE_BOOK_NETWORK01_02:
-      Book_Network01_02.draw(_main_pgb)
+      drawPG = Book_Network01_02.getDrawPG()
       break
     default:
       console.error(`${RUN_MODULE.toString()} is not in draw switch`)
   }
 
   if(main_drawGrid){
-    _Main.drawGrid(_main_pgb)
+    _Main.drawGrid(drawPG)
   }
   if(main_drawMouseXY){
-    _Main.drawMouseXY(_main_pgb)
-  }
-  if(main_save){
-    // You can choose with/without background color by "main_save_background".
-    // Without background color means, background is transparent.
-    // File format png.
-    //
-    // File name PREFIX-XXXXXX.png
-    // - define PREFIX as global parameter "main_save_prefix"
-    // - XXXXXXX is frame count
-    _Main.save(_main_pgb)
+    _Main.drawMouseXY(drawPG)
   }
 
-  image(_main_pgb, 0, 0);
+  image(drawPG, 0, 0);
 }
 
 /*
 * LOCAL Variables.
 * Please don't touch them.
 */
-let _main_pgb;
 let _main_canvas
 
 function windowResized() {
@@ -263,17 +251,5 @@ class _Main{
 
   static drawMouseXY(pgb){
 
-  }
-
-  static save(pgb){
-    let fc = ('000000' + frameCount).slice(-6)
-    let fname = `${main_save_prefix}${fc}.png`
-    if(main_save_background){
-      // Save image with background color.
-      save(fname)
-    }else{
-      // Save Transparent background image.
-      save(pgb, fname)
-    }
   }
 }
