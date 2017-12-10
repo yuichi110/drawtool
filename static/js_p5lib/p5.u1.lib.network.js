@@ -57,6 +57,106 @@ function getNetworkGearSymbol(textName){
 * Size Large
 **************/
 
+class Network_Format{
+  static getPG_EthIp(sColor, sWeight, sAlpha, tSize,
+                     fcDstEth, txDstEth, textDstEth, tcDstEth,
+                     fcSrcEth, txSrcEth, textSrcEth, tcSrcEth,
+                     fcDstIp,  txDstIp,  textDstIp,  tcDstIp,
+                     fcSrcIp,  txSrcIp,  textSrcIp,  tcSrcIp,
+                     fcPayload, tcPayload){
+
+    let widthArray = [90, 90, 90, 90, 200]
+    let fcArray = [fcDstEth, fcSrcEth, fcDstIp, fcSrcIp, fcPayload]
+    let faArray = [255, 255, 255, 255, 255]
+    let txArray = [txDstEth, txSrcEth, txDstIp, txSrcIp, 50]
+    let textArray = [textDstEth, textSrcEth, textDstIp, textSrcIp, '']
+    let tcArray = [tcDstEth, tcSrcEth, tcDstIp, tcSrcEth, tcPayload]
+    let taArray = [255, 255, 255, 255, 255]
+
+    let pg = getPG_horizontalRects(widthArray, 60,
+                                   sColor, sWeight, sAlpha,
+                                   fcArray, faArray,
+                                   txArray, 50 , textArray,
+                                   tSize, tcArray, taArray);
+    drawPG_text(pg, 10, 20, "Dst MAC", 18, tcDstEth, 255)
+    drawPG_text(pg, 97, 20, "Src MAC", 18, tcSrcEth, 255)
+    drawPG_text(pg, 200, 20, "Dst IP", 18, tcDstIp, 255)
+    drawPG_text(pg, 290, 20, "Src IP", 18, tcSrcIp, 255)
+    drawPG_text(pg, 410, 40, "Payload", 24, tcPayload, 255)
+
+    let pgb = createGraphics(560, 96)
+    drawPG_line(pgb, 5, 30, 15, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 15, 10, 25, 10, BLACK, 2, 255)
+    drawPG_text(pgb, 32, 20, "Ethernet (L2)", 20, BLACK, 255)
+    drawPG_line(pgb, 155, 10, 165, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 165, 10, 175, 30, BLACK, 2, 255)
+
+    drawPG_line(pgb, 185, 30, 195, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 195, 10, 230, 10, BLACK, 2, 255)
+    drawPG_text(pgb, 240, 20, "IP (L3)", 20, BLACK, 255)
+    drawPG_line(pgb, 310, 10, 345, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 345, 10, 355, 30, BLACK, 2, 255)
+
+    drawPG_line(pgb, 365, 30, 375, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 375, 10, 415, 10, BLACK, 2, 255)
+    drawPG_text(pgb, 427, 20, "L4 + L7", 20, BLACK, 255)
+    drawPG_line(pgb, 505, 10, 545, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 545, 10, 555, 30, BLACK, 2, 255)
+
+    pgb.image(pg, 1, 35)
+    return pgb
+  }
+
+  static getPG_EthIpWide(sColor, sWeight, sAlpha, tSize,
+                         fcDstEth, txDstEth, textDstEth, tcDstEth,
+                         fcSrcEth, txSrcEth, textSrcEth, tcSrcEth,
+                         fcDstIp,  txDstIp,  textDstIp,  tcDstIp,
+                         fcSrcIp,  txSrcIp,  textSrcIp,  tcSrcIp,
+                         fcPayload, tcPayload){
+
+    let widthArray = [160, 160, 160, 160, 130]
+    let fcArray = [fcDstEth, fcSrcEth, fcDstIp, fcSrcIp, fcPayload]
+    let faArray = [255, 255, 255, 255, 255]
+    let txArray = [txDstEth, txSrcEth, txDstIp, txSrcIp, 0]
+    let textArray = [textDstEth, textSrcEth, textDstIp, textSrcIp, '']
+    let tcArray = [tcDstEth, tcSrcEth, tcDstIp, tcSrcEth, tcPayload]
+    let taArray = [255, 255, 255, 255, 255]
+
+    let pg = getPG_horizontalRects(widthArray, 60,
+                                   sColor, sWeight, sAlpha,
+                                   fcArray, faArray,
+                                   txArray, 50 , textArray,
+                                   tSize, tcArray, taArray);
+    drawPG_text(pg, 50, 20, "Dst MAC", 18, tcDstEth, 255)
+    drawPG_text(pg, 200, 20, "Src MAC", 18, tcSrcEth, 255)
+    drawPG_text(pg, 375, 20, "Dst IP", 18, tcDstIp, 255)
+    drawPG_text(pg, 540, 20, "Src IP", 18, tcSrcIp, 255)
+    drawPG_text(pg, 660, 40, "Payload", 24, tcPayload, 255)
+
+    let pgb = createGraphics(770, 96)
+    drawPG_line(pgb, 5, 30, 15, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 15, 10, 90, 10, BLACK, 2, 255)
+    drawPG_text(pgb, 105, 20, "Ethernet (L2)", 20, BLACK, 255)
+    drawPG_line(pgb, 230, 10, 305, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 305, 10, 315, 30, BLACK, 2, 255)
+
+    drawPG_line(pgb, 325, 30, 335, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 335, 10, 435, 10, BLACK, 2, 255)
+    drawPG_text(pgb, 450, 20, "IP (L3)", 20, BLACK, 255)
+    drawPG_line(pgb, 520, 10, 625, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 625, 10, 635, 30, BLACK, 2, 255)
+
+    drawPG_line(pgb, 645, 30, 655, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 655, 10, 665, 10, BLACK, 2, 255)
+    drawPG_text(pgb, 672, 20, "L4 + L7", 20, BLACK, 255)
+    drawPG_line(pgb, 745, 10, 755, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 755, 10, 765, 30, BLACK, 2, 255)
+
+    pgb.image(pg, 1, 35)
+    return pgb
+  }
+}
+
 class Network_BriefPacket{
   static getPG_Eth(sColor, sWeight, sAlpha,
                      fcEth, tcEth, fcData, tcData,
@@ -93,6 +193,76 @@ class Network_BriefPacket{
     }
   }
 
+  static getPG_Eth(sColor, sWeight, sAlpha,
+                     fcEth, tcEth, fcData, tcData,
+                     isReverse){
+    if(isReverse){
+      let widthArray = [_NETWORK_BP_ETH_WIDTH, _NETWORK_BP_DATA_WIDTH]
+      let fcArray = [fcEth, fcData]
+      let faArray = [255, 255]
+      let txArray = [_NETWORK_BP_ETH_X, _NETWORK_BP_DATA_X]
+      let textArray = ['Eth', 'Data']
+      let tcArray = [tcEth, tcData]
+      let taArray = [255, 255]
+
+      return getPG_horizontalRects(widthArray, _NETWORK_BP_HEIGHT,
+                                  sColor, sWeight, sAlpha,
+                                  fcArray, faArray,
+                                  txArray, _NETWORK_BP_Y , textArray,
+                                  _NETWORK_BP_TEXT_SIZE, tcArray, taArray);
+
+    }else{
+      let widthArray = [_NETWORK_BP_DATA_WIDTH, _NETWORK_BP_ETH_WIDTH]
+      let fcArray = [fcData, fcEth]
+      let faArray = [255, 255]
+      let txArray = [_NETWORK_BP_DATA_X, _NETWORK_BP_ETH_X]
+      let textArray = ['Data', 'Eth']
+      let tcArray = [tcData, tcEth]
+      let taArray = [255, 255]
+
+      return getPG_horizontalRects(widthArray, _NETWORK_BP_HEIGHT,
+                                  sColor, sWeight, sAlpha,
+                                  fcArray, faArray,
+                                  txArray, _NETWORK_BP_Y , textArray,
+                                  _NETWORK_BP_TEXT_SIZE, tcArray, taArray);
+    }
+  }
+
+  static getPG_Eth(sColor, sWeight, sAlpha,
+                     fcEth, tcEth, fcData, tcData,
+                     isReverse){
+    if(isReverse){
+      let widthArray = [_NETWORK_BP_ETH_WIDTH, _NETWORK_BP_DATA_WIDTH]
+      let fcArray = [fcEth, fcData]
+      let faArray = [255, 255]
+      let txArray = [_NETWORK_BP_ETH_X, _NETWORK_BP_DATA_X]
+      let textArray = ['Eth', 'Data']
+      let tcArray = [tcEth, tcData]
+      let taArray = [255, 255]
+
+      return getPG_horizontalRects(widthArray, _NETWORK_BP_HEIGHT,
+                                  sColor, sWeight, sAlpha,
+                                  fcArray, faArray,
+                                  txArray, _NETWORK_BP_Y , textArray,
+                                  _NETWORK_BP_TEXT_SIZE, tcArray, taArray);
+
+    }else{
+      let widthArray = [_NETWORK_BP_DATA_WIDTH, _NETWORK_BP_ETH_WIDTH]
+      let fcArray = [fcData, fcEth]
+      let faArray = [255, 255]
+      let txArray = [_NETWORK_BP_DATA_X, _NETWORK_BP_ETH_X]
+      let textArray = ['Data', 'Eth']
+      let tcArray = [tcData, tcEth]
+      let taArray = [255, 255]
+
+      return getPG_horizontalRects(widthArray, _NETWORK_BP_HEIGHT,
+                                  sColor, sWeight, sAlpha,
+                                  fcArray, faArray,
+                                  txArray, _NETWORK_BP_Y , textArray,
+                                  _NETWORK_BP_TEXT_SIZE, tcArray, taArray);
+    }
+  }
+  
   static getPG_EthIp(sColor, sWeight, sAlpha,
                      fcEth, tcEth, fcIp, tcIp, fcData, tcData,
                      isReverse){
@@ -132,6 +302,8 @@ class Network_BriefPacket{
                                    _NETWORK_BP_TEXT_SIZE, tcArray, taArray);
     }
   }
+
+
 
   static getPG_EthIpTcp(sColor, sWeight, sAlpha,
                         fcEth, tcEth, fcIp, tcIp, fcTcp, tcTcp, fcData, tcData,
@@ -1590,7 +1762,7 @@ class Network_TopologyManager{
   }
 
   drawPG(pg){
-    
+
     // draw underground images
     for(let [name, itemPg, x, y] of this.pgUnderItemArray){
       pg.image(itemPg, x, y)

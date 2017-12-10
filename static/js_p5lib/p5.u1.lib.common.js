@@ -75,6 +75,20 @@ function savePG(pg, fname_prefix){
 * Animation
 */
 
+function stayPG(pgb, pg, x, y, currentFrame, startFrame, endFrame){
+  if(currentFrame < startFrame) return;
+  if(endFrame < currentFrame) return;
+
+  pgb.image(pg, x - pg.width/2, y - pg.height/2)
+}
+
+function stayPG_corner(pgb, pg, x, y, currentFrame, startFrame, endFrame){
+  if(currentFrame < startFrame) return;
+  if(endFrame < currentFrame) return;
+
+  pgb.image(pg, x, y)
+}
+
 function movePG(pgb, pg,
                 x1, y1, r1, x2, y2, r2,
                 currentFrame, startFrame, endFrame){
@@ -556,6 +570,59 @@ function getPG_bigArrowL(width_, height_, arrowWidth, arrowHeight,
 * Special shapes
 */
 
+function getPG_balloon(
+  rectX, rectY, rectWidth, rectHeight,
+  location, balloonX, balloonY, b1, b2,
+  sColor, sWeight, sAlpha, fColor, fAlpha){
+
+    let [x1, y1] = [rectX, rectY]
+    let [x2, y2] = [x1, y1 + rectHeight]
+    let [x3, y3] = [x2 + rectWidth, y2]
+    let [x4, y4] = [x3, y1]
+
+    let pg = createGraphics(max(x3, balloonX) + 10, max(y3, balloonY) + 10)
+
+    switch(location){
+      case LEFT:
+      case BOTTOM:
+      case RIGHT:
+      case TOP:
+        break
+      default:
+        console.error('Switch Error')
+    }
+
+    setPG_style(pg, sColor, sWeight, sAlpha, fColor, fAlpha)
+    pg.beginShape()
+    pg.vertex(x1, y1)
+    if(location == LEFT){
+      pg.vertex(x1, y1 + b1)
+      pg.vertex(balloonX, balloonY)
+      pg.vertex(x1, y1 + b2)
+    }
+    pg.vertex(x2, y2)
+    if(location == BOTTOM){
+      pg.vertex(x2 + b1, y2)
+      pg.vertex(balloonX, balloonY)
+      pg.vertex(x2 + b2, y2)
+    }
+    pg.vertex(x3, y3)
+    if(location == RIGHT){
+      pg.vertex(x3, y3 - b1)
+      pg.vertex(balloonX, balloonY)
+      pg.vertex(x3, y3 - b2)
+    }
+    pg.vertex(x4, y4)
+    if(location == TOP){
+      pg.vertex(x4 - b1, y4)
+      pg.vertex(balloonX, balloonY)
+      pg.vertex(x4 - b2, y4)
+    }
+    pg.endShape(CLOSE)
+
+    return pg
+}
+
 function getPG_cylinder(width_, height_, arcHeight,
                         sColor, sWeight, sAlpha, bodyColor, topEllipseColor, fAlpha,
                         tX=0, tY=0, tString='', tSize=18, tColor=TRANSPARENT, tAlpha=255){
@@ -719,57 +786,60 @@ function getPG_table(columnWidthArray, rawHeightArray,
                       sColor, sWeight, sAlpha, fColorTable, fAlphaTable,
                       txTable, tyArray, textTable, tSize, tColorTable, tAlphaTable){
 
+  let cwArray = [].concat(columnWidthArray)
+  let rhArray = [].concat(rawHeightArray)
+
   if(sColor == TRANSPARENT){
     sWeight = 0
   }
-  let xArray = new Array(columnWidthArray.length);
-  let yArray = new Array(rawHeightArray.length)
+  let xArray = new Array(cwArray.length);
+  let yArray = new Array(rhArray.length)
   let width_ = 0;
   let w = 0;
   let height_ = 0
   let h = 0
 
   // update width and x positions
-  for(let i=0; i<columnWidthArray.length; i++){
-    width_ += columnWidthArray[i];
+  for(let i=0; i<cwArray.length; i++){
+    width_ += cwArray[i];
     if(i==0){
       xArray[i] = ceil(sWeight/2);
     }else{
       xArray[i] = w + xArray[0];
     }
 
-    if(columnWidthArray.length == 0){
-      columnWidthArray[0] = columnWidthArray[0] - ceil(sWeight);
-    }else if(i==0 || i==columnWidthArray.length-1){
-      columnWidthArray[i] = columnWidthArray[i] - ceil(sWeight/2) - 1;
+    if(cwArray.length == 0){
+      cwArray[0] = cwArray[0] - ceil(sWeight);
+    }else if(i==0 || i==cwArray.length-1){
+      cwArray[i] = cwArray[i] - ceil(sWeight/2) - 1;
     }
-    w += columnWidthArray[i];
+    w += cwArray[i];
   }
 
   // update height and y positions
-  for(let i=0; i<rawHeightArray.length; i++){
-    height_ += rawHeightArray[i];
+  for(let i=0; i<rhArray.length; i++){
+    height_ += rhArray[i];
     if(i==0){
       yArray[i] = ceil(sWeight/2);
     }else{
       yArray[i] = h + yArray[0];
     }
 
-    if(rawHeightArray.length == 0){
-      rawHeightArray[0] = rawHeightArray[0] - ceil(sWeight);
-    }else if(i==0 || i==rawHeightArray.length-1){
-      rawHeightArray[i] = rawHeightArray[i] - ceil(sWeight/2) - 1;
+    if(rhArray.length == 0){
+      rhArray[0] = rhArray[0] - ceil(sWeight);
+    }else if(i==0 || i==rhArray.length-1){
+      rhArray[i] = rhArray[i] - ceil(sWeight/2) - 1;
     }
-    h += rawHeightArray[i];
+    h += rhArray[i];
   }
 
   pg = createGraphics(width_ + 1 , height_);
   //console.log(width_)
-  for(let raw=0; raw<rawHeightArray.length; raw++){
-    for(let column=0; column<columnWidthArray.length; column++){
+  for(let raw=0; raw<rhArray.length; raw++){
+    for(let column=0; column<cwArray.length; column++){
       // rect
       setPG_style(pg, sColor, sWeight, sAlpha, fColorTable[raw][column], 255);
-      pg.rect(xArray[column], yArray[raw], columnWidthArray[column], rawHeightArray[raw]);
+      pg.rect(xArray[column], yArray[raw], cwArray[column], rhArray[raw]);
 
       // text
       if(textTable[raw][column] != ''){
