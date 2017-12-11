@@ -84,6 +84,7 @@ class Network_Format{
     drawPG_text(pg, 290, 20, "Src IP", 18, tcSrcIp, 255)
     drawPG_text(pg, 410, 40, "Payload", 24, tcPayload, 255)
 
+
     let pgb = createGraphics(560, 96)
     drawPG_line(pgb, 5, 30, 15, 10, BLACK, 2, 255)
     drawPG_line(pgb, 15, 10, 25, 10, BLACK, 2, 255)
@@ -114,7 +115,7 @@ class Network_Format{
                          fcSrcIp,  txSrcIp,  textSrcIp,  tcSrcIp,
                          fcPayload, tcPayload){
 
-    let widthArray = [160, 160, 160, 160, 130]
+    let widthArray = [180, 180, 180, 180, 130]
     let fcArray = [fcDstEth, fcSrcEth, fcDstIp, fcSrcIp, fcPayload]
     let faArray = [255, 255, 255, 255, 255]
     let txArray = [txDstEth, txSrcEth, txDstIp, txSrcIp, 0]
@@ -127,30 +128,73 @@ class Network_Format{
                                    fcArray, faArray,
                                    txArray, 50 , textArray,
                                    tSize, tcArray, taArray);
+    drawPG_text(pg, 10, 20, "Dst MAC", 18, tcDstEth, 255)
+    drawPG_text(pg, 230, 20, "Src MAC", 18, tcSrcEth, 255)
+    drawPG_text(pg, 425, 20, "Dst IP", 18, tcDstIp, 255)
+    drawPG_text(pg, 610, 20, "Src IP", 18, tcSrcIp, 255)
+    drawPG_text(pg, 740, 40, "Payload", 24, tcPayload, 255)
+
+    let pgb = createGraphics(850, 96)
+    drawPG_line(pgb, 5, 30, 15, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 15, 10, 110, 10, BLACK, 2, 255)
+    drawPG_text(pgb, 125, 20, "Ethernet (L2)", 20, BLACK, 255)
+    drawPG_line(pgb, 250, 10, 345, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 345, 10, 355, 30, BLACK, 2, 255)
+
+    drawPG_line(pgb, 365, 30, 375, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 375, 10, 495, 10, BLACK, 2, 255)
+    drawPG_text(pgb, 510, 20, "IP (L3)", 20, BLACK, 255)
+    drawPG_line(pgb, 585, 10, 705, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 705, 10, 715, 30, BLACK, 2, 255)
+
+    drawPG_line(pgb, 725, 30, 735, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 735, 10, 745, 10, BLACK, 2, 255)
+    drawPG_text(pgb, 752, 20, "L4 + L7", 20, BLACK, 255)
+    drawPG_line(pgb, 825, 10, 835, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 835, 10, 845, 30, BLACK, 2, 255)
+
+    pgb.image(pg, 1, 35)
+    return pgb
+  }
+
+  static getPG_EthArp(sColor, sWeight, sAlpha, tSize,
+                         fcDstEth, txDstEth, textDstEth, tcDstEth,
+                         fcSrcEth, txSrcEth, textSrcEth, tcSrcEth,
+                         fcArp, txArp, textArp, tcArp, isRequest=true){
+
+    let widthArray = [180, 180, 400]
+    let fcArray = [fcDstEth, fcSrcEth, fcArp]
+    let faArray = [255, 255, 255]
+    let txArray = [txDstEth, txSrcEth, txArp]
+    let textArray = [textDstEth, textSrcEth, textArp]
+    let tcArray = [tcDstEth, tcSrcEth, tcArp]
+    let taArray = [255, 255, 255]
+
+    let pg = getPG_horizontalRects(widthArray, 60,
+                                   sColor, sWeight, sAlpha,
+                                   fcArray, faArray,
+                                   txArray, 50 , textArray,
+                                   tSize, tcArray, taArray);
     drawPG_text(pg, 50, 20, "Dst MAC", 18, tcDstEth, 255)
-    drawPG_text(pg, 200, 20, "Src MAC", 18, tcSrcEth, 255)
-    drawPG_text(pg, 375, 20, "Dst IP", 18, tcDstIp, 255)
-    drawPG_text(pg, 540, 20, "Src IP", 18, tcSrcIp, 255)
-    drawPG_text(pg, 660, 40, "Payload", 24, tcPayload, 255)
+    drawPG_text(pg, 230, 20, "Src MAC", 18, tcSrcEth, 255)
+    if(isRequest){
+      drawPG_text(pg, 510, 20, "Arp Request", 18, tcArp, 255)
+    }else{
+      drawPG_text(pg, 520, 20, "Arp Reply", 18, tcArp, 255)
+    }
 
     let pgb = createGraphics(770, 96)
     drawPG_line(pgb, 5, 30, 15, 10, BLACK, 2, 255)
-    drawPG_line(pgb, 15, 10, 90, 10, BLACK, 2, 255)
-    drawPG_text(pgb, 105, 20, "Ethernet (L2)", 20, BLACK, 255)
-    drawPG_line(pgb, 230, 10, 305, 10, BLACK, 2, 255)
-    drawPG_line(pgb, 305, 10, 315, 30, BLACK, 2, 255)
+    drawPG_line(pgb, 15, 10, 110, 10, BLACK, 2, 255)
+    drawPG_text(pgb, 125, 20, "Ethernet (L2)", 20, BLACK, 255)
+    drawPG_line(pgb, 250, 10, 345, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 345, 10, 355, 30, BLACK, 2, 255)
 
-    drawPG_line(pgb, 325, 30, 335, 10, BLACK, 2, 255)
-    drawPG_line(pgb, 335, 10, 435, 10, BLACK, 2, 255)
-    drawPG_text(pgb, 450, 20, "IP (L3)", 20, BLACK, 255)
-    drawPG_line(pgb, 520, 10, 625, 10, BLACK, 2, 255)
-    drawPG_line(pgb, 625, 10, 635, 30, BLACK, 2, 255)
-
-    drawPG_line(pgb, 645, 30, 655, 10, BLACK, 2, 255)
-    drawPG_line(pgb, 655, 10, 665, 10, BLACK, 2, 255)
-    drawPG_text(pgb, 672, 20, "L4 + L7", 20, BLACK, 255)
-    drawPG_line(pgb, 745, 10, 755, 10, BLACK, 2, 255)
-    drawPG_line(pgb, 755, 10, 765, 30, BLACK, 2, 255)
+    drawPG_line(pgb, 365, 30, 375, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 375, 10, 520, 10, BLACK, 2, 255)
+    drawPG_text(pgb, 540, 20, "ARP", 20, BLACK, 255)
+    drawPG_line(pgb, 600, 10, 745, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 745, 10, 755, 30, BLACK, 2, 255)
 
     pgb.image(pg, 1, 35)
     return pgb
@@ -193,16 +237,16 @@ class Network_BriefPacket{
     }
   }
 
-  static getPG_Eth(sColor, sWeight, sAlpha,
-                     fcEth, tcEth, fcData, tcData,
+  static getPG_EthArpRequest(sColor, sWeight, sAlpha,
+                     fcEth, tcEth, fcArp, tcArp,
                      isReverse){
     if(isReverse){
-      let widthArray = [_NETWORK_BP_ETH_WIDTH, _NETWORK_BP_DATA_WIDTH]
-      let fcArray = [fcEth, fcData]
+      let widthArray = [_NETWORK_BP_ETH_WIDTH, _NETWORK_BP_ARP_REQUEST_WIDTH]
+      let fcArray = [fcEth, fcArp]
       let faArray = [255, 255]
-      let txArray = [_NETWORK_BP_ETH_X, _NETWORK_BP_DATA_X]
-      let textArray = ['Eth', 'Data']
-      let tcArray = [tcEth, tcData]
+      let txArray = [_NETWORK_BP_ETH_X, _NETWORK_BP_ARP_REQUEST_X]
+      let textArray = ['Eth', 'Arp Request']
+      let tcArray = [tcEth, tcArp]
       let taArray = [255, 255]
 
       return getPG_horizontalRects(widthArray, _NETWORK_BP_HEIGHT,
@@ -212,12 +256,12 @@ class Network_BriefPacket{
                                   _NETWORK_BP_TEXT_SIZE, tcArray, taArray);
 
     }else{
-      let widthArray = [_NETWORK_BP_DATA_WIDTH, _NETWORK_BP_ETH_WIDTH]
-      let fcArray = [fcData, fcEth]
+      let widthArray = [_NETWORK_BP_ARP_REQUEST_WIDTH, _NETWORK_BP_ETH_WIDTH]
+      let fcArray = [fcArp, fcEth]
       let faArray = [255, 255]
-      let txArray = [_NETWORK_BP_DATA_X, _NETWORK_BP_ETH_X]
-      let textArray = ['Data', 'Eth']
-      let tcArray = [tcData, tcEth]
+      let txArray = [_NETWORK_BP_ARP_REQUEST_X, _NETWORK_BP_ETH_X]
+      let textArray = ['Arp Request', 'Eth']
+      let tcArray = [tcArp, tcEth]
       let taArray = [255, 255]
 
       return getPG_horizontalRects(widthArray, _NETWORK_BP_HEIGHT,
@@ -228,16 +272,16 @@ class Network_BriefPacket{
     }
   }
 
-  static getPG_Eth(sColor, sWeight, sAlpha,
-                     fcEth, tcEth, fcData, tcData,
+  static getPG_EthArpReply(sColor, sWeight, sAlpha,
+                     fcEth, tcEth, fcArp, tcArp,
                      isReverse){
     if(isReverse){
-      let widthArray = [_NETWORK_BP_ETH_WIDTH, _NETWORK_BP_DATA_WIDTH]
-      let fcArray = [fcEth, fcData]
+      let widthArray = [_NETWORK_BP_ETH_WIDTH, _NETWORK_BP_ARP_REPLY_WIDTH]
+      let fcArray = [fcEth, fcArp]
       let faArray = [255, 255]
-      let txArray = [_NETWORK_BP_ETH_X, _NETWORK_BP_DATA_X]
-      let textArray = ['Eth', 'Data']
-      let tcArray = [tcEth, tcData]
+      let txArray = [_NETWORK_BP_ETH_X, _NETWORK_BP_ARP_REPLY_X]
+      let textArray = ['Eth', 'Arp Reply']
+      let tcArray = [tcEth, tcArp]
       let taArray = [255, 255]
 
       return getPG_horizontalRects(widthArray, _NETWORK_BP_HEIGHT,
@@ -247,12 +291,12 @@ class Network_BriefPacket{
                                   _NETWORK_BP_TEXT_SIZE, tcArray, taArray);
 
     }else{
-      let widthArray = [_NETWORK_BP_DATA_WIDTH, _NETWORK_BP_ETH_WIDTH]
-      let fcArray = [fcData, fcEth]
+      let widthArray = [_NETWORK_BP_ARP_REPLY_WIDTH, _NETWORK_BP_ETH_WIDTH]
+      let fcArray = [fcArp, fcEth]
       let faArray = [255, 255]
-      let txArray = [_NETWORK_BP_DATA_X, _NETWORK_BP_ETH_X]
-      let textArray = ['Data', 'Eth']
-      let tcArray = [tcData, tcEth]
+      let txArray = [_NETWORK_BP_ARP_REPLY_X, _NETWORK_BP_ETH_X]
+      let textArray = ['Arp Reply', 'Eth']
+      let tcArray = [tcArp, tcEth]
       let taArray = [255, 255]
 
       return getPG_horizontalRects(widthArray, _NETWORK_BP_HEIGHT,
@@ -262,7 +306,7 @@ class Network_BriefPacket{
                                   _NETWORK_BP_TEXT_SIZE, tcArray, taArray);
     }
   }
-  
+
   static getPG_EthIp(sColor, sWeight, sAlpha,
                      fcEth, tcEth, fcIp, tcIp, fcData, tcData,
                      isReverse){
@@ -498,6 +542,10 @@ const _NETWORK_BP_TCP_WIDTH = 75
 const _NETWORK_BP_TCP_X = 15
 const _NETWORK_BP_DATA_WIDTH = 100
 const _NETWORK_BP_DATA_X = 25
+const _NETWORK_BP_ARP_REQUEST_WIDTH = 160
+const _NETWORK_BP_ARP_REQUEST_X = 12
+const _NETWORK_BP_ARP_REPLY_WIDTH = 130
+const _NETWORK_BP_ARP_REPLY_X = 10
 const _NETWORK_BP_HEIGHT = 50
 const _NETWORK_BP_Y = 34
 const _NETWORK_BP_TEXT_SIZE = 24

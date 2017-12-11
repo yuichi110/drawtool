@@ -2,7 +2,7 @@ class LibNetworkTest{
 
   static preload(){
     main_width = 1200
-    main_height = 800
+    main_height = 900
     main_guiDebug = false
     main_loglevel = LOGLEVEL_INFO
   }
@@ -24,6 +24,11 @@ class LibNetworkTest{
     this.pg_bpTcp1 = Network_BriefPacket.getPG_Tcp(BLACK, 2, 255, CONCRETE, BLACK, CONCRETE, BLACK, false, false)
     this.pg_bpTcp2 = Network_BriefPacket.getPG_Tcp(BLACK, 2, 255, CONCRETE, BLACK, CONCRETE, BLACK, true, true)
     this.pg_bpData = Network_BriefPacket.getPG_Data(BLACK, 2, 255, CONCRETE, BLACK)
+
+    this.pg_bpArpRequest1 = Network_BriefPacket.getPG_EthArpRequest(BLACK, 2, 255, CONCRETE, BLACK, CONCRETE, BLACK, false)
+    this.pg_bpArpRequest2 = Network_BriefPacket.getPG_EthArpRequest(BLACK, 2, 255, CONCRETE, BLACK, CONCRETE, BLACK, true)
+    this.pg_bpArpReply1 = Network_BriefPacket.getPG_EthArpReply(BLACK, 2, 255, CONCRETE, BLACK, CONCRETE, BLACK, false)
+    this.pg_bpArpReply2 = Network_BriefPacket.getPG_EthArpReply(BLACK, 2, 255, CONCRETE, BLACK, CONCRETE, BLACK, true)
 
     // brief packet small
     this.pg_bpsEth1 = Network_BriefPacketSmall.getPG_Eth(BLACK, 2, 255, CONCRETE, BLACK, CONCRETE, BLACK, false)
@@ -94,7 +99,7 @@ class LibNetworkTest{
   }
 
   static getDrawPG(){
-    switch(5){
+    switch(1){
       case 1:
         return this.getDrawPG_briefPackets()
       case 2:
@@ -133,6 +138,10 @@ class LibNetworkTest{
     this.pgb.image(this.pg_bpIp2, 400, 200)
     this.pgb.image(this.pg_bpIpTcp1, 400, 300)
     this.pgb.image(this.pg_bpIpTcp2, 400, 400)
+    this.pgb.image(this.pg_bpArpRequest1, 400, 500)
+    this.pgb.image(this.pg_bpArpRequest2, 400, 600)
+    this.pgb.image(this.pg_bpArpReply1, 400, 700)
+    this.pgb.image(this.pg_bpArpReply2, 400, 800)
 
     this.pgb.image(this.pg_bpTcp1, 700, 100)
     this.pgb.image(this.pg_bpTcp2, 700, 200)

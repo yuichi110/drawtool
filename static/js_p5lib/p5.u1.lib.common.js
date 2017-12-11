@@ -59,6 +59,20 @@ const UNDEFINED_COLOR = Symbol('undefined')
 * ICON
 *****/
 
+class Icon{
+  static getPG_exclamationMark(
+    rx, ry, rr, width_, height_, ey, esize,
+    sColor, sWeight, sAlpha, fColor, fAlpha){
+      let pg = createGraphics(rx + width_ + 10, ey + esize + 10)
+
+      setPG_style(pg, sColor, sWeight, sAlpha, fColor, fAlpha)
+      pg.rect(rx, ry, width_, height_, rr)
+      let ex = rx + width_/2
+      pg.ellipse(ex, ey, esize)
+
+      return pg
+  }
+}
 /*
 * Font
 */
@@ -468,7 +482,8 @@ function getPG_curvedArrow2(width_, height_, topHasArrow, bottomHasArrow,
   // left top outside
   let [x7, y7] = [bodyWidth, 0]
   pg.vertex(x7, y7)
-  let [x8_1, y8_1, x8_2, y8_2, x8_3, y8_3] = [bodyWidth/2, 0, 0, bodyWidth/2, 0, bodyWidth]
+  let [x8_1, y8_1, x8_2, y8_2, x8_3, y8_3] =
+    [bodyWidth/2, 0, 0, bodyWidth/2, 0, bodyWidth]
   pg.bezierVertex(x8_1, y8_1, x8_2, y8_2, x8_3, y8_3)
 
   pg.endShape(CLOSE)
@@ -570,7 +585,70 @@ function getPG_bigArrowL(width_, height_, arrowWidth, arrowHeight,
 * Special shapes
 */
 
-function getPG_balloon(
+function getPG_roundedBalloon(
+  rectX, rectY, rectWidth, rectHeight,
+  location, balloonX, balloonY, b1, b2,
+  sColor, sWeight, sAlpha, fColor, fAlpha){
+
+    let [x1, y1] = [rectX, rectY]
+    let [x2, y2] = [x1, y1 + rectHeight]
+    let [x3, y3] = [x2 + rectWidth, y2]
+    let [x4, y4] = [x3, y1]
+
+    let r1 = min(rectWidth, rectHeight)/5
+    let r2 = min(rectWidth, rectHeight)/10
+
+    let pg = createGraphics(max(x3, balloonX) + 10, max(y3, balloonY) + 10)
+
+    switch(location){
+      case LEFT:
+      case BOTTOM:
+      case RIGHT:
+      case TOP:
+        break
+      default:
+        console.error('Switch Error')
+    }
+
+    setPG_style(pg, sColor, sWeight, sAlpha, fColor, fAlpha)
+    pg.beginShape()
+    pg.vertex(x1 + r1, y1)
+    pg.bezierVertex(x1 + r2, y1, x1, y1 + r2, x1, y1 + r1)
+    if(location == LEFT){
+      pg.vertex(x1, y1 + b1)
+      pg.vertex(balloonX, balloonY)
+      pg.vertex(x1, y1 + b2)
+    }
+
+    pg.vertex(x2, y2 - r1)
+    pg.bezierVertex(x2, y2 - r2, x2 + r2, y2, x2 + r1, y2)
+    if(location == BOTTOM){
+      pg.vertex(x2 + b1, y2)
+      pg.vertex(balloonX, balloonY)
+      pg.vertex(x2 + b2, y2)
+    }
+
+    pg.vertex(x3 - r1, y3)
+    pg.bezierVertex(x3 - r2, y3, x3, y3 - r2, x3, y3 - r1)
+    if(location == RIGHT){
+      pg.vertex(x3, y3 - b1)
+      pg.vertex(balloonX, balloonY)
+      pg.vertex(x3, y3 - b2)
+    }
+
+    pg.vertex(x4, y4 + r1)
+    pg.bezierVertex(x4, y4 + r2, x4 - r2, y4, x4 - r1, y4)
+    if(location == TOP){
+      pg.vertex(x4 - b1, y4)
+      pg.vertex(balloonX, balloonY)
+      pg.vertex(x4 - b2, y4)
+    }
+    pg.endShape(CLOSE)
+
+    return pg
+}
+
+function getPG_rectBalloon(
   rectX, rectY, rectWidth, rectHeight,
   location, balloonX, balloonY, b1, b2,
   sColor, sWeight, sAlpha, fColor, fAlpha){

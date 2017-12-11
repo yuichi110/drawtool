@@ -75,10 +75,26 @@ class LibCommonTest{
     this.pg_curvedArrow2 = getPG_curvedArrow2(100, 100, true, true,
                            25, 25, 12,
                            BLACK, 2, 255, RED, 255)
+
+    // ICON
+    this.pg_icon_exclamation = Icon.getPG_exclamationMark(
+      20, 10, 10, 20, 60, 90, 20,
+      BLACK, 2, 255, RED, 255)
+
+    // BALLOON
+    this.pg_rectBalloon = getPG_rectBalloon(
+      100, 10, 300, 300,
+      LEFT, 30, 260, 180, 230,
+      TRANSPARENT, 2, 255, BELIZEHOLE, 255)
+
+    this.pg_roundedBalloon = getPG_roundedBalloon(
+      100, 10, 300, 300,
+      LEFT, 30, 260, 180, 230,
+      TRANSPARENT, 2, 255, BELIZEHOLE, 255)
   }
 
   static getDrawPG(){
-    switch(10){
+    switch(12){
       case 1:
         return this.getDrawPG_test()
       case 2:
@@ -99,6 +115,11 @@ class LibCommonTest{
         return this.getDrawPG_image()
       case 10:
         return this.getDrawPG_curvedArrow()
+      case 11:
+        return this.getDrawPG_icon()
+      case 12:
+        return this.getDrawPG_balloon()
+
       default:
         console.error('Switch Error')
     }
@@ -216,6 +237,24 @@ class LibCommonTest{
     this.pgb.image(this.pg_curvedArrow1, 100, 100)
     this.pgb.image(this.pg_curvedArrow2, 400, 100)
 
+    return this.pgb
+  }
+
+  static getDrawPG_icon(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
+    this.pgb.image(this.pg_icon_exclamation, 100, 100)
+
+    return this.pgb
+  }
+
+  static getDrawPG_balloon(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
+    this.pgb.image(this.pg_rectBalloon, 50, 50)
+    this.pgb.image(this.pg_roundedBalloon, 50, 400)
     return this.pgb
   }
 }

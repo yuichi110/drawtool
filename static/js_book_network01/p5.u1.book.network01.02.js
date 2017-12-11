@@ -15,8 +15,8 @@ class Book_Network01_02{
     this.setup_image02()
     this.setup_image03()
     this.setup_image04()
-    /*
     this.setup_image05()
+    /*
     this.setup_image06()
     this.setup_image07()
     this.setup_image08()
@@ -25,7 +25,7 @@ class Book_Network01_02{
   }
 
   static getDrawPG(){
-    let imageNumber = 4
+    let imageNumber = 5
     switch(imageNumber){
       case 1:
         return this.getDrawPG_image01()
@@ -275,9 +275,9 @@ class Book_Network01_02{
   **/
 
   static setup_image04(){
-    let pgb = createGraphics(this.i01_pgb.width, this.i01_pgb.height)
+    let pgb = createGraphics(this.i01_pgb.width, this.i01_pgb.height + 100)
 
-    let pgBalloon = getPG_balloon(
+    let pgBalloon = getPG_rectBalloon(
       100, 10, 300, 300,
       LEFT, 30, 260, 180, 230,
       TRANSPARENT, 2, 255, BELIZEHOLE, 255)
@@ -306,19 +306,19 @@ class Book_Network01_02{
       txTable, tyArray, textTable, 24, tColorTable, tAlphaTable)
 
     let pgEthFormat1 = Network_Format.getPG_EthIpWide(
-      BLACK, 2, 255, 20,
-      CONCRETE, 5, '0000.0000.0102', BLACK,
-      CONCRETE, 5, '0000.0000.0101', BLACK,
-      CONCRETE, 30, '10.0.0.102', BLACK,
-      CONCRETE, 30, '10.0.0.101', BLACK,
+      BLACK, 2, 255, 22,
+      CONCRETE, 10, '0000.0000.0102', BLACK,
+      CONCRETE, 10, '0000.0000.0101', BLACK,
+      CONCRETE, 40, '10.0.0.102', BLACK,
+      CONCRETE, 40, '10.0.0.101', BLACK,
       CONCRETE, BLACK)
 
     let pgEthFormat2 = Network_Format.getPG_EthIpWide(
-      BLACK, 2, 255, 20,
-      POMEGRANATE, 5, '0000.0000.0102', WHITE,
-      CONCRETE, 5, '0000.0000.0101', BLACK,
-      CONCRETE, 30, '10.0.0.102', BLACK,
-      CONCRETE, 30, '10.0.0.101', BLACK,
+      BLACK, 2, 255, 22,
+      POMEGRANATE, 10, '0000.0000.0102', WHITE,
+      CONCRETE, 10, '0000.0000.0101', BLACK,
+      CONCRETE, 40, '10.0.0.102', BLACK,
+      CONCRETE, 40, '10.0.0.101', BLACK,
       CONCRETE, BLACK)
 
     this.i04_pgb = pgb
@@ -356,19 +356,21 @@ class Book_Network01_02{
 
     let count = frameCount % 500
 
-    // Animation1
+    // Animation1 : Frame Flow
     stayPG(pgb, pgEth1, x1, y1, count, 50, 150)
     movePG(pgb, pgEth1, x1, y1, 0, x2, y2, 0, count, 150, 200)
     stayPG(pgb, pgEth2, x2, y2, count, 200, 300)
     movePG(pgb, pgEth3, x2, y2, 0, x3, y3, 0, count, 300, 350)
     stayPG(pgb, pgEth3, x3, y3, count, 350, 450)
 
-    // Animation2
-    stayPG_corner(pgb, pgEthFormat1, 550, 460, count, 0, 200)
-    stayPG_corner(pgb, pgEthFormat2, 550, 460, count, 200, 300)
-    stayPG_corner(pgb, pgEthFormat1, 550, 460, count, 300, 500)
+    // Animation2 : Frame Detail
+    let pfx = 200
+    let pfy = 600
+    stayPG_corner(pgb, pgEthFormat1, pfx, pfy, count, 0, 200)
+    stayPG_corner(pgb, pgEthFormat2, pfx, pfy, count, 200, 300)
+    stayPG_corner(pgb, pgEthFormat1, pfx, pfy, count, 300, 500)
 
-    // Animation3
+    // Animation3 : Mac Table
     stayPG_corner(pgb, pgTable1, 810, 130, count, 0, 200)
     stayPG_corner(pgb, pgTable2, 810, 130, count, 200, 300)
     stayPG_corner(pgb, pgTable1, 810, 130, count, 300, 500)
@@ -381,12 +383,210 @@ class Book_Network01_02{
   **/
 
   static setup_image05(){
-    let pgb = createGraphics(width, height)
+    let pgb = createGraphics(this.i01_pgb.width, this.i01_pgb.height + 150)
+
+    // ARP PACKETS
+    let pg_bpArpRequest1 = Network_BriefPacket.getPG_EthArpRequest(
+      BLACK, 2, 255, CONCRETE, BLACK, CONCRETE, BLACK, false)
+    let pg_bpArpRequest2 = Network_BriefPacket.getPG_EthArpRequest(
+      BLACK, 2, 255, POMEGRANATE, WHITE, CONCRETE, BLACK, false)
+    let pg_bpArpRequest3 = Network_BriefPacket.getPG_EthArpRequest(
+      BLACK, 2, 255, CONCRETE, BLACK, CONCRETE, BLACK, true)
+    let pg_bpArpRequest4 = Network_BriefPacket.getPG_EthArpRequest(
+      BLACK, 2, 255, CONCRETE, BLACK, POMEGRANATE, WHITE, true)
+
+    let pg_bpArpReply1 = Network_BriefPacket.getPG_EthArpReply(
+      BLACK, 2, 255, CONCRETE, BLACK, CONCRETE, BLACK, false)
+    let pg_bpArpReply2 = Network_BriefPacket.getPG_EthArpReply(
+      BLACK, 2, 255, POMEGRANATE, WHITE, CONCRETE, BLACK, false)
+    let pg_bpArpReply3 = Network_BriefPacket.getPG_EthArpReply(
+      BLACK, 2, 255, CONCRETE, BLACK, CONCRETE, BLACK, true)
+    let pg_bpArpReply4 = Network_BriefPacket.getPG_EthArpReply(
+      BLACK, 2, 255, CONCRETE, BLACK, POMEGRANATE, WHITE, true)
+
+    // Exclamation Mark
+    let pgExclamationBalloon = getPG_roundedBalloon(
+      20, 10, 50, 50,
+      BOTTOM, 30, 80, 15, 35,
+      TRANSPARENT, 0, 0, POMEGRANATE, 255)
+    let pgIconExclamation = Icon.getPG_exclamationMark(
+      20, 10, 2, 7, 20, 40, 7,
+      TRANSPARENT, 0, 0, WHITE, 255
+    )
+    pgExclamationBalloon.image(pgIconExclamation, 23, 10)
+
+    // ARP BALLOON
+    let pgArpBalloon1 = getPG_rectBalloon(
+      10, 10, 320, 195,
+      RIGHT, 390, 130, 50, 100,
+      TRANSPARENT, 2, 255, BELIZEHOLE, 255)
+    drawPG_text(pgArpBalloon1, 120, 42, "Arp Table", 28, WHITE, 255)
+
+    let pgArpBalloon2 = getPG_rectBalloon(
+      10, 10, 320, 160,
+      RIGHT, 390, 90, 55, 105,
+      TRANSPARENT, 2, 255, BELIZEHOLE, 255)
+
+    // ARP TABLE
+    let columnWidthArray = [130, 170]
+    let rawHeightArray = [35, 35, 35, 35]
+    let fColorTable1 = [[BELIZEHOLE, BELIZEHOLE], [BELIZEHOLE, BELIZEHOLE],
+     [BELIZEHOLE, BELIZEHOLE], [BELIZEHOLE, BELIZEHOLE]]
+    let fColorTable2 = [[BELIZEHOLE, BELIZEHOLE], [BELIZEHOLE, BELIZEHOLE],
+     [POMEGRANATE, POMEGRANATE], [BELIZEHOLE, BELIZEHOLE]]
+    let fAlphaTable = [[255, 255], [255, 255], [255, 255], [255, 255]]
+    let txTable = [[15, 25], [17, 13], [17, 13], [17, 13]]
+    let tyArray = [25, 25, 25, 25]
+
+    let textTable1_1 = [['IP Address', 'MAC Address'], ['10.0.0.101', '0000.0000.0101'],
+     ['', ''], ['', '']]
+    let textTable1_2 = [['IP Address', 'MAC Address'], ['10.0.0.101', '0000.0000.0101'],
+      ['10.0.0.102', '0000.0000.0102'], ['', '']]
+    let textTable2_1 = [['IP Address', 'MAC Address'], ['10.0.0.102', '0000.0000.0102'],
+     ['', ''], ['', '']]
+    let textTable2_2 = [['IP Address', 'MAC Address'], ['10.0.0.102', '0000.0000.0102'],
+      ['10.0.0.101', '0000.0000.0101'], ['', '']]
+    let textTable3 = [['IP Address', 'MAC Address'], ['10.0.0.103', '0000.0000.0103'],
+     ['', ''], ['', '']]
+
+    let tColorTable = [[WHITE, WHITE], [WHITE, WHITE], [WHITE, WHITE], [WHITE, WHITE]]
+    let tAlphaTable = fAlphaTable
+
+    let pgArpTable1_1 = getPG_table(
+      columnWidthArray, rawHeightArray, WHITE, 2, 255,
+      fColorTable1, fAlphaTable,
+      txTable, tyArray, textTable1_1, 20, tColorTable, tAlphaTable)
+    let pgArpTable1_2 = getPG_table(
+      columnWidthArray, rawHeightArray, WHITE, 2, 255,
+      fColorTable2, fAlphaTable,
+      txTable, tyArray, textTable1_2, 20, tColorTable, tAlphaTable)
+    let pgArpTable1_3 = getPG_table(
+      columnWidthArray, rawHeightArray, WHITE, 2, 255,
+      fColorTable1, fAlphaTable,
+      txTable, tyArray, textTable1_2, 20, tColorTable, tAlphaTable)
+
+    let pgArpTable2_1 = getPG_table(
+      columnWidthArray, rawHeightArray, WHITE, 2, 255,
+      fColorTable1, fAlphaTable,
+      txTable, tyArray, textTable2_1, 20, tColorTable, tAlphaTable)
+    let pgArpTable2_2 = getPG_table(
+      columnWidthArray, rawHeightArray, WHITE, 2, 255,
+      fColorTable2, fAlphaTable,
+      txTable, tyArray, textTable2_2, 20, tColorTable, tAlphaTable)
+    let pgArpTable2_3 = getPG_table(
+      columnWidthArray, rawHeightArray, WHITE, 2, 255,
+      fColorTable1, fAlphaTable,
+      txTable, tyArray, textTable2_2, 20, tColorTable, tAlphaTable)
+
+    let pgArpTable3 = getPG_table(
+      columnWidthArray, rawHeightArray, WHITE, 2, 255,
+      fColorTable1, fAlphaTable,
+      txTable, tyArray, textTable3, 20, tColorTable, tAlphaTable)
+
+    // ARP REQUEST FORMAT
+    let pg_ethArpRequestFormat1 = Network_Format.getPG_EthArp(
+      BLACK, 2, 255, 22,
+      POMEGRANATE, 5, 'FFFF.FFFF.FFFF', WHITE,
+      CONCRETE, 12, '0000.0000.0101', BLACK,
+      CONCRETE, 80, 'Who has "10.0.0.102" ?', BLACK)
+
+    // ARP REPLY FORMAT
+    let pg_ethArpReplyFormat1 = Network_Format.getPG_EthArp(
+      BLACK, 2, 255, 22,
+      POMEGRANATE, 12, '0000.0000.0101', WHITE,
+      CONCRETE, 12, '0000.0000.0102', BLACK,
+      CONCRETE, 30, '"0000.0000.0102" has "10.0.0.102"', BLACK, false)
+
     this.i05_pgb = pgb
+    this.i05_pg_exclamation = pgExclamationBalloon
+    this.i05_pg_bpArpRequest1 = pg_bpArpRequest1
+    this.i05_pg_bpArpRequest2 = pg_bpArpRequest2
+    this.i05_pg_bpArpRequest3 = pg_bpArpRequest3
+    this.i05_pg_bpArpRequest4 = pg_bpArpRequest4
+
+    this.i05_pg_bpArpReply1 = pg_bpArpReply1
+    this.i05_pg_bpArpReply2 = pg_bpArpReply2
+    this.i05_pg_bpArpReply3 = pg_bpArpReply3
+    this.i05_pg_bpArpReply4 = pg_bpArpReply4
+
+    this.i05_pg_arpBalloon1 = pgArpBalloon1
+    this.i05_pg_arpBalloon2 = pgArpBalloon2
+    this.i05_pg_arpTable1_1 = pgArpTable1_1
+    this.i05_pg_arpTable2_1 = pgArpTable2_1
+    this.i05_pg_arpTable3 = pgArpTable3
+
+    this.i05_pg_ethArpRequestFormat1 = pg_ethArpRequestFormat1
+
+    this.i05_pg_ethArpReplyFormat1 = pg_ethArpReplyFormat1
   }
 
   static getDrawPG_image05(){
+    let x = 400
+
     let pgb = this.i05_pgb
+    let static_pgb = this.i01_pgb
+    let pg_exclamation = this.i05_pg_exclamation
+
+    let [x1, y1] = [this.i01_pc1x + x, this.i01_pc1y]
+    let [x2, y2] = [this.i01_sw1x + x, this.i01_sw1y]
+    let [x3, y3] = [this.i01_pc2x + x, this.i01_pc2y]
+    let [x4, y4] = [this.i01_pc3x + x, this.i01_pc3y]
+
+    let pg_bpArpRequest1 = this.i05_pg_bpArpRequest1
+    let pg_bpArpRequest2 = this.i05_pg_bpArpRequest2
+    let pg_bpArpRequest3 = this.i05_pg_bpArpRequest3
+    let pg_bpArpRequest4 = this.i05_pg_bpArpRequest4
+
+    let pg_bpArpReply1 = this.i05_pg_bpArpReply1
+    let pg_bpArpReply2 = this.i05_pg_bpArpReply2
+    let pg_bpArpReply3 = this.i05_pg_bpArpReply3
+    let pg_bpArpReply4 = this.i05_pg_bpArpReply4
+
+    let pg_arpBalloon1 = this.i05_pg_arpBalloon1
+    let pg_arpBalloon2 = this.i05_pg_arpBalloon2
+    let pg_arpTable1_1 = this.i05_pg_arpTable1_1
+    let pg_arpTable2_1 = this.i05_pg_arpTable2_1
+    let pg_arpTable3 = this.i05_pg_arpTable3
+
+    let pg_ethArpRequestFormat1 = this.i05_pg_ethArpRequestFormat1
+    let pg_ethArpReplyFormat1 = this.i05_pg_ethArpReplyFormat1
+
+    pgb.clear()
+    pgb.background(255)
+    pgb.image(static_pgb, x, 0)
+    pgb.image(pg_arpBalloon1, 50, 20)
+    pgb.image(pg_arpBalloon2, 50, 230)
+    pgb.image(pg_arpBalloon2, 50, 410)
+
+    let count = frameCount % 1000
+
+    // Animation1 : Flowing Packet
+    stayPG(pgb, pg_bpArpRequest1, x1, y1, count, 50, 150)
+    movePG(pgb, pg_bpArpRequest1, x1, y1, 0, x2, y2, 0, count, 150, 200)
+    stayPG(pgb, pg_bpArpRequest2, x2, y2, count, 200, 300)
+    movePG(pgb, pg_bpArpRequest3, x2, y2, 0, x3, y3, 0, count, 300, 350)
+    movePG(pgb, pg_bpArpRequest3, x2, y2, 0, x4, y4, 0, count, 300, 350)
+    stayPG(pgb, pg_bpArpRequest4, x3, y3, count, 350, 450)
+    stayPG(pgb, pg_bpArpRequest4, x4, y4, count, 350, 450)
+
+    stayPG(pgb, pg_bpArpReply1, x3, y3, count, 500, 600)
+    movePG(pgb, pg_bpArpReply1, x3, y3, 0, x2, y2, 0, count, 600, 650)
+    stayPG(pgb, pg_bpArpReply2, x2, y2, count, 650, 750)
+    movePG(pgb, pg_bpArpReply3, x2, y2, 0, x1, y1, 0, count, 750, 800)
+    stayPG(pgb, pg_bpArpReply4, x1, y1, count, 800, 900)
+
+    // Animation2 : Exclamation Mark
+    stayPG_corner(pgb, pg_exclamation, x3 + 20, y3 - 130, count, 350, 450)
+    stayPG_corner(pgb, pg_exclamation, x1 + 20, y1 - 130, count, 800, 900)
+
+    // Animation3 : Arp Table
+    pgb.image(pg_arpTable1_1, 70, 75)
+    pgb.image(pg_arpTable2_1, 70, 250)
+    pgb.image(pg_arpTable3, 70, 430)
+
+    // Animation4 : Arp Format
+    pgb.image(pg_ethArpReplyFormat1, 200, 620)
+
     return pgb
   }
 
