@@ -8,6 +8,8 @@ class Book_Network01_02{
     main_loglevel = LOGLEVEL_INFO
 
     this.save = false
+
+    lib_network_preload()
   }
 
   static setup(){
@@ -64,9 +66,9 @@ class Book_Network01_02{
     pc1.setPortsColor([], [], [EMERALD], [])
     pc1.setIcon(NETWORK_GEAR_PC, 10, 10, 80, WHITE)
     topology.addGear('pc1', pc1, 300, 100)
-    topology.addGearText('pc1', 'name',  30, -10, 'PC1', 24, BLACK, 255)
-    topology.addGearText('pc1', 'ip', -230, 40, 'IP : 10.0.0.101/8', 20, BLACK, 255)
-    topology.addGearText('pc1', 'mac', -230, 70, 'MAC : 0000.0000.0101', 20, BLACK, 255)
+    topology.addGearText('pc1', 'name',  28, -10, 'PC1', 24, BLACK, 255)
+    topology.addGearText('pc1', 'ip', -250, 40, 'IP : 10.0.0.101/8', 20, BLACK, 255)
+    topology.addGearText('pc1', 'mac', -250, 70, 'MAC : 0000.0000.0101', 20, BLACK, 255)
     topology.addGearText('pc1', 'port', 115, 40, 'g0/1', 20, BLACK, 255)
 
     let pc2 = new Network_Gear(100, 100, 10,
@@ -75,9 +77,9 @@ class Book_Network01_02{
     pc2.setPortsColor([], [], [EMERALD], [])
     pc2.setIcon(NETWORK_GEAR_PC, 10, 10, 80, WHITE)
     topology.addGear('pc2', pc2, 300, 275)
-    topology.addGearText('pc2', 'name', 30, -10, 'PC2', 24, BLACK, 255)
-    topology.addGearText('pc2', 'ip', -230, 40, 'IP : 10.0.0.102/8', 20, BLACK, 255)
-    topology.addGearText('pc2', 'mac', -230, 70, 'MAC : 0000.0000.0102', 20, BLACK, 255)
+    topology.addGearText('pc2', 'name', 28, -10, 'PC2', 24, BLACK, 255)
+    topology.addGearText('pc2', 'ip', -250, 40, 'IP : 10.0.0.102/8', 20, BLACK, 255)
+    topology.addGearText('pc2', 'mac', -250, 70, 'MAC : 0000.0000.0102', 20, BLACK, 255)
     topology.addGearText('pc2', 'port', 115, 40, 'g0/1', 20, BLACK, 255)
 
     let pc3 = new Network_Gear(100, 100, 10,
@@ -86,9 +88,9 @@ class Book_Network01_02{
     pc3.setPortsColor([], [], [EMERALD], [])
     pc3.setIcon(NETWORK_GEAR_PC, 10, 10, 80, WHITE)
     topology.addGear('pc3', pc3, 300, 450)
-    topology.addGearText('pc3', 'name',  30, -10, 'PC3', 24, BLACK, 255)
-    topology.addGearText('pc3', 'ip', -230, 40, 'IP : 10.0.0.103/8', 20, BLACK, 255)
-    topology.addGearText('pc3', 'mac', -230, 70, 'MAC : 0000.0000.0103', 20, BLACK, 255)
+    topology.addGearText('pc3', 'name',  28, -10, 'PC3', 24, BLACK, 255)
+    topology.addGearText('pc3', 'ip', -250, 40, 'IP : 10.0.0.103/8', 20, BLACK, 255)
+    topology.addGearText('pc3', 'mac', -250, 70, 'MAC : 0000.0000.0103', 20, BLACK, 255)
     topology.addGearText('pc3', 'port', 115, 60, 'g0/1', 20, BLACK, 255)
 
     let sw1 = new Network_Gear(100, 100, 10,
@@ -97,10 +99,10 @@ class Book_Network01_02{
     sw1.setPortsColor([EMERALD, EMERALD, EMERALD], [], [], [])
     sw1.setIcon(NETWORK_GEAR_L2SWITCH, 10, 10, 80, WHITE)
     topology.addGear('sw1', sw1, 600, 275)
-    topology.addGearText('sw1', 'name', 10, -10, 'Switch1', 24, BLACK, 255)
-    topology.addGearText('sw1', 'port1', -70, 20, 'g0/1', 20, BLACK, 255)
-    topology.addGearText('sw1', 'port2', -70, 70, 'g0/2', 20, BLACK, 255)
-    topology.addGearText('sw1', 'port3', -70, 145, 'g0/3', 20, BLACK, 255)
+    topology.addGearText('sw1', 'name', 5, -10, 'Switch1', 24, BLACK, 255)
+    topology.addGearText('sw1', 'port1', -70, 25, 'g0/1', 20, BLACK, 255)
+    topology.addGearText('sw1', 'port2', -70, 75, 'g0/2', 20, BLACK, 255)
+    topology.addGearText('sw1', 'port3', -70, 150, 'g0/3', 20, BLACK, 255)
 
     topology.connectGears('pc1', RIGHT, 1, 'sw1', LEFT, 1, BLACK, 2, 255)
     topology.connectGears('pc2', RIGHT, 1, 'sw1', LEFT, 2, BLACK, 2, 255)
@@ -217,13 +219,13 @@ class Book_Network01_02{
       CONCRETE, BLACK, CONCRETE, BLACK, CONCRETE, BLACK, true)
 
     let pgEthFormat1 = Network_Format.getPG_EthIp(
-      BLACK, 2, 255, 20,
+      BLACK, 2, 255, 24,
       CONCRETE, 25, 'PC2', BLACK, CONCRETE, 25, 'PC1', BLACK,
       CONCRETE, 25, 'PC2', BLACK, CONCRETE, 25, 'PC1', BLACK,
       CONCRETE, BLACK)
 
     let pgEthFormat2 = Network_Format.getPG_EthIp(
-      BLACK, 2, 255, 20,
+      BLACK, 2, 255, 24,
       POMEGRANATE, 25, 'PC2', WHITE, CONCRETE, 25, 'PC1', BLACK,
       CONCRETE, 25, 'PC2', BLACK, CONCRETE, 25, 'PC1', BLACK,
       CONCRETE, BLACK)
@@ -281,14 +283,14 @@ class Book_Network01_02{
       100, 10, 300, 300,
       LEFT, 30, 260, 180, 230,
       TRANSPARENT, 2, 255, BELIZEHOLE, 255)
-    drawPG_text(pgBalloon, 130, 50, "MAC Address Table", 28, WHITE, 255)
+    drawPG_text(pgBalloon, 120, 50, "MAC Address Table", 28, WHITE, 255)
 
     let columnWidthArray = [80, 200]
     let rawHeightArray = [50, 50, 50, 50]
     let fColorTable1 = [[BELIZEHOLE, BELIZEHOLE], [BELIZEHOLE, BELIZEHOLE],
      [BELIZEHOLE, BELIZEHOLE], [BELIZEHOLE, BELIZEHOLE]]
     let fAlphaTable = [[255, 255], [255, 255], [255, 255], [255, 255]]
-    let txTable = [[15, 25], [15, 15], [15, 15], [15, 15]]
+    let txTable = [[15, 25], [12, 10], [12, 10], [12, 10]]
     let tyArray = [32, 32, 32, 32]
     let textTable = [['Port', 'MAC Address'], ['g0/1', '0000.0000.0101'], ['g0/2', '0000.0000.0102'], ['g0/3', '0000.0000.0103']]
     let tColorTable = [[WHITE, WHITE], [WHITE, WHITE], [WHITE, WHITE], [WHITE, WHITE]]
@@ -296,17 +298,17 @@ class Book_Network01_02{
     let pgTable1 = getPG_table(
       columnWidthArray, rawHeightArray, WHITE, 2, 255,
       fColorTable1, fAlphaTable,
-      txTable, tyArray, textTable, 24, tColorTable, tAlphaTable)
+      txTable, tyArray, textTable, 22, tColorTable, tAlphaTable)
 
     let fColorTable2 = [[BELIZEHOLE, BELIZEHOLE], [BELIZEHOLE, BELIZEHOLE],
      [POMEGRANATE, POMEGRANATE], [BELIZEHOLE, BELIZEHOLE]]
     let pgTable2 = getPG_table(
       columnWidthArray, rawHeightArray, WHITE, 2, 255,
       fColorTable2, fAlphaTable,
-      txTable, tyArray, textTable, 24, tColorTable, tAlphaTable)
+      txTable, tyArray, textTable, 22, tColorTable, tAlphaTable)
 
     let pgEthFormat1 = Network_Format.getPG_EthIpWide(
-      BLACK, 2, 255, 22,
+      BLACK, 2, 255, 20,
       CONCRETE, 10, '0000.0000.0102', BLACK,
       CONCRETE, 10, '0000.0000.0101', BLACK,
       CONCRETE, 40, '10.0.0.102', BLACK,
@@ -314,7 +316,7 @@ class Book_Network01_02{
       CONCRETE, BLACK)
 
     let pgEthFormat2 = Network_Format.getPG_EthIpWide(
-      BLACK, 2, 255, 22,
+      BLACK, 2, 255, 20,
       POMEGRANATE, 10, '0000.0000.0102', WHITE,
       CONCRETE, 10, '0000.0000.0101', BLACK,
       CONCRETE, 40, '10.0.0.102', BLACK,
@@ -383,7 +385,7 @@ class Book_Network01_02{
   **/
 
   static setup_image05(){
-    let pgb = createGraphics(this.i01_pgb.width, this.i01_pgb.height + 150)
+    let pgb = createGraphics(this.i01_pgb.width, this.i01_pgb.height + 170)
 
     // ARP PACKETS
     let pg_bpArpRequest1 = Network_BriefPacket.getPG_EthArpRequest(
@@ -417,25 +419,25 @@ class Book_Network01_02{
 
     // ARP BALLOON
     let pgArpBalloon1 = getPG_rectBalloon(
-      10, 10, 320, 195,
+      10, 10, 340, 195,
       RIGHT, 390, 130, 50, 100,
       TRANSPARENT, 2, 255, BELIZEHOLE, 255)
     drawPG_text(pgArpBalloon1, 120, 42, "Arp Table", 28, WHITE, 255)
 
     let pgArpBalloon2 = getPG_rectBalloon(
-      10, 10, 320, 160,
+      10, 10, 340, 160,
       RIGHT, 390, 90, 55, 105,
       TRANSPARENT, 2, 255, BELIZEHOLE, 255)
 
     // ARP TABLE
-    let columnWidthArray = [130, 170]
+    let columnWidthArray = [130, 190]
     let rawHeightArray = [35, 35, 35, 35]
     let fColorTable1 = [[BELIZEHOLE, BELIZEHOLE], [BELIZEHOLE, BELIZEHOLE],
      [BELIZEHOLE, BELIZEHOLE], [BELIZEHOLE, BELIZEHOLE]]
     let fColorTable2 = [[BELIZEHOLE, BELIZEHOLE], [BELIZEHOLE, BELIZEHOLE],
      [POMEGRANATE, POMEGRANATE], [BELIZEHOLE, BELIZEHOLE]]
     let fAlphaTable = [[255, 255], [255, 255], [255, 255], [255, 255]]
-    let txTable = [[15, 25], [17, 13], [17, 13], [17, 13]]
+    let txTable = [[15, 35], [12, 13], [12, 13], [12, 13]]
     let tyArray = [25, 25, 25, 25]
 
     let textTable1_1 = [['IP Address', 'MAC Address'], ['10.0.0.101', '0000.0000.0101'],
@@ -485,17 +487,42 @@ class Book_Network01_02{
 
     // ARP REQUEST FORMAT
     let pg_ethArpRequestFormat1 = Network_Format.getPG_EthArp(
-      BLACK, 2, 255, 22,
-      POMEGRANATE, 5, 'FFFF.FFFF.FFFF', WHITE,
-      CONCRETE, 12, '0000.0000.0101', BLACK,
-      CONCRETE, 80, 'Who has "10.0.0.102" ?', BLACK)
+      BLACK, 2, 255, 20,
+      CONCRETE, 15, 'FFFF.FFFF.FFFF', BLACK,
+      CONCRETE, 10, '0000.0000.0101', BLACK,
+      CONCRETE, 85, 'Who has "10.0.0.102" ?', BLACK)
+
+    let pg_ethArpRequestFormat2 = Network_Format.getPG_EthArp(
+      BLACK, 2, 255, 20,
+      POMEGRANATE, 15, 'FFFF.FFFF.FFFF', WHITE,
+      CONCRETE, 10, '0000.0000.0101', BLACK,
+      CONCRETE, 85, 'Who has "10.0.0.102" ?', BLACK)
+
+    let pg_ethArpRequestFormat3 = Network_Format.getPG_EthArp(
+      BLACK, 2, 255, 20,
+      CONCRETE, 15, 'FFFF.FFFF.FFFF', BLACK,
+      CONCRETE, 10, '0000.0000.0101', BLACK,
+      POMEGRANATE, 85, 'Who has "10.0.0.102" ?', WHITE)
+
 
     // ARP REPLY FORMAT
     let pg_ethArpReplyFormat1 = Network_Format.getPG_EthArp(
-      BLACK, 2, 255, 22,
-      POMEGRANATE, 12, '0000.0000.0101', WHITE,
-      CONCRETE, 12, '0000.0000.0102', BLACK,
-      CONCRETE, 30, '"0000.0000.0102" has "10.0.0.102"', BLACK, false)
+      BLACK, 2, 255, 20,
+      CONCRETE, 10, '0000.0000.0101', BLACK,
+      CONCRETE, 10, '0000.0000.0102', BLACK,
+      CONCRETE, 28, '"0000.0000.0102" has "10.0.0.102"', BLACK, false)
+
+    let pg_ethArpReplyFormat2 = Network_Format.getPG_EthArp(
+      BLACK, 2, 255, 20,
+      POMEGRANATE, 10, '0000.0000.0101', WHITE,
+      CONCRETE, 10, '0000.0000.0102', BLACK,
+      CONCRETE, 28, '"0000.0000.0102" has "10.0.0.102"', BLACK, false)
+
+    let pg_ethArpReplyFormat3 = Network_Format.getPG_EthArp(
+      BLACK, 2, 255, 20,
+      CONCRETE, 10, '0000.0000.0101', BLACK,
+      CONCRETE, 10, '0000.0000.0102', BLACK,
+      POMEGRANATE, 28, '"0000.0000.0102" has "10.0.0.102"', WHITE, false)
 
     this.i05_pgb = pgb
     this.i05_pg_exclamation = pgExclamationBalloon
@@ -511,26 +538,36 @@ class Book_Network01_02{
 
     this.i05_pg_arpBalloon1 = pgArpBalloon1
     this.i05_pg_arpBalloon2 = pgArpBalloon2
+
     this.i05_pg_arpTable1_1 = pgArpTable1_1
+    this.i05_pg_arpTable1_2 = pgArpTable1_2
+    this.i05_pg_arpTable1_3 = pgArpTable1_3
     this.i05_pg_arpTable2_1 = pgArpTable2_1
+    this.i05_pg_arpTable2_2 = pgArpTable2_2
+    this.i05_pg_arpTable2_3 = pgArpTable2_3
     this.i05_pg_arpTable3 = pgArpTable3
 
     this.i05_pg_ethArpRequestFormat1 = pg_ethArpRequestFormat1
+    this.i05_pg_ethArpRequestFormat2 = pg_ethArpRequestFormat2
+    this.i05_pg_ethArpRequestFormat3 = pg_ethArpRequestFormat3
 
     this.i05_pg_ethArpReplyFormat1 = pg_ethArpReplyFormat1
+    this.i05_pg_ethArpReplyFormat2 = pg_ethArpReplyFormat2
+    this.i05_pg_ethArpReplyFormat3 = pg_ethArpReplyFormat3
   }
 
   static getDrawPG_image05(){
-    let x = 400
+    let x = 420
+    let y = 30
 
     let pgb = this.i05_pgb
     let static_pgb = this.i01_pgb
     let pg_exclamation = this.i05_pg_exclamation
 
-    let [x1, y1] = [this.i01_pc1x + x, this.i01_pc1y]
-    let [x2, y2] = [this.i01_sw1x + x, this.i01_sw1y]
-    let [x3, y3] = [this.i01_pc2x + x, this.i01_pc2y]
-    let [x4, y4] = [this.i01_pc3x + x, this.i01_pc3y]
+    let [x1, y1] = [this.i01_pc1x + x, this.i01_pc1y + y]
+    let [x2, y2] = [this.i01_sw1x + x, this.i01_sw1y + y]
+    let [x3, y3] = [this.i01_pc2x + x, this.i01_pc2y + y]
+    let [x4, y4] = [this.i01_pc3x + x, this.i01_pc3y + y]
 
     let pg_bpArpRequest1 = this.i05_pg_bpArpRequest1
     let pg_bpArpRequest2 = this.i05_pg_bpArpRequest2
@@ -545,20 +582,48 @@ class Book_Network01_02{
     let pg_arpBalloon1 = this.i05_pg_arpBalloon1
     let pg_arpBalloon2 = this.i05_pg_arpBalloon2
     let pg_arpTable1_1 = this.i05_pg_arpTable1_1
+    let pg_arpTable1_2 = this.i05_pg_arpTable1_2
+    let pg_arpTable1_3 = this.i05_pg_arpTable1_3
     let pg_arpTable2_1 = this.i05_pg_arpTable2_1
+    let pg_arpTable2_2 = this.i05_pg_arpTable2_2
+    let pg_arpTable2_3 = this.i05_pg_arpTable2_3
     let pg_arpTable3 = this.i05_pg_arpTable3
 
     let pg_ethArpRequestFormat1 = this.i05_pg_ethArpRequestFormat1
+    let pg_ethArpRequestFormat2 = this.i05_pg_ethArpRequestFormat2
+    let pg_ethArpRequestFormat3 = this.i05_pg_ethArpRequestFormat3
+
     let pg_ethArpReplyFormat1 = this.i05_pg_ethArpReplyFormat1
+    let pg_ethArpReplyFormat2 = this.i05_pg_ethArpReplyFormat2
+    let pg_ethArpReplyFormat3 = this.i05_pg_ethArpReplyFormat3
 
     pgb.clear()
     pgb.background(255)
-    pgb.image(static_pgb, x, 0)
-    pgb.image(pg_arpBalloon1, 50, 20)
-    pgb.image(pg_arpBalloon2, 50, 230)
-    pgb.image(pg_arpBalloon2, 50, 410)
+    pgb.image(static_pgb, x, y)
+    pgb.image(pg_arpBalloon1, 50, 50)
+    pgb.image(pg_arpBalloon2, 50, 260)
+    pgb.image(pg_arpBalloon2, 50, 440)
 
     let count = frameCount % 1000
+
+    /*
+    Frame Time Table
+
+    0 - 50    : None
+    50 - 150  : Show arp request frame at PC1
+    150 - 200 : move it from PC1 to SW1
+    200 - 300 : Show it at SW1
+    300 - 350 : move it from SW1 to PC2 and PC3 (Flood)
+    350 - 450 : Show it at PC2 and PC3
+    450 - 500 : None
+
+    500 - 600 : Show arp reply frame at PC2
+    600 - 650 : Move it from PC2 to SW1
+    650 - 750 : Showt it at SW1
+    750 - 800 : Move it from SW1 to PC1
+    800 - 900 : Show it at PC1
+    900 - 950 : None
+    */
 
     // Animation1 : Flowing Packet
     stayPG(pgb, pg_bpArpRequest1, x1, y1, count, 50, 150)
@@ -580,12 +645,29 @@ class Book_Network01_02{
     stayPG_corner(pgb, pg_exclamation, x1 + 20, y1 - 130, count, 800, 900)
 
     // Animation3 : Arp Table
-    pgb.image(pg_arpTable1_1, 70, 75)
-    pgb.image(pg_arpTable2_1, 70, 250)
-    pgb.image(pg_arpTable3, 70, 430)
+    stayPG_corner(pgb, pg_arpTable1_1, 70, 105, count, 0, 800)
+    stayPG_corner(pgb, pg_arpTable1_2, 70, 105, count, 800, 900)
+    stayPG_corner(pgb, pg_arpTable1_3, 70, 105, count, 900, 1000)
+
+    stayPG_corner(pgb, pg_arpTable2_1, 70, 280, count, 0, 350)
+    stayPG_corner(pgb, pg_arpTable2_2, 70, 280, count, 350, 450)
+    stayPG_corner(pgb, pg_arpTable2_3, 70, 280, count, 450, 1000)
+
+    stayPG_corner(pgb, pg_arpTable3, 70, 460, count, 0, 1000)
 
     // Animation4 : Arp Format
-    pgb.image(pg_ethArpReplyFormat1, 200, 620)
+    stayPG_corner(pgb, pg_ethArpRequestFormat1, 200, 650, count, 0, 200)
+    stayPG_corner(pgb, pg_ethArpRequestFormat2, 200, 650, count, 200, 300)
+    stayPG_corner(pgb, pg_ethArpRequestFormat1, 200, 650, count, 300, 350)
+    stayPG_corner(pgb, pg_ethArpRequestFormat3, 200, 650, count, 350, 450)
+
+    stayPG_corner(pgb, pg_ethArpReplyFormat1, 200, 650, count, 500, 650)
+    stayPG_corner(pgb, pg_ethArpReplyFormat2, 200, 650, count, 650, 750)
+    stayPG_corner(pgb, pg_ethArpReplyFormat1, 200, 650, count, 750, 800)
+    stayPG_corner(pgb, pg_ethArpReplyFormat3, 200, 650, count, 800, 950)
+
+
+    //pgb.image(pg_ethArpReplyFormat1, 200, 650)
 
     return pgb
   }

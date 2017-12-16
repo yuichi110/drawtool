@@ -1,5 +1,6 @@
 /*
 * Utility module for drawing network object.
+* Item Size are designed for font mplus-1p
 *
 * Classes
 *  - Network_BreifPacket : draw brief packet.
@@ -22,6 +23,17 @@ const NETWORK_GEAR_PC = Symbol('pc')
 const NETWORK_GEAR_SERVER = Symbol('server')
 const NETWORK_GEAR_STORAGE = Symbol('storage')
 const NETWORK_GEAR_UNDEFINED = Symbol('undefined')
+
+function lib_network_preload(){
+  if(_lib_network_preload){
+    return
+  }
+  _lib_network_preload = true
+
+  lib_common_preload()
+  setDefaultFont('mp1p')
+}
+let _lib_network_preload = false
 
 function getNetworkGearSymbol(textName){
   textName = textName.toLowerCase()
@@ -65,7 +77,7 @@ class Network_Format{
                      fcSrcIp,  txSrcIp,  textSrcIp,  tcSrcIp,
                      fcPayload, tcPayload){
 
-    let widthArray = [90, 90, 90, 90, 200]
+    let widthArray = [100, 100, 100, 100, 200]
     let fcArray = [fcDstEth, fcSrcEth, fcDstIp, fcSrcIp, fcPayload]
     let faArray = [255, 255, 255, 255, 255]
     let txArray = [txDstEth, txSrcEth, txDstIp, txSrcIp, 50]
@@ -78,31 +90,31 @@ class Network_Format{
                                    fcArray, faArray,
                                    txArray, 50 , textArray,
                                    tSize, tcArray, taArray);
-    drawPG_text(pg, 10, 20, "Dst MAC", 18, tcDstEth, 255)
-    drawPG_text(pg, 97, 20, "Src MAC", 18, tcSrcEth, 255)
-    drawPG_text(pg, 200, 20, "Dst IP", 18, tcDstIp, 255)
-    drawPG_text(pg, 290, 20, "Src IP", 18, tcSrcIp, 255)
-    drawPG_text(pg, 410, 40, "Payload", 24, tcPayload, 255)
+    drawPG_text(pg, 12, 20, "Dst MAC", 18, tcDstEth, 255)
+    drawPG_text(pg, 112, 20, "Src MAC", 18, tcSrcEth, 255)
+    drawPG_text(pg, 225, 20, "Dst IP", 18, tcDstIp, 255)
+    drawPG_text(pg, 325, 20, "Src IP", 18, tcSrcIp, 255)
+    drawPG_text(pg, 450, 40, "Payload", 24, tcPayload, 255)
 
 
-    let pgb = createGraphics(560, 96)
+    let pgb = createGraphics(100 * 4 + 200, 96)
     drawPG_line(pgb, 5, 30, 15, 10, BLACK, 2, 255)
     drawPG_line(pgb, 15, 10, 25, 10, BLACK, 2, 255)
-    drawPG_text(pgb, 32, 20, "Ethernet (L2)", 20, BLACK, 255)
-    drawPG_line(pgb, 155, 10, 165, 10, BLACK, 2, 255)
-    drawPG_line(pgb, 165, 10, 175, 30, BLACK, 2, 255)
+    drawPG_text(pgb, 34, 20, "Ethernet (L2)", 20, BLACK, 255)
+    drawPG_line(pgb, 175, 10, 185, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 185, 10, 195, 30, BLACK, 2, 255)
 
-    drawPG_line(pgb, 185, 30, 195, 10, BLACK, 2, 255)
-    drawPG_line(pgb, 195, 10, 230, 10, BLACK, 2, 255)
-    drawPG_text(pgb, 240, 20, "IP (L3)", 20, BLACK, 255)
-    drawPG_line(pgb, 310, 10, 345, 10, BLACK, 2, 255)
-    drawPG_line(pgb, 345, 10, 355, 30, BLACK, 2, 255)
+    drawPG_line(pgb, 205, 30, 215, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 215, 10, 260, 10, BLACK, 2, 255)
+    drawPG_text(pgb, 267, 20, "IP (L3)", 20, BLACK, 255)
+    drawPG_line(pgb, 340, 10, 385, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 385, 10, 395, 30, BLACK, 2, 255)
 
-    drawPG_line(pgb, 365, 30, 375, 10, BLACK, 2, 255)
-    drawPG_line(pgb, 375, 10, 415, 10, BLACK, 2, 255)
-    drawPG_text(pgb, 427, 20, "L4 + L7", 20, BLACK, 255)
-    drawPG_line(pgb, 505, 10, 545, 10, BLACK, 2, 255)
-    drawPG_line(pgb, 545, 10, 555, 30, BLACK, 2, 255)
+    drawPG_line(pgb, 405, 30, 415, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 415, 10, 455, 10, BLACK, 2, 255)
+    drawPG_text(pgb, 463, 20, "L4 + L7", 20, BLACK, 255)
+    drawPG_line(pgb, 545, 10, 585, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 585, 10, 595, 30, BLACK, 2, 255)
 
     pgb.image(pg, 1, 35)
     return pgb
@@ -115,7 +127,7 @@ class Network_Format{
                          fcSrcIp,  txSrcIp,  textSrcIp,  tcSrcIp,
                          fcPayload, tcPayload){
 
-    let widthArray = [180, 180, 180, 180, 130]
+    let widthArray = [180, 180, 180, 180, 150]
     let fcArray = [fcDstEth, fcSrcEth, fcDstIp, fcSrcIp, fcPayload]
     let faArray = [255, 255, 255, 255, 255]
     let txArray = [txDstEth, txSrcEth, txDstIp, txSrcIp, 0]
@@ -128,17 +140,17 @@ class Network_Format{
                                    fcArray, faArray,
                                    txArray, 50 , textArray,
                                    tSize, tcArray, taArray);
-    drawPG_text(pg, 10, 20, "Dst MAC", 18, tcDstEth, 255)
-    drawPG_text(pg, 230, 20, "Src MAC", 18, tcSrcEth, 255)
+    drawPG_text(pg, 55, 20, "Dst MAC", 18, tcDstEth, 255)
+    drawPG_text(pg, 235, 20, "Src MAC", 18, tcSrcEth, 255)
     drawPG_text(pg, 425, 20, "Dst IP", 18, tcDstIp, 255)
     drawPG_text(pg, 610, 20, "Src IP", 18, tcSrcIp, 255)
-    drawPG_text(pg, 740, 40, "Payload", 24, tcPayload, 255)
+    drawPG_text(pg, 750, 40, "Payload", 24, tcPayload, 255)
 
-    let pgb = createGraphics(850, 96)
+    let pgb = createGraphics(180 * 4 + 150, 96)
     drawPG_line(pgb, 5, 30, 15, 10, BLACK, 2, 255)
-    drawPG_line(pgb, 15, 10, 110, 10, BLACK, 2, 255)
-    drawPG_text(pgb, 125, 20, "Ethernet (L2)", 20, BLACK, 255)
-    drawPG_line(pgb, 250, 10, 345, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 15, 10, 100, 10, BLACK, 2, 255)
+    drawPG_text(pgb, 115, 20, "Ethernet (L2)", 20, BLACK, 255)
+    drawPG_line(pgb, 260, 10, 345, 10, BLACK, 2, 255)
     drawPG_line(pgb, 345, 10, 355, 30, BLACK, 2, 255)
 
     drawPG_line(pgb, 365, 30, 375, 10, BLACK, 2, 255)
@@ -149,9 +161,9 @@ class Network_Format{
 
     drawPG_line(pgb, 725, 30, 735, 10, BLACK, 2, 255)
     drawPG_line(pgb, 735, 10, 745, 10, BLACK, 2, 255)
-    drawPG_text(pgb, 752, 20, "L4 + L7", 20, BLACK, 255)
-    drawPG_line(pgb, 825, 10, 835, 10, BLACK, 2, 255)
-    drawPG_line(pgb, 835, 10, 845, 30, BLACK, 2, 255)
+    drawPG_text(pgb, 760, 20, "L4 + L7", 20, BLACK, 255)
+    drawPG_line(pgb, 845, 10, 855, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 855, 10, 865, 30, BLACK, 2, 255)
 
     pgb.image(pg, 1, 35)
     return pgb
@@ -185,9 +197,9 @@ class Network_Format{
 
     let pgb = createGraphics(770, 96)
     drawPG_line(pgb, 5, 30, 15, 10, BLACK, 2, 255)
-    drawPG_line(pgb, 15, 10, 110, 10, BLACK, 2, 255)
-    drawPG_text(pgb, 125, 20, "Ethernet (L2)", 20, BLACK, 255)
-    drawPG_line(pgb, 250, 10, 345, 10, BLACK, 2, 255)
+    drawPG_line(pgb, 15, 10, 100, 10, BLACK, 2, 255)
+    drawPG_text(pgb, 115, 20, "Ethernet (L2)", 20, BLACK, 255)
+    drawPG_line(pgb, 260, 10, 345, 10, BLACK, 2, 255)
     drawPG_line(pgb, 345, 10, 355, 30, BLACK, 2, 255)
 
     drawPG_line(pgb, 365, 30, 375, 10, BLACK, 2, 255)
@@ -534,10 +546,10 @@ class Network_BriefPacket{
   }
 }
 
-const _NETWORK_BP_ETH_WIDTH = 50
-const _NETWORK_BP_ETH_X = 7
+const _NETWORK_BP_ETH_WIDTH = 60
+const _NETWORK_BP_ETH_X = 10
 const _NETWORK_BP_IP_WIDTH = 50
-const _NETWORK_BP_IP_X = 15
+const _NETWORK_BP_IP_X = 14
 const _NETWORK_BP_TCP_WIDTH = 75
 const _NETWORK_BP_TCP_X = 15
 const _NETWORK_BP_DATA_WIDTH = 100
@@ -548,7 +560,7 @@ const _NETWORK_BP_ARP_REPLY_WIDTH = 130
 const _NETWORK_BP_ARP_REPLY_X = 10
 const _NETWORK_BP_HEIGHT = 50
 const _NETWORK_BP_Y = 34
-const _NETWORK_BP_TEXT_SIZE = 24
+const _NETWORK_BP_TEXT_SIZE = 22
 
 
 /**************

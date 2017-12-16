@@ -5,6 +5,8 @@ class LibNetworkTest{
     main_height = 900
     main_guiDebug = false
     main_loglevel = LOGLEVEL_INFO
+
+    lib_network_preload()
   }
 
   static setup(){
@@ -66,6 +68,35 @@ class LibNetworkTest{
     //this.gear.setText(20, 50, 'Hello', 32, BLACK, 255, false)
 
     this.setup_topology()
+
+    // FORMAT
+    this.pg_ethFormat1 = Network_Format.getPG_EthIp(
+      BLACK, 2, 255, 24,
+      POMEGRANATE, 25, 'PC2', WHITE, CONCRETE, 25, 'PC1', BLACK,
+      CONCRETE, 25, 'PC2', BLACK, CONCRETE, 25, 'PC1', BLACK,
+      CONCRETE, BLACK)
+
+    this.pg_ethFormat2 = Network_Format.getPG_EthIpWide(
+      BLACK, 2, 255, 20,
+      POMEGRANATE, 10, '0000.0000.0102', WHITE,
+      CONCRETE, 10, '0000.0000.0101', BLACK,
+      CONCRETE, 40, '10.0.0.102', BLACK,
+      CONCRETE, 40, '10.0.0.101', BLACK,
+      CONCRETE, BLACK)
+
+    // ARP REQUEST FORMAT
+    this.pg_ethArpRequestFormat = Network_Format.getPG_EthArp(
+      BLACK, 2, 255, 20,
+      POMEGRANATE, 5, 'FFFF.FFFF.FFFF', WHITE,
+      CONCRETE, 12, '0000.0000.0101', BLACK,
+      CONCRETE, 80, 'Who has "10.0.0.102" ?', BLACK)
+
+    // ARP REPLY FORMAT
+    this.pg_ethArpReplyFormat = Network_Format.getPG_EthArp(
+      BLACK, 2, 255, 20,
+      POMEGRANATE, 12, '0000.0000.0101', WHITE,
+      CONCRETE, 12, '0000.0000.0102', BLACK,
+      CONCRETE, 30, '"0000.0000.0102" has "10.0.0.102"', BLACK, false)
   }
 
   static setup_topology(){
@@ -99,7 +130,7 @@ class LibNetworkTest{
   }
 
   static getDrawPG(){
-    switch(1){
+    switch(7){
       case 1:
         return this.getDrawPG_briefPackets()
       case 2:
@@ -112,9 +143,9 @@ class LibNetworkTest{
         return this.getDrawPG_gear()
       case 6:
         return this.getDrawPG_topology()
-        /*
       case 7:
-        this.drawSerialRects(pgb); break
+        return this.getDrawPG_format()
+        /*
       case 8:
         this.drawTable(pgb); break
         */
@@ -212,6 +243,19 @@ class LibNetworkTest{
     this.pgb.background(255)
 
     this.topology.drawPG(this.pgb)
+
+    return this.pgb
+  }
+
+  static getDrawPG_format(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
+    this.pgb.image(this.pg_ethFormat1, 100, 100)
+    this.pgb.image(this.pg_ethFormat2, 100, 250)
+    this.pgb.image(this.pg_ethArpRequestFormat, 100, 400)
+    this.pgb.image(this.pg_ethArpReplyFormat, 100, 550)
+    //this.pg_ethArpRequestFormat
 
     return this.pgb
   }

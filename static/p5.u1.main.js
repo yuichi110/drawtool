@@ -38,6 +38,7 @@ const LOGLEVEL_LOG =   Symbol('log level log')
 const LOGLEVEL_WARN =  Symbol('log level warn')
 const LOGLEVEL_ERROR = Symbol('log level error')
 
+//const DEFAULT_PROPO_FONT =
 
 /*
 * Global Parameters.
@@ -51,9 +52,11 @@ let main_frameRate
 let main_pixelDensity
 let main_canvasParent
 
+/*
 let main_save
 let main_save_background
 let main_save_prefix
+*/
 
 let main_loglevel
 let main_guiDebug
@@ -80,9 +83,11 @@ function preload(){
   main_pixelDensity = 1 // ALWAYS AVOID RETINA DISPLAY MODE
   main_canvasParent = 'p5js-canvas-here'
 
+  /*
   main_save =            false
   main_save_background = true
   main_save_prefix =     'p5-'
+  */
 
   main_loglevel = LOGLEVEL_LOG
   main_guiDebug = false

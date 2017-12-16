@@ -55,6 +55,17 @@ const ASBESTOS =     Symbol('asbestos');
 // return on string parse error
 const UNDEFINED_COLOR = Symbol('undefined')
 
+function lib_common_preload(){
+  if(_lib_common_preload){
+    return
+  }
+  _lib_common_preload = true
+
+  registerFont('mp1m', '/static/font/mplus-1m-medium.ttf')
+  registerFont('mp1p', '/static/font/mplus-1p-medium.ttf')
+}
+let _lib_common_preload = false
+
 /*****
 * ICON
 *****/
@@ -73,8 +84,58 @@ class Icon{
       return pg
   }
 }
+
 /*
 * Font
+*/
+
+let _lib_common_fontMap = new Map()
+let _lib_common_defaultFont = ''
+
+function registerFont(fontName, fontPath){
+  let f = loadFont(fontPath)
+  //console.log(f)
+  _lib_common_fontMap.set(fontName, f)
+}
+
+function setDefaultFont(fontName){
+  if(_lib_common_fontMap.has(fontName)){
+    _lib_common_defaultFont = fontName
+  }else{
+    console.error('The font is not yet registered.')
+  }
+}
+
+function setPG_font(pg, fontName=''){
+  if(fontName != ''){
+    if(_lib_common_fontMap.has(fontName)){
+      pg.textFont(_lib_common_fontMap[fontName])
+      return
+    }else{
+      console.error('Font is not registered. Please call setFont First')
+    }
+  }
+
+  if(_lib_common_defaultFont != ''){
+    if(_lib_common_fontMap.has(_lib_common_defaultFont)){
+      let f = _lib_common_fontMap.get(_lib_common_defaultFont)
+      //console.log('load: ' + f)
+      pg.textFont(f)
+    }else{
+      console.error('error')
+    }
+
+  }else{
+    // no font is choosed.
+    // no default font.
+    // do nothing.
+  }
+}
+
+
+
+/*
+Save
 */
 
 function savePG(pg, fname_prefix){
@@ -179,7 +240,8 @@ function movePG_bezier(pgb, pg,
 * Text
 */
 
-function drawPG_text(pg, x, y, tString, tSize, tColor, tAlpha){
+function drawPG_text(pg, x, y, tString, tSize, tColor, tAlpha, font=''){
+  setPG_font(pg, font)
   pg.textSize(tSize)
   setPG_style(pg, TRANSPARENT, 0, 0, tColor, tAlpha)
   pg.text(tString, x, y)
@@ -301,9 +363,7 @@ function getPG_rect(width_, height_, r,
   pg.rect(x1, y1, x2, y2, r)
 
   if(tString != ''){
-    pg.textSize(tSize)
-    setPG_style(pg, TRANSPARENT, 0, 0, tColor, tAlpha)
-    pg.text(tString, tX, tY)
+    drawPG_text(pg, tX, tY, tString, tSize, tColor, tAlpha)
   }
 
   return pg
@@ -326,9 +386,7 @@ function getPG_ellipse(width_, height_,
   pg.ellipse(x, y, w, h)
 
   if(tString != ''){
-    pg.textSize(tSize)
-    setPG_style(pg, TRANSPARENT, 0, 0, tColor, tAlpha)
-    pg.text(tString, tX, tY)
+    drawPG_text(pg, tX, tY, tString, tSize, tColor, tAlpha)
   }
 
   return pg
@@ -532,9 +590,7 @@ function getPG_bigArrowR(width_, height_, arrowWidth, arrowHeight,
   pg.pop()
 
   if(tString != ''){
-    pg.textSize(tSize)
-    setPG_style(pg, TRANSPARENT, 0, 0, tColor, tAlpha)
-    pg.text(tString, tX, tY)
+    drawPG_text(pg, tX, tY, tString, tSize, tColor, tAlpha)
   }
 
   return pg
@@ -573,9 +629,7 @@ function getPG_bigArrowL(width_, height_, arrowWidth, arrowHeight,
   pg.pop()
 
   if(tString != ''){
-    pg.textSize(tSize)
-    setPG_style(pg, TRANSPARENT, 0, 0, tColor, tAlpha)
-    pg.text(tString, tX, tY)
+    drawPG_text(pg, tX, tY, tString, tSize, tColor, tAlpha)
   }
 
   return pg
@@ -745,9 +799,7 @@ function getPG_cylinder(width_, height_, arcHeight,
   pg.ellipse(e2_x, e2_y, e2_w, e2_h);
 
   if(tString != ''){
-    pg.textSize(tSize)
-    setPG_style(pg, TRANSPARENT, 0, 0, tColor, tAlpha)
-    pg.text(tString, tX, tY)
+    drawPG_text(pg, tX, tY, tString, tSize, tColor, tAlpha)
   }
 
   return pg
