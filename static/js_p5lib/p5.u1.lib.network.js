@@ -132,7 +132,7 @@ class Network_Format{
     let faArray = [255, 255, 255, 255, 255]
     let txArray = [txDstEth, txSrcEth, txDstIp, txSrcIp, 0]
     let textArray = [textDstEth, textSrcEth, textDstIp, textSrcIp, '']
-    let tcArray = [tcDstEth, tcSrcEth, tcDstIp, tcSrcEth, tcPayload]
+    let tcArray = [tcDstEth, tcSrcEth, tcDstIp, tcSrcIp, tcPayload]
     let taArray = [255, 255, 255, 255, 255]
 
     let pg = getPG_horizontalRects(widthArray, 60,
