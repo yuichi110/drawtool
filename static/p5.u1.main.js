@@ -29,8 +29,10 @@ const MODULE_WATCHMAN = Symbol('module watchman')
 const MODULE_BOOK_NETWORK01_01 = Symbol('module book network01 01')
 const MODULE_BOOK_NETWORK01_02 = Symbol('module book network01 02')
 
+const MODULE_YUICHICOM = Symbol('module www.yuichi.com')
+
 // CHOOSED RUN MODULE
-const RUN_MODULE = MODULE_BOOK_NETWORK01_02
+const RUN_MODULE = MODULE_YUICHICOM
 
 const LOGLEVEL_DEBUG = Symbol('log level debug')
 const LOGLEVEL_INFO =  Symbol('log level info')
@@ -128,6 +130,9 @@ function preload(){
     case MODULE_BOOK_NETWORK01_02:
       Book_Network01_02.preload()
       break
+    case MODULE_YUICHICOM:
+      Www_Yuichi_Com.preload()
+      break
     default:
       console.error(`${RUN_MODULE.toString()} is not in preload switch`)
   }
@@ -164,6 +169,9 @@ function setup() {
     case MODULE_BOOK_NETWORK01_02:
       Book_Network01_02.setup()
       break
+    case MODULE_YUICHICOM:
+      Www_Yuichi_Com.setup()
+      break
     default:
       console.error(`${RUN_MODULE.toString()} is not in setup switch`)
   }
@@ -189,6 +197,9 @@ function draw() {
       break
     case MODULE_BOOK_NETWORK01_02:
       drawPG = Book_Network01_02.getDrawPG()
+      break
+    case MODULE_YUICHICOM:
+      drawPG = Www_Yuichi_Com.getDrawPG()
       break
     default:
       console.error(`${RUN_MODULE.toString()} is not in draw switch`)
