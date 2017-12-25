@@ -109,7 +109,7 @@ function setDefaultFont(fontName){
 function setPG_font(pg, fontName=''){
   if(fontName != ''){
     if(_lib_common_fontMap.has(fontName)){
-      pg.textFont(_lib_common_fontMap[fontName])
+      pg.textFont(_lib_common_fontMap.get(fontName))
       return
     }else{
       console.error('Font is not registered. Please call setFont First')
