@@ -96,8 +96,8 @@ function preload(){
 
   main_drawGrid =              false
   main_drawGrid_color =        GRAY
-  main_drawGrid_weight =       1
-  main_drawGrid_strongWeight = 2
+  main_drawGrid_weight =       3
+  main_drawGrid_strongWeight = 10
   main_drawGrid_xPitch =       50
   main_drawGrid_xStrongPitch = 400
   main_drawGrid_yPitch =       50
@@ -262,7 +262,25 @@ class _Main{
   }
 
   static drawGrid(pgb){
+    for(let x=main_drawGrid_xPitch; x<pgb.width; x+=main_drawGrid_xPitch){
+        if(x % main_drawGrid_xStrongPitch == 0){
+            drawPG_line(pgb, x, 0, x, pgb.height,
+              main_drawGrid_color, main_drawGrid_strongWeight, 255);
+        }else{
+          drawPG_line(pgb, x, 0, x, pgb.height,
+            main_drawGrid_color, main_drawGrid_weight, 255);
+        }
+    }
 
+    /*
+    for(int y=hPitch; y<height; y+=hPitch){
+        if(y % hsPitch == 0){
+            drawPG_line(pg, 0, y, pg.width, y, strokeColor, strongStrokeWeight, strokeAlpha);
+        }else{
+            drawPG_line(pg, 0, y, pg.width, y, strokeColor, strokeWeight_, strokeAlpha);
+        }
+    }
+    */
   }
 
   static drawMouseXY(pgb){

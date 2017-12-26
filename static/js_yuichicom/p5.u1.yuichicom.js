@@ -2,9 +2,17 @@ class Www_Yuichi_Com{
 
   static preload(){
     main_width = 1100
-    main_height = 690
+    main_height = 740
     main_guiDebug = false
     main_loglevel = LOGLEVEL_INFO
+
+    main_frameRate = 10
+
+    /*
+    main_drawGrid = true
+    main_drawGrid_xPitch =       25
+    main_drawGrid_xStrongPitch = 275
+    */
 
     registerFont('avenger', '/static/font/avenger.ttf')
 
@@ -57,23 +65,29 @@ class Www_Yuichi_Com{
   **/
 
   static setup_image01(){
-    let pgb = createGraphics(1100, 690)
-    let spgb = createGraphics(1100, 690)
+    let pgb = createGraphics(1100, 740)
+    let spgb = createGraphics(1100, 740)
     let apgb = createGraphics(1100, 500)
 
-    // make spgb
+    let upperTextY = 125
+    let upperBorderY = 140
+    let animeY = 100
+    let bottomBorderY = 600
+    let bottomTextY = 735
+
+    drawPG_text(spgb, 200, upperTextY, 'G', 192, MIDNIGHTBLUE, 255, 'avenger')
+    drawPG_text(spgb, 425, upperTextY, 'R', 192, MIDNIGHTBLUE, 255, 'avenger')
+    drawPG_text(spgb, 650, upperTextY, 'I', 192, MIDNIGHTBLUE, 255, 'avenger')
+    drawPG_text(spgb, 750, upperTextY, 'T', 192, MIDNIGHTBLUE, 255, 'avenger')
     setPG_style(spgb, TRANSPARENT, 0, 0, MIDNIGHTBLUE, 255)
-    spgb.rect(5, 100, 1090, 25)
-    spgb.rect(5, 560, 1090, 25)
-    drawPG_text(spgb, 5, 95, 'G', 148, MIDNIGHTBLUE, 255, 'avenger')
-    drawPG_text(spgb, 165, 95, 'R', 148, MIDNIGHTBLUE, 255, 'avenger')
-    drawPG_text(spgb, 325, 95, 'I', 148, MIDNIGHTBLUE, 255, 'avenger')
-    drawPG_text(spgb, 405, 95, 'T', 148, MIDNIGHTBLUE, 255, 'avenger')
-    drawPG_text(spgb, 6, 685, 'COMPUTING', 148, MIDNIGHTBLUE, 255, 'avenger')
+    spgb.rect(5, upperBorderY, 1090, 25)
+    spgb.rect(5, bottomBorderY, 1090, 25)
+    drawPG_text(spgb, 6, bottomTextY, 'COMPUTING', 148, MIDNIGHTBLUE, 255, 'avenger')
 
     this.i01_pgb = pgb
     this.i01_spgb = spgb
     this.i01_apgb = apgb
+    this.i01_ay = animeY
     this.yd = new YellowDevil()
   }
 
@@ -81,17 +95,33 @@ class Www_Yuichi_Com{
     let pgb = this.i01_pgb
     let spgb = this.i01_spgb
     let apgb = this.i01_apgb
+    let animeY = this.i01_ay
     let yd = this.yd
 
     pgb.clear()
+    pgb.background(255)
 
     // static
     pgb.image(spgb, 0, 0)
 
     // animation
-    yd.draw(apgb)
-    pgb.image(apgb, 0, 60)
+    yd.draw(apgb) // 1350 frames
+    pgb.image(apgb, 0, animeY)
 
+
+    let halfWidth = pgb.width/2
+    let halfHeight = pgb.height/2
+    pgb = pgb.get()
+    pgb.resize(halfWidth, halfHeight)
+
+
+    // save
+    let doSave = true
+    if(doSave){
+      if(frameCount <= 1350){
+        savePG(pgb, 'logo')
+      }
+    }
     return pgb
   }
 

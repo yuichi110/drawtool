@@ -1002,6 +1002,8 @@ function setPG_stroke(pg, sColor, sWeight, sAlpha){
       pg.stroke(0, sAlpha); break;
     case WHITE:
       pg.stroke(255, sAlpha); break;
+    case GRAY:
+      pg.stroke(127, 127, 127, sAlpha); break;
     case RED:
       pg.stroke(255, 0, 0, sAlpha); break;
     case GREEN:
