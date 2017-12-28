@@ -5,8 +5,9 @@ class Www_Yuichi_Com{
     main_height = 740
     main_guiDebug = false
     main_loglevel = LOGLEVEL_INFO
+    main_background = 0
 
-    main_frameRate = 10
+    main_frameRate = 50
 
     /*
     main_drawGrid = true
@@ -32,7 +33,7 @@ class Www_Yuichi_Com{
   }
 
   static getDrawPG(){
-    let imageNumber = 1
+    let imageNumber = 3
     switch(imageNumber){
       case 1:
         return this.getDrawPG_image01()
@@ -62,27 +63,30 @@ class Www_Yuichi_Com{
   * To make copy-paste easier, avoid using class scope variables.
   * setup: make local -> class at last
   * getDrawPG: make global -> local at first
+  *
+  * LOGO
+  *
   **/
 
   static setup_image01(){
-    let pgb = createGraphics(1100, 740)
-    let spgb = createGraphics(1100, 740)
-    let apgb = createGraphics(1100, 500)
+    let pgb = createGraphics(550, 355)
+    let spgb = createGraphics(550, 355)
+    let apgb = createGraphics(550, 250)
 
-    let upperTextY = 125
-    let upperBorderY = 140
-    let animeY = 100
-    let bottomBorderY = 600
-    let bottomTextY = 735
+    let upperTextY = 50
+    let upperBorderY = 60
+    let animeY = 32.5
+    let bottomBorderY = 282.5
+    let bottomTextY = 352.5
 
-    drawPG_text(spgb, 200, upperTextY, 'G', 192, MIDNIGHTBLUE, 255, 'avenger')
-    drawPG_text(spgb, 425, upperTextY, 'R', 192, MIDNIGHTBLUE, 255, 'avenger')
-    drawPG_text(spgb, 650, upperTextY, 'I', 192, MIDNIGHTBLUE, 255, 'avenger')
-    drawPG_text(spgb, 750, upperTextY, 'T', 192, MIDNIGHTBLUE, 255, 'avenger')
+    drawPG_text(spgb, 140, upperTextY, 'G', 74, MIDNIGHTBLUE, 255, 'avenger')
+    drawPG_text(spgb, 230, upperTextY, 'R', 74, MIDNIGHTBLUE, 255, 'avenger')
+    drawPG_text(spgb, 315, upperTextY, 'I', 74, MIDNIGHTBLUE, 255, 'avenger')
+    drawPG_text(spgb, 355, upperTextY, 'T', 74, MIDNIGHTBLUE, 255, 'avenger')
     setPG_style(spgb, TRANSPARENT, 0, 0, MIDNIGHTBLUE, 255)
-    spgb.rect(5, upperBorderY, 1090, 25)
-    spgb.rect(5, bottomBorderY, 1090, 25)
-    drawPG_text(spgb, 6, bottomTextY, 'COMPUTING', 148, MIDNIGHTBLUE, 255, 'avenger')
+    spgb.rect(2.5, upperBorderY, 545, 12.5)
+    spgb.rect(2.5, bottomBorderY, 545, 12.5)
+    drawPG_text(spgb, 2.5, bottomTextY, 'COMPUTING', 74, MIDNIGHTBLUE, 255, 'avenger')
 
     this.i01_pgb = pgb
     this.i01_spgb = spgb
@@ -108,28 +112,102 @@ class Www_Yuichi_Com{
     yd.draw(apgb) // 1350 frames
     pgb.image(apgb, 0, animeY)
 
-
-    let halfWidth = pgb.width/2
-    let halfHeight = pgb.height/2
-    pgb = pgb.get()
-    pgb.resize(halfWidth, halfHeight)
-
-
     // save
-    let doSave = true
+    let doSave = false
     if(doSave){
       if(frameCount <= 1350){
         savePG(pgb, 'logo')
       }
     }
+
     return pgb
   }
 
   /**
   * Image 02
+  * Python
   **/
+  
   static setup_image02(){
-    let pgb = createGraphics(width, height)
+    let pgb = createGraphics(600, 600)
+    pgb.background(39, 174, 96)
+
+
+    setPG_style(pgb, NEPHRITIS, 3, 255, WHITE, 255)
+
+    // bottom left
+    /*
+    pgb.beginShape()
+    pgb.vertex(200, 300)
+    pgb.vertex(150, 350)
+    pgb.vertex(200, 350)
+    pgb.vertex(250, 300)
+    pgb.endShape(CLOSE)
+    */
+    pgb.beginShape()
+    pgb.vertex(200, 300)
+    pgb.vertex(150, 350)
+    pgb.vertex(200, 350)
+    pgb.vertex(250, 300)
+    pgb.endShape(CLOSE)
+
+    // front
+    pgb.beginShape()
+    pgb.vertex(200, 200)
+    pgb.vertex(200, 350)
+    pgb.vertex(400, 350)
+    pgb.vertex(400, 200)
+    pgb.endShape(CLOSE)
+
+    // right
+    pgb.beginShape()
+    pgb.vertex(400, 200)
+    pgb.vertex(400, 350)
+    pgb.vertex(450, 300)
+    pgb.vertex(450, 150)
+    pgb.endShape(CLOSE)
+
+    // top
+    pgb.beginShape()
+    pgb.vertex(250, 150)
+    pgb.vertex(200, 200)
+    pgb.vertex(400, 200)
+    pgb.vertex(450, 150)
+    pgb.endShape(CLOSE)
+    pgb.line(225, 175, 422, 175)
+
+    // bottom front
+    pgb.beginShape()
+    pgb.vertex(200, 350)
+    pgb.vertex(160, 390)
+    pgb.vertex(360, 390)
+    pgb.vertex(400, 350)
+    pgb.endShape(CLOSE)
+
+    // bottom right
+    pgb.beginShape()
+    pgb.vertex(450, 300)
+    pgb.vertex(400, 350)
+    pgb.vertex(450, 350)
+    pgb.vertex(500, 300)
+    pgb.endShape(CLOSE)
+
+    // Line Paint
+    setPG_style(pgb, NEPHRITIS, 3, 255, NEPHRITIS, 255)
+    pgb.rect(200, 265, 20, 20)
+    pgb.rect(380, 265, 20, 20)
+    pgb.beginShape()
+    pgb.vertex(400, 265)
+    pgb.vertex(400, 285)
+    pgb.vertex(450, 235)
+    pgb.vertex(450, 215)
+    pgb.endShape(CLOSE)
+
+    drawPG_text(pgb, 228, 285, 'PYTHON', 28, NEPHRITIS, 255, 'avenger')
+
+
+
+
     this.i02_pgb = pgb
   }
 
@@ -142,7 +220,46 @@ class Www_Yuichi_Com{
   * Image 03
   **/
   static setup_image03(){
-    let pgb = createGraphics(width, height)
+    let pgb = createGraphics(320, 320)
+
+    pgb.background(255);
+    let r = 100
+    let w = 40
+    let h = 40
+
+    // Start in the center and draw the circle
+    pgb.translate(pgb.width / 2, pgb.height / 2);
+    pgb.noFill();
+    pgb.stroke(0);
+    // Our curve is a circle with radius r in the center of the window.
+    pgb.ellipse(0, 0, r*2, r*2);
+
+    // 10 boxes along the curve
+    let totalBoxes = 10;
+    // We must keep track of our position along the curve
+    let arclength = 0;
+
+    // For every box
+    for (let i = 0; i < totalBoxes; i++) {
+      // Each box is centered so we move half the width
+      arclength += w/2;
+      // Angle in radians is the arclength divided by the radius
+      let theta = arclength / r;
+
+      pgb.push();
+      // Polar to cartesian coordinate conversion
+      pgb.translate(r*cos(theta), r*sin(theta));
+      // Rotate the box
+      pgb.rotate(theta);
+      // Display the box
+      pgb.fill(0,100);
+      pgb.rectMode(CENTER);
+      pgb.rect(0,0,w,h);
+      pgb.pop();
+      // Move halfway again
+      arclength += w/2;
+    }
+
     this.i03_pgb = pgb
   }
 
@@ -238,19 +355,15 @@ class Www_Yuichi_Com{
 
 class YellowDevil{
   constructor(){
-    let size = 90
+    let size = 45
     this.yrect = getPG_rect(size, size, 10, TRANSPARENT, 0, 0, SUNFLOWER, 255)
     this.brect = getPG_rect(size, size, 10, TRANSPARENT, 0, 0, PETERRIVER, 255)
     this.bball = getPG_ellipse(size, size, PETERRIVER, 15, 255, PETERRIVER, 255)
-    this.rrect = getPG_ellipse(size, size, MIDNIGHTBLUE, 15, 255, ALIZARIN, 255)
-    let left_xArray = [5 + size/2, 105 + size/2, 205 + size/2]
-    let right_xArray = [805 + size/2, 905 + size/2, 1005 + size/2]
-    let yArray = [205 + size/2, 305 + size/2, 405 + size/2]
+    this.rrect = getPG_ellipse(size, size, MIDNIGHTBLUE, 7.5, 255, ALIZARIN, 255)
 
-    this.mx = 505 //+ size/2
-    this.my01 = 305 + size/2
-    this.my02 = 405 + size/2
-
+    let left_xArray = [2.5 + size/2, 52.5 + size/2, 102.5 + size/2]
+    let right_xArray = [402.5 + size/2, 452.5 + size/2, 502.5 + size/2]
+    let yArray = [102.5 + size/2, 152.5 + size/2, 202.5 + size/2]
     this.lx01 = left_xArray[0]
     this.ly01 = yArray[0]
     this.lx02 = left_xArray[0]
@@ -289,13 +402,13 @@ class YellowDevil{
     this.rx09 = right_xArray[2]
     this.ry09 = yArray[2]
 
-    this.yGround = 405
-    //this.xpos = 505
+    this.mx = 252.5
+    this.yGround = 202.5
     this.ypos = this.yGround
-
     this.vy = 0
     this.gravity = 0.98
-    //this.bounce = -1
+    this.hj = -15
+    this.sj = -12
   }
 
   draw(pgb){
@@ -311,7 +424,7 @@ class YellowDevil{
 
   drawMegaMan(pgb){
     pgb.image(this.brect, this.mx, this.ypos) // bottom side
-    pgb.image(this.bball, this.mx, this.ypos - 100) // top side
+    pgb.image(this.bball, this.mx, this.ypos - 50) // top side
     if(this.vy != 0){
       if(this.ypos > this.yGround){
         this.vy = 0
@@ -328,8 +441,8 @@ class YellowDevil{
     stayPG(pgb, this.yrect, this.rx09, this.ry09, count, 0, 150)
     movePG(pgb, this.yrect, this.rx09, this.ry09, 0, this.lx03, this.ly03, 0, count, 150, 200)
     stayPG(pgb, this.yrect, this.lx03, this.ly03, count, 200, 10000)
-    if(count == 155){
-      this.vy = -18
+    if(count == 162){
+      this.vy = this.sj
     }
 
     // b2
@@ -341,8 +454,8 @@ class YellowDevil{
     stayPG(pgb, this.yrect, this.rx08, this.ry08, count, 0, 290)
     movePG(pgb, this.yrect, this.rx08, this.ry08, 0, this.lx02, this.ly02, 0, count, 290, 340)
     stayPG(pgb, this.yrect, this.lx02, this.ly02, count, 340, 10000)
-    if(count == 295){
-      this.vy = -22
+    if(count == 300){
+      this.vy = this.hj
     }
 
     // b4
@@ -354,24 +467,24 @@ class YellowDevil{
     stayPG(pgb, this.yrect, this.rx06, this.ry06, count, 0, 420)
     movePG(pgb, this.yrect, this.rx06, this.ry06, 0, this.lx06, this.ly06, 0, count, 420, 460)
     stayPG(pgb, this.yrect, this.lx06, this.ly06, count, 460, 10000)
-    if(count == 420){
-      this.vy = -18
+    if(count == 427){
+      this.vy = this.sj
     }
 
     // b6
     stayPG(pgb, this.rrect, this.rx05, this.ry05, count, 0, 480)
     movePG(pgb, this.rrect, this.rx05, this.ry05, 0, this.lx05, this.ly05, 0, count, 480, 520)
     stayPG(pgb, this.rrect, this.lx05, this.ly05, count, 520, 10000)
-    if(count == 475){
-      this.vy = -22
+    if(count == 485){
+      this.vy = this.hj
     }
 
     // b7
     stayPG(pgb, this.yrect, this.rx03, this.ry03, count, 0, 540)
     movePG(pgb, this.yrect, this.rx03, this.ry03, 0, this.lx09, this.ly09, 0, count, 540, 570)
     stayPG(pgb, this.yrect, this.lx09, this.ly09, count, 570, 10000)
-    if(count == 535){
-      this.vy = -18
+    if(count == 543){
+      this.vy = this.sj
     }
 
     // b8
@@ -384,8 +497,8 @@ class YellowDevil{
     stayPG(pgb, this.yrect, this.rx02, this.ry02, count, 0, 640)
     movePG(pgb, this.yrect, this.rx02, this.ry02, 0, this.lx08, this.ly08, 0, count, 640, 670)
     stayPG(pgb, this.yrect, this.lx08, this.ly08, count, 670, 10000)
-    if(count == 633){
-      this.vy = -22
+    if(count == 640){
+      this.vy = this.hj
     }
   }
 
@@ -399,24 +512,24 @@ class YellowDevil{
     stayPG(pgb, this.yrect, this.lx02, this.ly02, count, 0, 120)
     movePG(pgb, this.yrect, this.lx02, this.ly02, 0, this.rx08, this.ry08, 0, count, 120, 170)
     stayPG(pgb, this.yrect, this.rx08, this.ry08, count, 170, 10000)
-    if(count == 120){
-      this.vy = -22
+    if(count == 130){
+      this.vy = this.hj
     }
 
     // b3
     stayPG(pgb, this.yrect, this.lx03, this.ly03, count, 0, 190)
     movePG(pgb, this.yrect, this.lx03, this.ly03, 0, this.rx09, this.ry09, 0, count, 190, 240)
     stayPG(pgb, this.yrect, this.rx09, this.ry09, count, 240, 10000)
-    if(count == 195){
-      this.vy = -18
+    if(count == 203){
+      this.vy = this.sj
     }
 
     // b4
     stayPG(pgb, this.yrect, this.lx06, this.ly06, count, 0, 260)
     movePG(pgb, this.yrect, this.lx06, this.ly06, 0, this.rx06, this.ry06, 0, count, 260, 300)
     stayPG(pgb, this.yrect, this.rx06, this.ry06, count, 300, 10000)
-    if(count == 265){
-      this.vy = -18
+    if(count == 267){
+      this.vy = this.sj
     }
 
     // b5
@@ -428,16 +541,16 @@ class YellowDevil{
     stayPG(pgb, this.rrect, this.lx05, this.ly05, count, 0, 380)
     movePG(pgb, this.rrect, this.lx05, this.ly05, 0, this.rx05, this.ry05, 0, count, 380, 420)
     stayPG(pgb, this.rrect, this.rx05, this.ry05, count, 420, 10000)
-    if(count == 380){
-      this.vy = -22
+    if(count == 385){
+      this.vy = this.hj
     }
 
     // b7
     stayPG(pgb, this.yrect, this.lx09, this.ly09, count, 0, 440)
     movePG(pgb, this.yrect, this.lx09, this.ly09, 0, this.rx03, this.ry03, 0, count, 440, 470)
     stayPG(pgb, this.yrect, this.rx03, this.ry03, count, 470, 10000)
-    if(count == 440){
-      this.vy = -18
+    if(count == 442){
+      this.vy = this.sj
     }
 
     // b8
@@ -449,8 +562,8 @@ class YellowDevil{
     stayPG(pgb, this.yrect, this.lx08, this.ly08, count, 0, 540)
     movePG(pgb, this.yrect, this.lx08, this.ly08, 0, this.rx02, this.ry02, 0, count, 540, 570)
     stayPG(pgb, this.yrect, this.rx02, this.ry02, count, 570, 10000)
-    if(count == 533){
-      this.vy = -22
+    if(count == 540){
+      this.vy = this.hj
     }
   }
 }
