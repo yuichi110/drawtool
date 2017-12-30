@@ -16,6 +16,7 @@ class Www_Yuichi_Com{
     */
 
     registerFont('avenger', '/static/font/avenger.ttf')
+    registerFont('roboto', '/static/font/Roboto-Black.ttf')
 
     this.save = false
   }
@@ -33,7 +34,7 @@ class Www_Yuichi_Com{
   }
 
   static getDrawPG(){
-    let imageNumber = 3
+    let imageNumber = 2
     switch(imageNumber){
       case 1:
         return this.getDrawPG_image01()
@@ -127,23 +128,17 @@ class Www_Yuichi_Com{
   * Image 02
   * Python
   **/
-  
+
   static setup_image02(){
-    let pgb = createGraphics(600, 600)
+    let pgb = createGraphics(370, 260)
     pgb.background(39, 174, 96)
 
 
     setPG_style(pgb, NEPHRITIS, 3, 255, WHITE, 255)
 
-    // bottom left
-    /*
-    pgb.beginShape()
-    pgb.vertex(200, 300)
-    pgb.vertex(150, 350)
-    pgb.vertex(200, 350)
-    pgb.vertex(250, 300)
-    pgb.endShape(CLOSE)
-    */
+    pgb.push()
+    pgb.translate(-140, -140)
+
     pgb.beginShape()
     pgb.vertex(200, 300)
     pgb.vertex(150, 350)
@@ -205,44 +200,102 @@ class Www_Yuichi_Com{
 
     drawPG_text(pgb, 228, 285, 'PYTHON', 28, NEPHRITIS, 255, 'avenger')
 
-
-
+    pgb.pop()
 
     this.i02_pgb = pgb
   }
 
   static getDrawPG_image02(){
     let pgb = this.i02_pgb
+
+    let doSave = true
+    if(doSave){
+      if(frameCount == 50){
+        savePG(pgb, 'python')
+      }
+    }
+
     return pgb
   }
 
   /**
   * Image 03
+  *
+  * Network
+  *
   **/
   static setup_image03(){
-    let pgb = createGraphics(320, 320)
-
+    let pgb = createGraphics(300, 270)
     pgb.background(255);
-    let r = 100
-    let w = 40
-    let h = 40
 
+    pgb.push()
+    pgb.translate(-5, -25)
+
+    // CENTER : 140, 160
+
+    // outer circle
+    setPG_style(pgb, BELIZEHOLE, 8, 255, WHITE, 255)
+    pgb.ellipse(140, 160, 250, 250)
+
+    // other circles
+    setPG_style(pgb, BELIZEHOLE, 13, 255, WHITE, 255)
+    pgb.ellipse(140, 160, 170, 170)
+    pgb.ellipse(140, 160, 120, 120)
+    pgb.ellipse(270, 160, 49, 49)
+
+    // delete useless blue lines
+    setPG_style(pgb, TRANSPARENT, 0, 0, WHITE, 255)
+    pgb.rect(70, 142, 200, 36)
+    pgb.rect(82, 112, 118, 20)
+    pgb.rect(92, 102, 98, 20)
+    pgb.rect(105, 92, 68, 20)
+
+    // draw blue lines
+    setPG_style(pgb, TRANSPARENT, 0, 0, BELIZEHOLE, 255)
+    pgb.rect(60, 129, 215, 13)
+    pgb.rect(85, 178, 110, 13)
+    pgb.rect(220, 178, 50, 13)
+
+    // make small white space
+    setPG_style(pgb, TRANSPARENT, 0, 0, WHITE, 255)
+    pgb.rect(47, 142, 20, 5)
+
+    drawPG_text(pgb, 75, 170, 'NETWORK', 32, BELIZEHOLE, 255, 'avenger')
+    pgb.pop()
+
+    let r = 97
+    let w = 18
+    let h = 20
+
+    // CENTER : 140, 160
     // Start in the center and draw the circle
-    pgb.translate(pgb.width / 2, pgb.height / 2);
-    pgb.noFill();
-    pgb.stroke(0);
+    pgb.translate(135, 135);
+
+    setPG_style(pgb, BLACK, 1, 255, TRANSPARENT, 0)
     // Our curve is a circle with radius r in the center of the window.
-    pgb.ellipse(0, 0, r*2, r*2);
+    //pgb.ellipse(0, 0, r*2, r*2);
+
 
     // 10 boxes along the curve
-    let totalBoxes = 10;
+    let text = 'The Net is Vast and Infinite.'
+    let xArray = [
+      0,7,7,0, // 'the '
+      9,7,7,0, // 'net '
+      9,3,0, // 'is '
+      9,7,7,7,0, // 'vast '
+      9,7,7,0, // 'and '
+      9,3,7,7,3,7,5,5,5] // 'infinit'
+    let totalBoxes = text.length
     // We must keep track of our position along the curve
-    let arclength = 0;
+    let arclength = 105;
+
+    //let text = 'The net is vast and infinite'
 
     // For every box
     for (let i = 0; i < totalBoxes; i++) {
       // Each box is centered so we move half the width
-      arclength += w/2;
+      //arclength += w/2;
+      arclength += xArray[i]
       // Angle in radians is the arclength divided by the radius
       let theta = arclength / r;
 
@@ -252,19 +305,35 @@ class Www_Yuichi_Com{
       // Rotate the box
       pgb.rotate(theta);
       // Display the box
+      pgb.rotate(radians(90))
+
+      /*
       pgb.fill(0,100);
       pgb.rectMode(CENTER);
       pgb.rect(0,0,w,h);
+      */
+
+      drawPG_text(pgb, 0, 0, text.charAt(i), 24, BELIZEHOLE, 255, 'roboto')
+
       pgb.pop();
       // Move halfway again
       arclength += w/2;
     }
+
 
     this.i03_pgb = pgb
   }
 
   static getDrawPG_image03(){
     let pgb = this.i03_pgb
+
+    let doSave = true
+    if(doSave){
+      if(frameCount == 50){
+        savePG(pgb, 'network')
+      }
+    }
+
     return pgb
   }
 
