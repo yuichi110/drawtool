@@ -21,6 +21,7 @@
 // Library test modules
 const MODULE_LIB_COMMON_TEST =  Symbol('module lib.common.test')
 const MODULE_LIB_NETWORK_TEST = Symbol('module lib.network.test')
+const MODULE_LIB_PYTHON_TEST = Symbol('module lib.python.test')
 
 // Watch: needs web server
 const MODULE_WATCHMAN = Symbol('module watchman')
@@ -29,10 +30,12 @@ const MODULE_WATCHMAN = Symbol('module watchman')
 const MODULE_BOOK_NETWORK01_01 = Symbol('module book network01 01')
 const MODULE_BOOK_NETWORK01_02 = Symbol('module book network01 02')
 
+const MODULE_WEB_PYTHON01_01 = Symbol('module web python01 01')
+
 const MODULE_YUICHICOM = Symbol('module www.yuichi.com')
 
 // CHOOSED RUN MODULE
-const RUN_MODULE = MODULE_YUICHICOM
+const RUN_MODULE = MODULE_WEB_PYTHON01_01
 
 const LOGLEVEL_DEBUG = Symbol('log level debug')
 const LOGLEVEL_INFO =  Symbol('log level info')
@@ -121,18 +124,26 @@ function preload(){
     case MODULE_LIB_NETWORK_TEST:
       LibNetworkTest.preload()
       break
+    case MODULE_LIB_PYTHON_TEST:
+      LibPythonTest.preload()
+      break
     case MODULE_WATCHMAN:
       Watchman.preload()
+      break
+    case MODULE_WEB_PYTHON01_01:
+      Web_Python01_01.preload()
       break
     case MODULE_BOOK_NETWORK01_01:
       Book_Network01_01.preload()
       break
+
     case MODULE_BOOK_NETWORK01_02:
       Book_Network01_02.preload()
       break
     case MODULE_YUICHICOM:
       Www_Yuichi_Com.preload()
       break
+
     default:
       console.error(`${RUN_MODULE.toString()} is not in preload switch`)
   }
@@ -160,8 +171,14 @@ function setup() {
     case MODULE_LIB_NETWORK_TEST:
       LibNetworkTest.setup()
       break
+    case MODULE_LIB_PYTHON_TEST:
+      LibPythonTest.setup()
+      break
     case MODULE_WATCHMAN:
       Watchman.setup()
+      break
+    case MODULE_WEB_PYTHON01_01:
+      Web_Python01_01.setup()
       break
     case MODULE_BOOK_NETWORK01_01:
       Book_Network01_01.setup()
@@ -189,9 +206,18 @@ function draw() {
     case MODULE_LIB_NETWORK_TEST:
       drawPG = LibNetworkTest.getDrawPG()
       break
+    case MODULE_LIB_PYTHON_TEST:
+      drawPG = LibPythonTest.getDrawPG()
+      break
+
     case MODULE_WATCHMAN:
       drawPG = Watchman.getDrawPG()
       break
+
+    case MODULE_WEB_PYTHON01_01:
+      drawPG = Web_Python01_01.getDrawPG()
+      break
+
     case MODULE_BOOK_NETWORK01_01:
       drawPG = Book_Network01_01.getDrawPG()
       break

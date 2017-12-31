@@ -136,6 +136,14 @@ class Book_Network01_02{
 
   static getDrawPG_image01(){
     let pgb = this.i01_pgb
+
+    let doSave = true
+    if(doSave){
+      if(frameCount == 50){
+        savePG(pgb, 'net01_01_')
+      }
+    }
+
     return pgb
   }
 
@@ -199,11 +207,13 @@ class Book_Network01_02{
   static getDrawPG_image02(){
     let pgb = this.i02_pgb
 
-    if(this.save){
-      if(frameCount == 100){
-        savePG(pgb, 'book_network01_02_image2')
+    let doSave = true
+    if(doSave){
+      if(frameCount == 50){
+        savePG(pgb, 'net01_02_')
       }
     }
+
     return pgb
   }
 
@@ -280,6 +290,13 @@ class Book_Network01_02{
     stayPG_corner(pgb, pgEthFormat1, pgfx, pgfy, count, 0, 200)
     stayPG_corner(pgb, pgEthFormat2, pgfx, pgfy, count, 200, 300)
     stayPG_corner(pgb, pgEthFormat1, pgfx, pgfy, count, 300, 500)
+
+    let doSave = false
+    if(doSave){
+      if(frameCount <= 500){
+        savePG(pgb, 'net01_03_')
+      }
+    }
 
     return pgb
   }
@@ -398,6 +415,13 @@ class Book_Network01_02{
     stayPG_corner(pgb, pgTable1, 810, 130, count, 0, 200)
     stayPG_corner(pgb, pgTable2, 810, 130, count, 200, 300)
     stayPG_corner(pgb, pgTable1, 810, 130, count, 300, 500)
+
+    let doSave = false
+    if(doSave){
+      if(frameCount <= 500){
+        savePG(pgb, 'net01_04_')
+      }
+    }
 
     return pgb
   }
@@ -690,7 +714,12 @@ class Book_Network01_02{
     stayPG_corner(pgb, pg_ethArpReplyFormat1, pfx, pfy, count, 750, 800)
     stayPG_corner(pgb, pg_ethArpReplyFormat3, pfx, pfy, count, 800, 950)
 
-
+    let doSave = false
+    if(doSave){
+      if(frameCount <= 1000){
+        savePG(pgb, 'net01_05_')
+      }
+    }
     //pgb.image(pg_ethArpReplyFormat1, 200, 650)
 
     return pgb
@@ -891,6 +920,13 @@ class Book_Network01_02{
     stayPG_corner(pgb, pgEthFormat1, pfx, pfy, count, 950, 1050)
     stayPG_corner(pgb, pgEthFormat3, pfx, pfy, count, 1100, 1200)
 
+    let doSave = false
+    if(doSave){
+      if(frameCount <= 1250){
+        savePG(pgb, 'net01_06_')
+      }
+    }
+
     return pgb
   }
 
@@ -1002,6 +1038,14 @@ class Book_Network01_02{
 
   static getDrawPG_image07(){
     let pgb = this.i07_pgb
+
+    let doSave = true
+    if(doSave){
+      if(frameCount == 50){
+        savePG(pgb, 'net01_07_')
+      }
+    }
+
     return pgb
   }
 
@@ -1208,7 +1252,12 @@ class Book_Network01_02{
     stayPG_corner(pgb, pg_macTable3_3, 1230, 220, count, f5, f6)
     stayPG_corner(pgb, pg_macTable3_1, 1230, 220, count, f6, 1350)
 
-
+    let doSave = true
+    if(doSave){
+      if(frameCount <= 1350){
+        savePG(pgb, 'net01_08_')
+      }
+    }
 
     return pgb
   }

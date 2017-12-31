@@ -61,8 +61,9 @@ function lib_common_preload(){
   }
   _lib_common_preload = true
 
-  registerFont('mp1m', '/static/font/mplus-1m-medium.ttf')
   registerFont('mp1p', '/static/font/mplus-1p-medium.ttf')
+  registerFont('mp1m', '/static/font/mplus-1m-medium.ttf')
+  setDefaultFont('mp1p')
 }
 let _lib_common_preload = false
 
@@ -144,6 +145,18 @@ function savePG(pg, fname_prefix){
 
   // Save Transparent background image.
   save(pg, fname)
+}
+
+/*
+Util
+*/
+
+function getArray(n, item){
+  let a = []
+  for(let i=0; i<n; i++){
+    a.push(item)
+  }
+  return a
 }
 
 /*
@@ -245,6 +258,12 @@ function drawPG_text(pg, x, y, tString, tSize, tColor, tAlpha, font=''){
   pg.textSize(tSize)
   setPG_style(pg, TRANSPARENT, 0, 0, tColor, tAlpha)
   pg.text(tString, x, y)
+}
+
+function getPG_text(width_, height_, x, y, tString, tSize, tColor, tAlpha, font=''){
+  let pg = createGraphics(width_, height_)
+  drawPG_text(pg, x, y, tString, tSize, tColor, tAlpha, font)
+  return pg
 }
 
 /*

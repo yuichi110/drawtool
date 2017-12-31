@@ -15,6 +15,8 @@ class Www_Yuichi_Com{
     main_drawGrid_xStrongPitch = 275
     */
 
+    lib_python_preload()
+
     registerFont('avenger', '/static/font/avenger.ttf')
     registerFont('roboto', '/static/font/Roboto-Black.ttf')
 
@@ -34,7 +36,7 @@ class Www_Yuichi_Com{
   }
 
   static getDrawPG(){
-    let imageNumber = 2
+    let imageNumber = 4
     switch(imageNumber){
       case 1:
         return this.getDrawPG_image01()
@@ -339,15 +341,101 @@ class Www_Yuichi_Com{
 
   /**
   * Image 04
+  * python console
   **/
 
   static setup_image04(){
-    let pgb = createGraphics(width, height)
+    let pgb = createGraphics(600, 700)
+
+    let pgs = createGraphics(pgb.width, pgb.height)
+    drawPG_text(pgs, 50, 447, 'index', 32, WHITE, 255)
+    let indexPG = Python.getPG_list(75, 75, TRANSPARENT, 0, TRANSPARENT, [28, 28, 28], 47, ['0', '1', '2'], 32, WHITE)
+    pgs.image(indexPG, 200, 400)
+    drawPG_text(pgs, 50, 547, 'list', 32, WHITE, 255)
+    drawPG_text(pgs, 50, 647, 'result', 32, WHITE, 255)
+
+
+    let last = 1500
+
+    let cons = Python_console.get500_300()
+    cons.command(100, "a = ['a', 'bc']", 200, '')
+    cons.command(300, "a.append('d')", 400, '')
+    cons.command(500, 'a.pop()', 600, "'d'")
+    cons.command(700, 'a', 800, "['a', 'bc']")
+    cons.command(900, 'a[1]', 1000, "'bc'")
+    cons.command(1100, "a[0] = 'hi'", 1200, '')
+    cons.command(1300, "print(a)", 1400, "['hi', 'bc']")
+    cons.finish(last - 1)
+
+    let list1 = Python.getPG_list(75, 75, NEPHRITIS, 2, WHITE, [28, 20], 47, ['a', 'bc'], 32, NEPHRITIS)
+    let list2 = Python.getPG_list(75, 75, NEPHRITIS, 2, WHITE, [28, 20, 28], 47, ['a', 'bc', 'd'], 32, NEPHRITIS)
+    let list3 = Python.getPG_list(75, 75, NEPHRITIS, 2, WHITE, [20, 20], 47, ['hi', 'bc'], 32, NEPHRITIS)
+
+    let result1 = getPG_text(500, 75, 28, 30, "'d'", 32, WHITE, 255)
+    let result2 = getPG_text(500, 75, 28, 30, "['a', 'bc']", 32, WHITE, 255)
+    let result3 = getPG_text(500, 75, 28, 30, "'bc'", 32, WHITE, 255)
+
+    let redRect = getPG_rect(78, 175, 0, WHITE, 5, 255)
+
     this.i04_pgb = pgb
+    this.i04_pgs = pgs
+    this.i04_console = cons
+    this.i04_last = last
+    this.i04_list1 = list1
+    this.i04_list2 = list2
+    this.i04_list3 = list3
+    this.i04_result1 = result1
+    this.i04_result2 = result2
+    this.i04_result3 = result3
+    this.i04_redRect = redRect
   }
 
   static getDrawPG_image04(){
     let pgb = this.i04_pgb
+    let pgs = this.i04_pgs
+    let cons = this.i04_console
+    let last = this.i04_last
+    let list1 = this.i04_list1
+    let list2 = this.i04_list2
+    let list3 = this.i04_list3
+    let result1 = this.i04_result1
+    let result2 = this.i04_result2
+    let result3 = this.i04_result3
+    let redRect = this.i04_redRect
+
+    pgb.clear()
+    pgb.background(39, 174, 96)
+    pgb.image(pgs, 0, 0)
+
+    let count = frameCount % last
+
+    // console
+    let consPG = cons.getPG(count)
+    pgb.image(consPG, 50, 50)
+
+    // list
+    stayPG_corner(pgb, list1, 200, 500, count, 200, 400)
+    stayPG_corner(pgb, list2, 200, 500, count, 400, 600)
+    stayPG_corner(pgb, list1, 200, 500, count, 600, 1200)
+    stayPG_corner(pgb, list3, 200, 500, count, 1200, 10000)
+
+    // result
+    stayPG_corner(pgb, result1, 200, 617, count, 600, 700)
+    stayPG_corner(pgb, result2, 200, 617, count, 800, 900)
+    stayPG_corner(pgb, result3, 200, 617, count, 1000, 1100)
+
+    // red rect
+    stayPG_corner(pgb, redRect, 272, 400, count, 1000, 1100)
+    stayPG_corner(pgb, redRect, 197, 400, count, 1200, 1300)
+
+    // save
+    let doSave = false
+    if(doSave){
+      if(frameCount <= 1500){
+        savePG(pgb, 'python-console-')
+      }
+    }
+
     return pgb
   }
 
