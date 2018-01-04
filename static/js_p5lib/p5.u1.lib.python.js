@@ -27,6 +27,60 @@ class Python{
   }
 }
 
+class Python_editor{
+  constructor(columns, rows, titleX, title, text){
+    this.backgroundColor = MIDNIGHTBLUE
+    this.textColor = CLOUDS
+    this.highLightBackgroundColor = MIDNIGHTBLUE
+    this.highLightTextColor = CLOUDS
+
+    this.fontSize = 20
+    this.font = 'mp1m'
+    this.charBoxWidth = 25
+    this.charBoxHeight = 25
+    this.charBoxX = 2
+    this.charBoxY = 20
+
+    this.textMap = []
+    this.highLightMap = []
+
+    let lines = text.split('\n')
+    console.log(text)
+    console.log(lines.length)
+    for(let row=0; row<rows; row++){
+      this.textMap.push(getArray(columns, ''))
+      this.highLightMap.push(getArray(columns, false))
+      if(lines.length - 1 < row){
+        continue
+        // keep pushing ['', '',...] and [false, false,...]
+      }
+
+      for(let column=0; column<columns; column++){
+        let line = lines[row]
+        if(line.length -1 < column){
+          break
+          // nothing to do on this line. break and go to next line
+        }
+        this.textMap[row][column] = line.charAt(column)
+      }
+    }
+
+    let width_ = charBoxWidth * columns
+    let height_ = charBoxHeight * rows
+    this.pgb = createGraphics(100, 100)
+    this.pgw = createGraphics(width_ + 5, height_ + 35)
+    this.pg = createGraphics(width_, height_)
+  }
+
+  getPG(){
+    for(let row=0; row<this.textMap.length; row++){
+      let columns = this.textMap[row]
+      console.log(columns)
+    }
+  }
+
+
+}
 class Python_console{
   static get500_200(){
     return new Python_console(500, 170, 3, 210, 'python3')

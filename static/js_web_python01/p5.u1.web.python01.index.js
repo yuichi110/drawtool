@@ -1,4 +1,4 @@
-class Web_Python01_01{
+class Web_python01_index{
 
   static preload(){
     main_width = 800
@@ -142,7 +142,7 @@ class Web_Python01_01{
     stayPG_corner(pgb, redRect, 197, 400, count, 1200, 1300)
 
     // save
-    let doSave = true
+    let doSave = false
     if(doSave){
       if(frameCount <= 1500){
         savePG(pgb, 'python-console-')

@@ -26,16 +26,18 @@ const MODULE_LIB_PYTHON_TEST = Symbol('module lib.python.test')
 // Watch: needs web server
 const MODULE_WATCHMAN = Symbol('module watchman')
 
-// Books
-const MODULE_BOOK_NETWORK01_01 = Symbol('module book network01 01')
-const MODULE_BOOK_NETWORK01_02 = Symbol('module book network01 02')
+// www.yuichi.com
+const MODULE_WEB_YUICHI = Symbol('module web yuichi index')
 
-const MODULE_WEB_PYTHON01_01 = Symbol('module web python01 01')
+// www.yuichi.com/python
+const MODULE_WEB_PYTHON01_INDEX = Symbol('module web python01 index')
 
-const MODULE_YUICHICOM = Symbol('module www.yuichi.com')
+// www.yuichi.com/network
+const MODULE_WEB_NETWORK01_01 = Symbol('module web network01 01')
+const MODULE_WEB_NETWORK01_02 = Symbol('module web network01 02')
 
 // CHOOSED RUN MODULE
-const RUN_MODULE = MODULE_WEB_PYTHON01_01
+const RUN_MODULE = MODULE_LIB_PYTHON_TEST
 
 const LOGLEVEL_DEBUG = Symbol('log level debug')
 const LOGLEVEL_INFO =  Symbol('log level info')
@@ -118,6 +120,7 @@ function preload(){
   * Please add new module here.
   */
   switch(RUN_MODULE){
+    // LIB
     case MODULE_LIB_COMMON_TEST:
       LibCommonTest.preload()
       break
@@ -127,21 +130,28 @@ function preload(){
     case MODULE_LIB_PYTHON_TEST:
       LibPythonTest.preload()
       break
+
+    // WATCHMAN
     case MODULE_WATCHMAN:
       Watchman.preload()
       break
-    case MODULE_WEB_PYTHON01_01:
-      Web_Python01_01.preload()
-      break
-    case MODULE_BOOK_NETWORK01_01:
-      Book_Network01_01.preload()
+
+    // www.yuichi.com
+    case MODULE_WEB_YUICHI_INDEX:
+      Web_yuichi_index.preload()
       break
 
-    case MODULE_BOOK_NETWORK01_02:
-      Book_Network01_02.preload()
+    // www.yuichi.com/python
+    case MODULE_WEB_PYTHON01_INDEX:
+      Web_python01_index.preload()
       break
-    case MODULE_YUICHICOM:
-      Www_Yuichi_Com.preload()
+
+    // www.yuichi.com/network
+    case MODULE_WEB_NETWORK01_01:
+      Web_network01_01.preload()
+      break
+    case MODULE_WEB_NETWORK01_02:
+      Web_network01_02.preload()
       break
 
     default:
@@ -165,6 +175,7 @@ function setup() {
   * Please add new module here.
   */
   switch(RUN_MODULE){
+    // LIB
     case MODULE_LIB_COMMON_TEST:
       LibCommonTest.setup()
       break
@@ -174,21 +185,30 @@ function setup() {
     case MODULE_LIB_PYTHON_TEST:
       LibPythonTest.setup()
       break
+
+    // WATCHMAN
     case MODULE_WATCHMAN:
       Watchman.setup()
       break
-    case MODULE_WEB_PYTHON01_01:
-      Web_Python01_01.setup()
+
+    // www.yuichi.com
+    case MODULE_WEB_YUICHI_INDEX:
+      Web_yuichi_index.setup()
+        break
+
+    // www.yuichi.com/python
+    case MODULE_WEB_PYTHON01_INDEX:
+      Web_python01_index.setup()
       break
-    case MODULE_BOOK_NETWORK01_01:
-      Book_Network01_01.setup()
+
+    // www.yuichi.com/network
+    case MODULE_WEB_NETWORK01_01:
+      Web_network01_01.setup()
       break
-    case MODULE_BOOK_NETWORK01_02:
-      Book_Network01_02.setup()
+    case MODULE_WEB_NETWORK01_02:
+      Web_network01_02.setup()
       break
-    case MODULE_YUICHICOM:
-      Www_Yuichi_Com.setup()
-      break
+
     default:
       console.error(`${RUN_MODULE.toString()} is not in setup switch`)
   }
@@ -200,6 +220,7 @@ function draw() {
   let drawPG
 
   switch(RUN_MODULE){
+    // LIB
     case MODULE_LIB_COMMON_TEST:
       drawPG = LibCommonTest.getDrawPG()
       break
@@ -210,23 +231,29 @@ function draw() {
       drawPG = LibPythonTest.getDrawPG()
       break
 
+    // WATCHMAN
     case MODULE_WATCHMAN:
       drawPG = Watchman.getDrawPG()
       break
 
-    case MODULE_WEB_PYTHON01_01:
-      drawPG = Web_Python01_01.getDrawPG()
+    // www.yuichi.com
+    case MODULE_WEB_YUICHI_INDEX:
+      drawPG = Web_yuichi_index.getDrawPG()
       break
 
-    case MODULE_BOOK_NETWORK01_01:
-      drawPG = Book_Network01_01.getDrawPG()
+    // www.yuichi.com/python
+    case MODULE_WEB_PYTHON01_INDEX:
+      drawPG = Web_python01_index.getDrawPG()
       break
-    case MODULE_BOOK_NETWORK01_02:
-      drawPG = Book_Network01_02.getDrawPG()
+
+    // www.yuichi.com/network
+    case MODULE_WEB_NETWORK01_01:
+      drawPG = Web_network01_01.getDrawPG()
       break
-    case MODULE_YUICHICOM:
-      drawPG = Www_Yuichi_Com.getDrawPG()
+    case MODULE_WEB_NETWORK01_02:
+      drawPG = Web_network01_02.getDrawPG()
       break
+
     default:
       console.error(`${RUN_MODULE.toString()} is not in draw switch`)
   }

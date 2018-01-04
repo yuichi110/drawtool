@@ -1,4 +1,4 @@
-class Www_Yuichi_Com{
+class Web_yuichi_com{
 
   static preload(){
     main_width = 1100

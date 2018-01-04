@@ -1,4 +1,4 @@
-class Book_Network01_01{
+class Web_network01_01{
 
   static preload(){
     main_width = 800
