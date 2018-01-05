@@ -28,77 +28,253 @@ class Python{
 }
 
 class Python_editor{
-  constructor(columns, rows, titleX, title, text){
+
+  static get_Font20_W30_H10(text){
+    let columns = 30
+    let rows = 10
+    let titleX = 220
+    let title = 'Editor'
+
+    let fontSize = 20
+    let charBoxWidth = 15
+    let charBoxHeight = 25
+    let charBoxX = 3
+    let charBoxY = 20
+    let lineNumberWidth = 40
+
+    return new Python_editor(columns, rows, titleX, title, text,
+      fontSize, charBoxWidth, charBoxHeight, charBoxX, charBoxY, lineNumberWidth)
+  }
+
+  static get_Font12_W50_H50(text){
+    let columns = 50
+    let rows = 50
+    let titleX = 160
+    let title = 'Editor'
+
+    let fontSize = 12
+    let charBoxWidth = 7
+    let charBoxHeight = 12
+    let charBoxX = 2
+    let charBoxY = 10
+    let lineNumberWidth = 20
+
+    return new Python_editor(columns, rows, titleX, title, text,
+      fontSize, charBoxWidth, charBoxHeight, charBoxX, charBoxY, lineNumberWidth)
+  }
+
+  static get_Font16_W50_H30(text){
+    let columns = 50
+    let rows = 30
+    let titleX = 220
+    let title = 'Editor'
+
+    let fontSize = 16
+    let charBoxWidth = 10
+    let charBoxHeight = 20
+    let charBoxX = 2
+    let charBoxY = 16
+    let lineNumberWidth = 30
+
+    return new Python_editor(columns, rows, titleX, title, text,
+      fontSize, charBoxWidth, charBoxHeight, charBoxX, charBoxY, lineNumberWidth)
+  }
+
+
+  constructor(columns, rows, titleX, title, text,
+  fontSize, charBoxWidth, charBoxHeight, charBoxX, charBoxY, lineNumberWidth){
+
     this.backgroundColor = MIDNIGHTBLUE
     this.textColor = CLOUDS
     this.highLightBackgroundColor = MIDNIGHTBLUE
     this.highLightTextColor = CLOUDS
 
-    this.fontSize = 20
+    this.fontSize = fontSize
     this.font = 'mp1m'
-    this.charBoxWidth = 25
-    this.charBoxHeight = 25
-    this.charBoxX = 2
-    this.charBoxY = 20
+    this.charBoxWidth = charBoxWidth
+    this.charBoxHeight = charBoxHeight
+    this.charBoxX = charBoxX
+    this.charBoxY = charBoxY
+
+    this.lineNumberWidth = lineNumberWidth
 
     this.textMap = []
     this.highLightMap = []
 
     let lines = text.split('\n')
-    console.log(text)
-    console.log(lines.length)
     for(let row=0; row<rows; row++){
       this.textMap.push(getArray(columns, ''))
       this.highLightMap.push(getArray(columns, false))
+
       if(lines.length - 1 < row){
         continue
-        // keep pushing ['', '',...] and [false, false,...]
+        // num of text line is less than row
+        // keep pushing ['', '',...] and [false, false,...] for the lines
       }
-
       for(let column=0; column<columns; column++){
         let line = lines[row]
         if(line.length -1 < column){
           break
-          // nothing to do on this line. break and go to next line
+          // nothing to do on this line.
+          // break and go to next line.
         }
         this.textMap[row][column] = line.charAt(column)
       }
     }
 
-    let width_ = charBoxWidth * columns
-    let height_ = charBoxHeight * rows
-    this.pgb = createGraphics(100, 100)
-    this.pgw = createGraphics(width_ + 5, height_ + 35)
+    let width_ = this.charBoxWidth * columns
+    let height_ = this.charBoxHeight * rows
+    this.pgb = createGraphics(width_ + this.lineNumberWidth + 5, height_ + 35)
+    this.pgw = createGraphics(width_ + this.lineNumberWidth + 5, height_ + 35)
     this.pg = createGraphics(width_, height_)
-  }
+    this.needsRedraw = true
 
-  getPG(){
-    for(let row=0; row<this.textMap.length; row++){
-      let columns = this.textMap[row]
-      console.log(columns)
+    // make windows
+    setPG_style(this.pgw, MIDNIGHTBLUE, 1, 255, SILVER, 255)
+    this.pgw.rect(0, 0, width_ + this.lineNumberWidth, 50, 10)
+    setPG_style(this.pgw, MIDNIGHTBLUE, 1, 255, POMEGRANATE, 255)
+    this.pgw.ellipse(20, 15, 15, 15)
+    setPG_style(this.pgw, MIDNIGHTBLUE, 1, 255, SUNFLOWER, 255)
+    this.pgw.ellipse(40, 15, 15, 15)
+    setPG_style(this.pgw, MIDNIGHTBLUE, 1, 255, NEPHRITIS, 255)
+    this.pgw.ellipse(60, 15, 15, 15)
+    drawPG_text(this.pgw, titleX, 22, title, 20, MIDNIGHTBLUE, 255, 'mp1p')
+    setPG_style(this.pgw, MIDNIGHTBLUE, 1, 255, MIDNIGHTBLUE, 255)
+    this.pgw.rect(0, height_, width_ + this.lineNumberWidth, 30, 10)
+    this.pgw.rect(0, 30, width_ + this.lineNumberWidth, height_ - 15, 0)
+
+    // draw line number
+    this.pgw.textSize(this.fontSize)
+    setPG_font(this.pgw, this.font)
+    setPG_style(this.pgw, TRANSPARENT, 0, 0, ASBESTOS, 255)
+    for(let row=0; row<rows; row++){
+      let lineNum = (row + 1).toString()
+      if(lineNum.length == 1){
+        lineNum = '0' + lineNum
+      }
+
+      let x = this.charBoxX
+      let y = 30 + (this.charBoxHeight * row) + this.charBoxY
+      this.pgw.text(lineNum, x, y)
     }
   }
 
+  unhighLight(){
+    for(let row=0; row<this.highLightMap.length; row++){
+      for(let column=0; column<this.highLightMap[row]; column++){
+        this.highLightMap[row][column] = false
+      }
+    }
 
+    this.needsRedraw = true
+  }
+
+  highLight(highlightLocation){
+    this.unhighLight()
+
+    for(let [key, value] of highlightLocation){
+      let [keyFrom, keyTo] = key
+      let [valueFrom, valueTo] = value
+
+      keyFrom -= 1
+      keyTo -= 1
+      valueFrom -= 1
+      valueTo -= 1
+
+      for(let row=0; row<this.highLightMap.length; row++){
+        if(row < keyFrom){
+          continue
+        }
+        if(keyTo < row){
+          continue
+        }
+
+        for(let column=0; column<this.highLightMap[row].length; column++){
+          if(column < valueFrom){
+            continue
+          }
+          if(valueTo < column){
+            continue
+          }
+          this.highLightMap[row][column] = true
+        }
+      }
+    }
+
+    this.needsRedraw = true
+  }
+
+  getPG(){
+    if(this.needsRedraw){
+      this.pg.clear()
+
+      // draw highlight background
+      setPG_style(this.pg, TRANSPARENT, 0, 0, POMEGRANATE, 255)
+
+      for(let row=0; row<this.highLightMap.length; row++){
+        let columns = this.highLightMap[row]
+        for(let column=0; column<columns.length; column++){
+          if(columns[column]){
+            // highlighted
+            let x = this.charBoxWidth * column
+            let y = this.charBoxHeight * row
+            this.pg.rect(x, y, this.charBoxWidth, this.charBoxHeight, 0)
+          }else{
+            // do nothing. show window background color
+          }
+        }
+      }
+
+      // draw texts
+      this.pg.textSize(this.fontSize)
+      setPG_font(this.pg, this.font)
+      setPG_style(this.pg, TRANSPARENT, 0, 0, this.textColor, 255)
+
+      for(let row=0; row<this.textMap.length; row++){
+        let columns = this.textMap[row]
+        for(let column=0; column<columns.length; column++){
+          let character = columns[column]
+          if(character != ''){
+            let x = (this.charBoxWidth * column) + this.charBoxX
+            let y = (this.charBoxHeight * row) + this.charBoxY
+            this.pg.text(character, x, y)
+          }
+        }
+      }
+
+      this.needsRedraw = false
+    }else{
+      // no update. use previous image
+    }
+
+    this.pgb.clear()
+    this.pgb.image(this.pgw, 0, 0)
+    this.pgb.image(this.pg, this.lineNumberWidth, 30)
+    return this.pgb
+  }
 }
+
 class Python_console{
   static get500_200(){
-    return new Python_console(500, 170, 3, 210, 'python3')
+    return new Python_console(500, 170, 3, 210, 'python3',
+    20, 25, 5)
   }
 
   static get500_300(){
-    return new Python_console(500, 270, 3, 210, 'python3')
+    return new Python_console(500, 270, 3, 210, 'python3',
+    20, 25, 5)
   }
 
-  constructor(width_, height_, typeSpeed, titleX, title){
+  constructor(width_, height_, typeSpeed, titleX, title,
+    fontSize, lineHeight, paddingBottom){
     this.backgroundColor = MIDNIGHTBLUE
     this.textColor = CLOUDS
 
     this.typeSpeed = typeSpeed
-    this.fontSize = 20
+    this.fontSize = fontSize
     this.font = 'mp1m'
-    this.lineHeight = 25
-    this.paddingBottom = 5
+    this.lineHeight = lineHeight
+    this.paddingBottom = paddingBottom
 
     this.input = '>>> '
     this.previousLines = []

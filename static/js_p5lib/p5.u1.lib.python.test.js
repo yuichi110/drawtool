@@ -6,6 +6,8 @@ class LibPythonTest{
     main_guiDebug = false
     main_loglevel = LOGLEVEL_INFO
 
+    main_drawGrid = true
+
     lib_python_preload()
   }
 
@@ -14,6 +16,19 @@ class LibPythonTest{
     this.setup_console()
     this.setup_editor()
   }
+
+  static getDrawPG(){
+    switch(1){
+      case 1:
+        return this.getDrawPG_console();
+      case 2:
+        return this.getDrawPG_editor();
+    }
+  }
+
+  /*
+  * Console
+  */
 
   static setup_console(){
     this.console = Python_console.get500_300()
@@ -24,22 +39,6 @@ class LibPythonTest{
     this.console.command(550, 'a', 600, '13')
     this.console.command(650, 'a + 5', 700, '18')
     this.console.finish(799)
-  }
-
-  static setup_editor(){
-    let text = `print('hello')
-print('world')`
-    this.editor = new Python_editor(40, 10, 'python', 10, text)
-    this.editor.getPG()
-  }
-
-  static getDrawPG(){
-    switch(2){
-      case 1:
-        return this.getDrawPG_console();
-      case 2:
-        return this.getDrawPG_editor();
-    }
   }
 
   static getDrawPG_console(){
@@ -53,7 +52,30 @@ print('world')`
     return this.pgb
   }
 
+
+  /*
+  * Editor
+  */
+
+  static setup_editor(){
+    let text = `print('hello00')
+print('world')`
+    //this.editor = Python_editor.get_Font20_W30_H10(text)
+    this.editor = Python_editor.get_Font12_W50_H50(text)
+    //this.editor = Python_editor.get_Font16_W50_H30(text)
+
+    let m = new Map()
+    m.set([1,1], [1,100])
+    this.editor.highLight(m)
+  }
+
   static getDrawPG_editor(){
+    this.pgb.clear()
+    this.pgb.background(255)
+
+    let pg = this.editor.getPG()
+    this.pgb.image(pg, 50, 50)
+
     return this.pgb
   }
 }
