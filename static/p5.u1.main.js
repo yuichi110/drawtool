@@ -20,6 +20,7 @@
 
 // Library test modules
 const MODULE_LIB_COMMON_TEST =  Symbol('module lib.common.test')
+const MODULE_LIB_PRESENTATION_TEST =  Symbol('module lib.presentation.test')
 const MODULE_LIB_NETWORK_TEST = Symbol('module lib.network.test')
 const MODULE_LIB_PYTHON_TEST = Symbol('module lib.python.test')
 
@@ -27,17 +28,18 @@ const MODULE_LIB_PYTHON_TEST = Symbol('module lib.python.test')
 const MODULE_WATCHMAN = Symbol('module watchman')
 
 // www.yuichi.com
-const MODULE_WEB_YUICHI = Symbol('module web yuichi index')
+const MODULE_WEB_YUICHI_INDEX = Symbol('module web.yuichi.index')
 
 // www.yuichi.com/python
-const MODULE_WEB_PYTHON01_INDEX = Symbol('module web python01 index')
+const MODULE_WEB_PYTHON01_INDEX = Symbol('module web.python01.index')
+const MODULE_WEB_PYTHON01_005 = Symbol('module web.python01.005')
 
 // www.yuichi.com/network
-const MODULE_WEB_NETWORK01_01 = Symbol('module web network01 01')
-const MODULE_WEB_NETWORK01_02 = Symbol('module web network01 02')
+const MODULE_WEB_NETWORK01_01 = Symbol('module web.network01.01')
+const MODULE_WEB_NETWORK01_02 = Symbol('module web.network01.02')
 
 // CHOOSED RUN MODULE
-const RUN_MODULE = MODULE_LIB_PYTHON_TEST
+const RUN_MODULE = MODULE_WEB_PYTHON01_005
 
 const LOGLEVEL_DEBUG = Symbol('log level debug')
 const LOGLEVEL_INFO =  Symbol('log level info')
@@ -124,6 +126,9 @@ function preload(){
     case MODULE_LIB_COMMON_TEST:
       LibCommonTest.preload()
       break
+    case MODULE_LIB_PRESENTATION_TEST:
+      LibPresentationTest.preload()
+      break
     case MODULE_LIB_NETWORK_TEST:
       LibNetworkTest.preload()
       break
@@ -144,6 +149,9 @@ function preload(){
     // www.yuichi.com/python
     case MODULE_WEB_PYTHON01_INDEX:
       Web_python01_index.preload()
+      break
+    case MODULE_WEB_PYTHON01_005:
+      Web_python01_005.preload()
       break
 
     // www.yuichi.com/network
@@ -179,6 +187,9 @@ function setup() {
     case MODULE_LIB_COMMON_TEST:
       LibCommonTest.setup()
       break
+    case MODULE_LIB_PRESENTATION_TEST:
+      LibPresentationTest.setup()
+      break
     case MODULE_LIB_NETWORK_TEST:
       LibNetworkTest.setup()
       break
@@ -199,6 +210,9 @@ function setup() {
     // www.yuichi.com/python
     case MODULE_WEB_PYTHON01_INDEX:
       Web_python01_index.setup()
+      break
+    case MODULE_WEB_PYTHON01_005:
+      Web_python01_005.setup()
       break
 
     // www.yuichi.com/network
@@ -224,6 +238,9 @@ function draw() {
     case MODULE_LIB_COMMON_TEST:
       drawPG = LibCommonTest.getDrawPG()
       break
+    case MODULE_LIB_PRESENTATION_TEST:
+      drawPG = LibPresentationTest.getDrawPG()
+      break
     case MODULE_LIB_NETWORK_TEST:
       drawPG = LibNetworkTest.getDrawPG()
       break
@@ -244,6 +261,9 @@ function draw() {
     // www.yuichi.com/python
     case MODULE_WEB_PYTHON01_INDEX:
       drawPG = Web_python01_index.getDrawPG()
+      break
+    case MODULE_WEB_PYTHON01_005:
+      drawPG = Web_python01_005.getDrawPG()
       break
 
     // www.yuichi.com/network

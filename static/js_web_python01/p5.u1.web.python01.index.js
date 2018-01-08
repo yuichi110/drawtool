@@ -67,18 +67,7 @@ class Web_python01_index{
     drawPG_text(pgs, 50, 547, 'list', 32, BLACK, 255)
     drawPG_text(pgs, 50, 647, 'result', 32, BLACK, 255)
 
-
-    let last = 1500
-
     let cons = Python_console.get500_300()
-    cons.command(100, "a = ['a', 'bc']", 200, '')
-    cons.command(300, "a.append('d')", 400, '')
-    cons.command(500, 'a.pop()', 600, "'d'")
-    cons.command(700, 'a', 800, "['a', 'bc']")
-    cons.command(900, 'a[1]', 1000, "'bc'")
-    cons.command(1100, "a[0] = 'hi'", 1200, '')
-    cons.command(1300, "print(a)", 1400, "['hi', 'bc']")
-    cons.finish(last - 1)
 
     let list1 = Python.getPG_list(75, 75, BLACK, 2, BELIZEHOLE, [28, 20], 47, ['a', 'bc'], 32, WHITE)
     let list2 = Python.getPG_list(75, 75, BLACK, 2, BELIZEHOLE, [28, 20, 28], 47, ['a', 'bc', 'd'], 32, WHITE)
@@ -93,7 +82,6 @@ class Web_python01_index{
     this.i01_pgb = pgb
     this.i01_pgs = pgs
     this.i01_console = cons
-    this.i01_last = last
     this.i01_list1 = list1
     this.i01_list2 = list2
     this.i01_list3 = list3
@@ -107,7 +95,6 @@ class Web_python01_index{
     let pgb = this.i01_pgb
     let pgs = this.i01_pgs
     let cons = this.i01_console
-    let last = this.i01_last
     let list1 = this.i01_list1
     let list2 = this.i01_list2
     let list3 = this.i01_list3
@@ -120,11 +107,20 @@ class Web_python01_index{
     pgb.background(255)
     pgb.image(pgs, 0, 0)
 
-    let count = frameCount % last
+    let count = frameCount % 1500
 
     // console
     let consPG = cons.getPG(count)
     pgb.image(consPG, 50, 50)
+
+    cons.command("a = ['a', 'bc']", '', count, 100, 200)
+    cons.command("a.append('d')", '', count, 300, 400)
+    cons.command('a.pop()', "'d'", count, 500, 600)
+    cons.command('a', "['a', 'bc']", count, 700, 800)
+    cons.command('a[1]', "'bc'", count, 900, 1000)
+    cons.command("a[0] = 'hi'", '', count, 1100, 1200)
+    cons.command("print(a)", "['hi', 'bc']", count, 1300, 1400)
+    cons.flush(count, 1500 - 1)
 
     // list
     stayPG_corner(pgb, list1, 200, 500, count, 200, 400)
@@ -140,6 +136,8 @@ class Web_python01_index{
     // red rect
     stayPG_corner(pgb, redRect, 272, 400, count, 1000, 1100)
     stayPG_corner(pgb, redRect, 197, 400, count, 1200, 1300)
+
+
 
     // save
     let doSave = false

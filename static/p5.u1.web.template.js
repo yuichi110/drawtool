@@ -1,4 +1,4 @@
-class Book_Template{
+class Web_Template{
 
   static preload(){
     main_width = 800
