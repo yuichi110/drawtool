@@ -139,7 +139,16 @@ function setPG_font(pg, fontName=''){
 Save
 */
 
-function savePG(pg, fname_prefix){
+function savePG(pg, fname_prefix, start=-1, end=-1){
+  if(start!=-1 && end!=-1){
+    if(frameCount < start){
+      return
+    }
+    if(end < frameCount){
+      return
+    }
+  }
+  
   let fc = ('000000' + frameCount).slice(-6)
   let fname = `${fname_prefix}${fc}.png`
 
@@ -302,6 +311,28 @@ function drawPG_lineArrow(pg, x1, y1, x2, y2, arrowLength,
     }
   }
   pg.pop();
+}
+
+/*
+ Needs to be called at preload.
+*/
+function getPG_image(name, width_=-1, height_=-1){
+  let default_size = 640
+  if(width_ == -1 || height_ == -1){
+    width_ = default_size
+    height_ = default_size
+  }
+  let pg = createGraphics(width_, height_)
+  let url = '/static/image/' + name + '.png'
+
+  loadImage(url, function(img){
+    if(width_ != default_size && height_ != default_size){
+      img.resize(width_, height_)
+    }
+    pg.image(img, 0, 0)
+  })
+
+  return pg
 }
 
 function getPG_imageWithColor(url, width_, height_, iColor){

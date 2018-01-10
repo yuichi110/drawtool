@@ -6,10 +6,18 @@ class Web_python01_005{
     main_guiDebug = false
     main_loglevel = LOGLEVEL_INFO
     main_background = 0
-
     this.save = false
 
     lib_python_preload()
+
+    this.image_man = getPG_image('man3', 320, 320)
+    this.image_robot = getPG_image('man_robot', 320, 320)
+    this.image_code = getPG_image('code', 320, 320)
+
+    this.image_python = getPG_image('lang_python1', 320, 320)
+    this.image_java = getPG_image('lang_java', 320, 320)
+    this.image_c = getPG_image('lang_c', 320, 320)
+
   }
 
   static setup(){
@@ -25,7 +33,7 @@ class Web_python01_005{
   }
 
   static getDrawPG(){
-    let imageNumber = 1
+    let imageNumber = 3
     switch(imageNumber){
       case 1:
         return this.getDrawPG_image01()
@@ -58,11 +66,11 @@ class Web_python01_005{
   **/
 
   static setup_image01(){
-    let pgb = createGraphics(1300, 1300)
+    let pgb = createGraphics(1300, 1220)
     let editorColumns = 66
     let fontSize = 28
     let enumX = 800
-    let enumY = 50
+    let enumY = 100
 
     {
       this.i01_pg_python = createGraphics(pgb.width, pgb.height)
@@ -89,13 +97,14 @@ list_file('/python', 0)`
       let pg = editor.getPG()
       this.i01_pg_python.image(pg, 50, 50)
 
+      drawPG_text(this.i01_pg_python, enumX, 80, 'Python', 36, MIDNIGHTBLUE, 255)
+
       let pe = new Presentation_enum(false, fontSize, false, fontSize, MIDNIGHTBLUE)
-      pe.push1('Pythonの長所')
-      pe.push2('普及している')
-      pe.push2('簡単ですぐに覚えられる')
-      pe.push2('OSを問わずに使える')
+      pe.push1('長所')
+      pe.push2('簡単で効率的な開発')
+      pe.push2('プログラムがOSに依存しない')
       pe.push2('様々な処理に利用できる')
-      pe.push1('Pythonの短所')
+      pe.push1('短所')
       pe.push2('実行速度が遅い')
       pe.drawPG(this.i01_pg_python, enumX, enumY)
     }
@@ -143,11 +152,13 @@ public class Main {
       let pg = editor.getPG()
       this.i01_pg_java.image(pg, 50, 50)
 
+      drawPG_text(this.i01_pg_java, enumX, 80, 'Java', 36, MIDNIGHTBLUE, 255)
+
       let pe = new Presentation_enum(false, fontSize, false, fontSize, MIDNIGHTBLUE)
-      pe.push1('Javaの長所')
-      pe.push2('普及している')
-      pe.push2('OSを問わずに使える')
-      pe.push1('Javaの短所')
+      pe.push1('長所')
+      pe.push2('プログラムがOSに依存しない')
+      pe.push2('大規模開発に適している')
+      pe.push1('短所')
       pe.push2('覚えることが多い')
       pe.drawPG(this.i01_pg_java, enumX, enumY)
     }
@@ -211,13 +222,14 @@ void listFile(char dirPath[], int indentLevel){
       let pg = editor.getPG()
       this.i01_pg_c.image(pg, 50, 50)
 
+      drawPG_text(this.i01_pg_c, enumX, 80, 'C言語', 36, MIDNIGHTBLUE, 255)
+
       let pe = new Presentation_enum(false, fontSize, false, fontSize, MIDNIGHTBLUE)
-      pe.push1('C言語の長所')
-      pe.push2('普及している')
+      pe.push1('長所')
       pe.push2('処理が高速')
       pe.push2('組み込みに使える')
-      pe.push1('C言語の短所')
-      pe.push2('難しく開発に時間を要する')
+      pe.push1('短所')
+      pe.push2('開発が難しく効率が悪い')
       pe.push2('プログラムがOSに依存')
       pe.push2('利用用途が限られる')
       pe.drawPG(this.i01_pg_c, enumX, enumY)
@@ -240,6 +252,8 @@ void listFile(char dirPath[], int indentLevel){
       pgb.image(this.i01_pg_c, 0, 0)
     }
 
+    savePG(pgb, 'image1_', 0, 749)
+
     return pgb
   }
 
@@ -248,12 +262,47 @@ void listFile(char dirPath[], int indentLevel){
   **/
 
   static setup_image02(){
-    let pgb = createGraphics(width, height)
+    let pgb = createGraphics(1070, 670)
+    pgb.clear()
+    pgb.background(255)
+
+
+    let balloon1 = getPG_roundedBalloon(
+      10, 10, 300, 150,
+      BOTTOM, 100, 230, 50, 75,
+      MIDNIGHTBLUE, 5, 255, TRANSPARENT, 255)
+    pgb.image(balloon1, 50, 50)
+    drawPG_text(pgb, 90, 120, 'こんにちは。\nいい天気ですね。', 32, MIDNIGHTBLUE, 255)
+    pgb.image(this.image_man, 50, 250)
+    drawPG_text(pgb, 110, 600, '人間(自然言語)', 32, MIDNIGHTBLUE, 255)
+
+    let balloon2 = getPG_roundedBalloon(
+      10, 10, 300, 150,
+      BOTTOM, 200, 230, 225, 250,
+      MIDNIGHTBLUE, 5, 255, TRANSPARENT, 255)
+    pgb.image(balloon2, 700, 50)
+    drawPG_text(pgb, 740, 130, '001000111001\n001010101010', 32, MIDNIGHTBLUE, 255)
+    pgb.image(this.image_robot, 700, 260)
+    drawPG_text(pgb, 700, 600, '機械(電気信号=2進数)', 32, MIDNIGHTBLUE, 255)
+
+
+    let arrow = getPG_bigArrowR(300, 120, 60, 30, TRANSPARENT, 10, 255, WETASPHALT, 255, true)
+    pgb.image(arrow, 360, 300)
+    let pg = createGraphics(150, 150)
+    setPG_style(pg, POMEGRANATE, 15, 255, TRANSPARENT, 0)
+    pg.ellipse(75, 75, 120, 120)
+    pg.line(35, 35, 115, 115)
+    pgb.image(pg, 435, 285)
+    drawPG_text(pgb, 360, 470, 'お互いに言葉が通じない', 28, POMEGRANATE, 255)
+
     this.i02_pgb = pgb
   }
 
   static getDrawPG_image02(){
     let pgb = this.i02_pgb
+
+    savePG(pgb, 'image2_', 100, 100)
+
     return pgb
   }
 
@@ -262,12 +311,50 @@ void listFile(char dirPath[], int indentLevel){
   **/
 
   static setup_image03(){
-    let pgb = createGraphics(width, height)
+    let pgb = createGraphics(1320, 700)
+    pgb.clear()
+    pgb.background(255)
+
+    let balloon1 = getPG_roundedBalloon(
+      10, 10, 300, 150,
+      BOTTOM, 100, 230, 50, 75,
+      MIDNIGHTBLUE, 5, 255, TRANSPARENT, 255)
+    pgb.image(balloon1, 50, 50)
+    drawPG_text(pgb, 115, 120, '「Hello」と\n表示させたい', 32, MIDNIGHTBLUE, 255)
+    pgb.image(this.image_man, 50, 250)
+    drawPG_text(pgb, 70, 600, '人間(自然言語の思考)', 32, MIDNIGHTBLUE, 255)
+
+    let arrow = getPG_bigArrowR(150, 120, 60, 30, TRANSPARENT, 10, 255, WETASPHALT, 255, false)
+    pgb.image(arrow, 360, 300)
+    drawPG_text(pgb, 375, 370, 'WRITE', 32, WHITE, 255)
+    pgb.image(this.image_code, 500, 200)
+    drawPG_text(pgb, 572, 365, "print('Hello')", 28, ALIZARIN, 255)
+    drawPG_text(pgb, 510, 600, 'プログラミング言語', 32, MIDNIGHTBLUE, 255)
+    drawPG_text(pgb, 480, 650, '(人間と機械の中間言語)', 32, MIDNIGHTBLUE, 255)
+    pgb.image(arrow, 820, 300)
+    drawPG_text(pgb, 845, 370, 'READ', 32, WHITE, 255)
+
+
+    let balloon2 = getPG_roundedBalloon(
+      10, 10, 300, 150,
+      BOTTOM, 200, 230, 225, 250,
+      MIDNIGHTBLUE, 5, 255, TRANSPARENT, 255)
+    pgb.image(balloon2, 950, 50)
+    drawPG_text(pgb, 990, 130, '101101101011\n011000111011', 32, MIDNIGHTBLUE, 255)
+    pgb.image(this.image_robot, 950, 260)
+    drawPG_text(pgb, 950, 600, '機械(2進数での実行)', 32, MIDNIGHTBLUE, 255)
+    let rectHello = getPG_rect(120, 80, 0, MIDNIGHTBLUE, 10, 255, WHITE, 255,
+      15, 55, 'Hello', 36, ALIZARIN, 255)
+    pgb.image(rectHello, 1055, 400)
+
     this.i03_pgb = pgb
   }
 
   static getDrawPG_image03(){
     let pgb = this.i03_pgb
+
+    savePG(pgb, 'image3_', 100, 100)
+
     return pgb
   }
 
@@ -276,12 +363,30 @@ void listFile(char dirPath[], int indentLevel){
   **/
 
   static setup_image04(){
-    let pgb = createGraphics(width, height)
+    let pgb = createGraphics(1200, 650)
+    pgb.clear()
+    pgb.background(255)
+
+    pgb.image(this.image_java, 50, 80)
+    drawPG_text(pgb, 95, 480, '覚えることが多い', 32, MIDNIGHTBLUE, 255)
+
+    pgb.image(this.image_python, 450, 80)
+    drawPG_text(pgb, 510, 480, '簡単で汎用的', 32, MIDNIGHTBLUE, 255)
+    let rectHello = getPG_rect(350, 480, 10, ALIZARIN, 10, 255)
+    drawPG_text(pgb, 510, 600, '初心者向け', 40, ALIZARIN, 255)
+    pgb.image(rectHello, 430, 50)
+
+    pgb.image(this.image_c, 850, 80)
+    drawPG_text(pgb, 915, 480, '難しく非効率', 32, MIDNIGHTBLUE, 255)
+
     this.i04_pgb = pgb
   }
 
   static getDrawPG_image04(){
     let pgb = this.i04_pgb
+
+    savePG(pgb, 'image4_', 100, 100)
+
     return pgb
   }
 
