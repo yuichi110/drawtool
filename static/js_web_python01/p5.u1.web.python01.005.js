@@ -6,7 +6,6 @@ class Web_python01_005{
     main_guiDebug = false
     main_loglevel = LOGLEVEL_INFO
     main_background = 0
-    this.save = false
 
     lib_python_preload()
 
@@ -18,6 +17,9 @@ class Web_python01_005{
     this.image_java = getPG_image('lang_java', 320, 320)
     this.image_c = getPG_image('lang_c', 320, 320)
 
+    this.image_python2 = getPG_image('lang_python1', 200, 200)
+    this.image_java2 = getPG_image('lang_java', 200, 200)
+    this.image_c2 = getPG_image('lang_c', 200, 200)
   }
 
   static setup(){
@@ -33,7 +35,7 @@ class Web_python01_005{
   }
 
   static getDrawPG(){
-    let imageNumber = 3
+    let imageNumber = 5
     switch(imageNumber){
       case 1:
         return this.getDrawPG_image01()
@@ -395,12 +397,53 @@ void listFile(char dirPath[], int indentLevel){
   **/
 
   static setup_image05(){
-    let pgb = createGraphics(width, height)
+    let pgb = createGraphics(1580, 650)
+
+    pgb.clear()
+    pgb.background(255)
+
+    let balloon1 = getPG_roundedBalloon(
+      10, 10, 300, 150,
+      BOTTOM, 100, 230, 50, 75,
+      MIDNIGHTBLUE, 5, 255, TRANSPARENT, 255)
+    pgb.image(balloon1, 50, 50)
+    drawPG_text(pgb, 90, 120, 'こんにちは。\nいい天気ですね。', 32, MIDNIGHTBLUE, 255)
+    pgb.image(this.image_man, 50, 250)
+    drawPG_text(pgb, 110, 600, '人間(自然言語)', 32, MIDNIGHTBLUE, 255)
+
+    let arrow = getPG_bigArrowR(780, 120, 60, 30, TRANSPARENT, 10, 255, WETASPHALT, 255, true)
+    pgb.image(arrow, 400, 180)
+
+    pgb.image(this.image_python2, 450, 300)
+    drawPG_text(pgb, 450, 560, '人間に近い', 40, POMEGRANATE, 255)
+
+    pgb.image(this.image_java2, 700, 300)
+    drawPG_text(pgb, 760, 560, '中間', 40, POMEGRANATE, 255)
+
+    pgb.image(this.image_c2, 950, 300)
+    drawPG_text(pgb, 960, 560, '機械に近い', 40, POMEGRANATE, 255)
+
+    drawPG_text(pgb, 550, 180, 'プログラミング言語の位置', 40, POMEGRANATE, 255)
+
+
+
+    let balloon2 = getPG_roundedBalloon(
+      10, 10, 300, 150,
+      BOTTOM, 200, 230, 225, 250,
+      MIDNIGHTBLUE, 5, 255, TRANSPARENT, 255)
+    pgb.image(balloon2, 1200, 50)
+    drawPG_text(pgb, 1240, 130, '001000111001\n001010101010', 32, MIDNIGHTBLUE, 255)
+    pgb.image(this.image_robot, 1200, 260)
+    drawPG_text(pgb, 1200, 600, '機械(電気信号=2進数)', 32, MIDNIGHTBLUE, 255)
+
     this.i05_pgb = pgb
   }
 
   static getDrawPG_image05(){
     let pgb = this.i05_pgb
+
+    savePG(pgb, 'image4_', 100, 100)
+
     return pgb
   }
 
