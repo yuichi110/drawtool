@@ -245,7 +245,7 @@ class Python_editor{
 
   unhighLight(){
     for(let row=0; row<this.highLightMap.length; row++){
-      for(let column=0; column<this.highLightMap[row]; column++){
+      for(let column=0; column<this.highLightMap[row].length; column++){
         this.highLightMap[row][column] = false
       }
     }

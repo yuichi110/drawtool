@@ -81,6 +81,8 @@ class Web_python01_010{
   }
 
   static getDrawPG_image01(){
+
+
     this.i01_pgb.clear()
     this.i01_pgb.image(this.i01_pgs, 0, 0)
 

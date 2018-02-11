@@ -148,7 +148,7 @@ function savePG(pg, fname_prefix, start=-1, end=-1){
       return
     }
   }
-  
+
   let fc = ('000000' + frameCount).slice(-6)
   let fname = `${fname_prefix}${fc}.png`
 
@@ -171,6 +171,13 @@ function getArray(n, item){
 /*
 * Animation
 */
+
+function drawPG_textAtFrame(pg, x, y, tString, tSize, tColor, tAlpha, currentFrame, startFrame, endFrame, font=''){
+  if(currentFrame < startFrame) return;
+  if(endFrame < currentFrame) return;
+
+  drawPG_text(pg, x, y, tString, tSize, tColor, tAlpha, font)
+}
 
 function stayPG(pgb, pg, x, y, currentFrame, startFrame, endFrame){
   if(currentFrame < startFrame) return;
