@@ -35,13 +35,14 @@ const MODULE_WEB_PYTHON01_INDEX = Symbol('module web.python01.index')
 const MODULE_WEB_PYTHON01_005 = Symbol('module web.python01.005')
 const MODULE_WEB_PYTHON01_010 = Symbol('module web.python01.010')
 const MODULE_WEB_PYTHON01_015 = Symbol('module web.python01.015')
+const MODULE_WEB_PYTHON01_020 = Symbol('module web.python01.020')
 
 // www.yuichi.com/network
 const MODULE_WEB_NETWORK01_01 = Symbol('module web.network01.01')
 const MODULE_WEB_NETWORK01_02 = Symbol('module web.network01.02')
 
 // CHOOSED RUN MODULE
-const RUN_MODULE = MODULE_WEB_PYTHON01_015
+const RUN_MODULE = MODULE_WEB_PYTHON01_020
 
 const LOGLEVEL_DEBUG = Symbol('log level debug')
 const LOGLEVEL_INFO =  Symbol('log level info')
@@ -161,6 +162,9 @@ function preload(){
     case MODULE_WEB_PYTHON01_015:
       Web_python01_015.preload()
       break
+    case MODULE_WEB_PYTHON01_020:
+      Web_python01_020.preload()
+      break
 
     // www.yuichi.com/network
     case MODULE_WEB_NETWORK01_01:
@@ -228,6 +232,9 @@ function setup() {
     case MODULE_WEB_PYTHON01_015:
       Web_python01_015.setup()
       break
+    case MODULE_WEB_PYTHON01_020:
+      Web_python01_020.setup()
+      break
 
     // www.yuichi.com/network
     case MODULE_WEB_NETWORK01_01:
@@ -284,6 +291,9 @@ function draw() {
       break
     case MODULE_WEB_PYTHON01_015:
       drawPG = Web_python01_015.getDrawPG()
+      break
+    case MODULE_WEB_PYTHON01_020:
+      drawPG = Web_python01_020.getDrawPG()
       break
 
     // www.yuichi.com/network

@@ -186,6 +186,22 @@ function stayPG(pgb, pg, x, y, currentFrame, startFrame, endFrame){
   pgb.image(pg, x - pg.width/2, y - pg.height/2)
 }
 
+function stayPG_angle(pgb, pg, x, y, r, currentFrame, startFrame, endFrame){
+  if(r == 0){
+    stayPG(pgb, pg, x, y, currentFrame, startFrame, endFrame)
+    return
+  }
+
+  if(currentFrame < startFrame) return;
+  if(endFrame < currentFrame) return;
+
+  pgb.push()
+  pgb.translate(x, y)
+  pgb.rotate(radians(r))
+  pgb.image(pg, - pg.width/2, - pg.height/2)
+  pgb.pop()
+}
+
 function stayPG_corner(pgb, pg, x, y, currentFrame, startFrame, endFrame){
   if(currentFrame < startFrame) return;
   if(endFrame < currentFrame) return;

@@ -23,7 +23,7 @@ class Web_python01_015{
   }
 
   static getDrawPG(){
-    let imageNumber = 5
+    let imageNumber = 2
     switch(imageNumber){
       case 1:
         return this.getDrawPG_image01()
@@ -151,8 +151,8 @@ class Web_python01_015{
     this.i02_console = Python_console.get500_300()
 
     // list
-    this.i02_list1 = Python.getPG_list(75, 75, BLACK, 2, BELIZEHOLE, [28, 28, 28, 28], 47, ['a', 'b', 'c', 'd'], 32, WHITE)
-    this.i02_list2 = Python.getPG_list(75, 75, BLACK, 2, BELIZEHOLE, [18, 28, 28, 28], 47, ['10', 'b', 'c', 'd'], 32, WHITE)
+    this.i02_list1 = Python.getPG_list(75, 75, MIDNIGHTBLUE, 2, BELIZEHOLE, [28, 28, 28, 28], 47, ['a', 'b', 'c', 'd'], 32, WHITE)
+    this.i02_list2 = Python.getPG_list(75, 75, MIDNIGHTBLUE, 2, BELIZEHOLE, [18, 28, 28, 28], 47, ['10', 'b', 'c', 'd'], 32, WHITE)
 
     // red rect
     this.i02_redRect = getPG_rect(78, 175, 0, POMEGRANATE, 5, 255)
@@ -190,7 +190,7 @@ class Web_python01_015{
     stayPG_corner(pgb, this.i02_redRect, x1, 125, count, 800, 900)
     stayPG_corner(pgb, this.i02_redRect, x1, 125, count, 1000, 1100)
 
-    savePG(pgb, 'image2_', 0, 1099)
+    //savePG(pgb, 'image2_', 0, 1099)
 
     return pgb
   }
@@ -490,12 +490,100 @@ print(4)`
   **/
 
   static setup_image06(){
-    let pgb = createGraphics(width, height)
+    let pgb = createGraphics(550, 400)
+
+    let columns = 25
+    let rows = 10
+
+    let text1 = `a = 90
+if 80 <= a:
+  print('Pass, Good')
+elif 60 <= a:
+  print('Pass')
+else:
+  print('Fail')`
+
+    let text2 = `a = 65
+if 80 <= a:
+  print('Pass, Good')
+elif 60 <= a:
+  print('Pass')
+else:
+  print('Fail')`
+
+    let text3 = `a = 40
+if 80 <= a:
+  print('Pass, Good')
+elif 60 <= a:
+  print('Pass')
+else:
+  print('Fail')`
+
+    let title = 'Python Editor'
+    let titleX = Python_editor.get_titleX(title, 20, columns)
+    this.i6_editor1 = Python_editor.get_Font20(text1, columns, rows, titleX + 30, title, true)
+    this.i6_editor2 = Python_editor.get_Font20(text2, columns, rows, titleX + 30, title, true)
+    this.i6_editor3 = Python_editor.get_Font20(text3, columns, rows, titleX + 30, title, true)
+
     this.i06_pgb = pgb
   }
 
   static getDrawPG_image06(){
     let pgb = this.i06_pgb
+    pgb.clear()
+    pgb.background(255)
+
+    let count = frameCount % 1000
+
+    let e1 = this.i6_editor1
+    let e2 = this.i6_editor2
+    let e3 = this.i6_editor3
+    if(count == 0){
+      e1.unhighLight()
+      e2.unhighLight()
+      e3.unhighLight()
+    }
+
+    // EDITOR1
+    let hdef1 = [[50, 1], [75, 2], [175, 3]]
+    for(let [c, r] of hdef1){
+      if(count == c){
+        e1.highLight([[[r,r],[0, 1000]]])
+      }
+    }
+    drawPG_textAtFrame(pgb, 400, 125, 'True', 28, POMEGRANATE, 255, count, 75, 175)
+    if(0 <= count && count <= 225){
+      pgb.image(e1.getPG(), 50, 50)
+    }
+
+    // EDITOR2
+    let hdef2 = [[325, 1], [350, 2], [450, 4], [550, 5]]
+    for(let [c, r] of hdef2){
+      if(count == c){
+        e2.highLight([[[r,r],[0, 1000]]])
+      }
+    }
+    drawPG_textAtFrame(pgb, 400, 125, 'False', 28, POMEGRANATE, 255, count, 350, 450)
+    drawPG_textAtFrame(pgb, 400, 175, 'True', 28, POMEGRANATE, 255, count, 450, 550)
+    if(275 <= count && count <= 600){
+      pgb.image(e2.getPG(), 50, 50)
+    }
+
+    // EDITOR2
+    let hdef3 = [[650, 1], [675, 2], [775, 4], [875, 6], [900, 7]]
+    for(let [c, r] of hdef3){
+      if(count == c){
+        e3.highLight([[[r,r],[0, 1000]]])
+      }
+    }
+    drawPG_textAtFrame(pgb, 400, 125, 'False', 28, POMEGRANATE, 255, count, 675, 775)
+    drawPG_textAtFrame(pgb, 400, 175, 'False', 28, POMEGRANATE, 255, count, 775, 875)
+    if(650 <= count && count <= 950){
+      pgb.image(e3.getPG(), 50, 50)
+    }
+
+    savePG(pgb, 'image6_', 0, 999)
+
     return pgb
   }
 

@@ -28,6 +28,171 @@ class Python{
 }
 
 /*
+* Output Console
+*/
+
+class Python_output{
+  static get500_200(){
+    return new Python_output(500, 170, 3, 180, 'Console Output',
+    20, 25, 5)
+  }
+
+  static get500_300(){
+    return new Python_output(500, 270, 3, 180, 'Console Output',
+    20, 25, 5)
+  }
+
+  constructor(width_, height_, typeSpeed, titleX, title,
+    fontSize, lineHeight, paddingBottom){
+    this.backgroundColor = MIDNIGHTBLUE
+    this.textColor = CLOUDS
+
+    this.typeSpeed = typeSpeed
+    this.fontSize = fontSize
+    this.font = 'mp1m'
+    this.lineHeight = lineHeight
+    this.paddingBottom = paddingBottom
+
+    this.inputPrompt = '$ '
+    this.consoleString = this.inputPrompt
+    this.state = 0
+    // 0 : after flush
+    // 1 : inputting
+    // 2 : waiting enter
+    // 3 : repeat output
+
+    this.previousLines = []
+
+    this.pgb = createGraphics(width_ + 5, height_ + 35)
+    this.pgw = createGraphics(width_ + 5, height_ + 35)
+    this.pg = createGraphics(width_, height_)
+
+    setPG_style(this.pgw, MIDNIGHTBLUE, 1, 255, SILVER, 255)
+    this.pgw.rect(0, 0, width_, 50, 10)
+    setPG_style(this.pgw, MIDNIGHTBLUE, 1, 255, POMEGRANATE, 255)
+    this.pgw.ellipse(20, 15, 15, 15)
+    setPG_style(this.pgw, MIDNIGHTBLUE, 1, 255, SUNFLOWER, 255)
+    this.pgw.ellipse(40, 15, 15, 15)
+    setPG_style(this.pgw, MIDNIGHTBLUE, 1, 255, NEPHRITIS, 255)
+    this.pgw.ellipse(60, 15, 15, 15)
+    drawPG_text(this.pgw, titleX, 22, title, 20, MIDNIGHTBLUE, 255, 'mp1p')
+
+    setPG_style(this.pgw, MIDNIGHTBLUE, 1, 255, MIDNIGHTBLUE, 255)
+    this.pgw.rect(0, height_, width_, 30, 10)
+    this.pgw.rect(0, 30, width_, height_ - 15, 0)
+
+    this.needsRedraw = true
+  }
+
+  // flush and make state to 0
+  flush(count, start){
+    if(count != start){
+      return
+    }
+
+    this.state = 0
+    this.consoleString = this.inputPrompt
+    this.needsRedraw = true
+  }
+
+  // Called at STATE 0
+  input(inputString, count, startInputCount, startEnterCount){
+    if(count != startInputCount){
+      return
+    }
+
+    this.state = 1
+    this.inputBuffer = inputString
+    this.enterCount = startEnterCount
+  }
+
+  // STATE 1
+  _input(){
+    if(this.inputBuffer.length == 0){
+      // move to "wait till output time"
+      this.state = 2
+      return
+    }
+    if(frameCount % this.typeSpeed != 0){
+      // wait for next char
+      return
+    }
+
+    this.consoleString += this.inputBuffer.charAt(0)
+    this.inputBuffer = this.inputBuffer.slice(1)
+    this.needsRedraw = true
+  }
+
+  // STATE2
+  _waitEnter(count){
+    if(count >= this.enterCount){
+      // move to "output state"
+      this.consoleString += '\n'
+      this.state = 3
+    }else{
+      // waitting
+    }
+  }
+
+  // called at STATE 3
+  output(outputString, count, outputCount){
+    if(count != outputCount){
+      return
+    }
+    if(this.state == 0){
+      console.error('issuing command is too fast. Input is not yet called.')
+      return
+    }
+    if(this.state != 3){
+      console.error('issuing command is too fast. Input is not yet finished.')
+      return
+    }
+
+    this.consoleString += outputString
+    this.needsRedraw = true
+  }
+
+  getPG(count){
+    switch(this.state){
+      case 0:
+        // do nothing
+        break;
+      case 1:
+        this._input();
+        break;
+      case 2:
+        this._waitEnter(count);
+        break;
+      case 3:
+        // do nothing
+        break;
+      default:
+        console.error('Error')
+    }
+
+    if(this.needsRedraw){
+      this.pg.clear()
+
+      let textHeight = this.lineHeight
+      let lines = this.consoleString.split('\n')
+      for(let line of lines){
+        drawPG_text(this.pg, 10, textHeight, line, this.fontSize, CLOUDS, 255, this.font)
+        textHeight += this.lineHeight
+      }
+
+      this.needsRedraw = false
+    }
+
+    this.pgb.clear()
+    this.pgb.image(this.pgw, 0, 0)
+    this.pgb.image(this.pg, 0, 30)
+
+    return this.pgb
+  }
+}
+
+
+/*
 * Editor
 */
 
