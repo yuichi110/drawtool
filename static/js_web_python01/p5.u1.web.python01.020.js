@@ -23,7 +23,7 @@ class Web_python01_020{
   }
 
   static getDrawPG(){
-    let imageNumber = 3
+    let imageNumber = 5
     switch(imageNumber){
       case 1:
         return this.getDrawPG_image01()
@@ -282,14 +282,87 @@ print('end')`
   **/
 
   static setup_image04(){
-    let pgb = createGraphics(width, height)
+    let pgb = createGraphics(900, 620)
+    let pgs = createGraphics(pgb.width, pgb.height)
+    pgs.clear()
+    pgs.background(255)
 
+    this.i04_arrowLeft1 = getPG_bigArrowR(200, 120, 60, 30, TRANSPARENT, 10, 255, WETASPHALT, 255, false,
+    45, 70, '引数', 32, WHITE, 255)
+    this.i04_arrowLeft2 = getPG_bigArrowR(200, 120, 60, 30, TRANSPARENT, 10, 255, POMEGRANATE, 255, false,
+    45, 70, '引数', 32, WHITE, 255)
+    drawPG_text(pgs, 145, 270, '入力', 32, MIDNIGHTBLUE, 255)
+
+    this.i04_rect1 = getPG_rect(200, 150, 10, TRANSPARENT, 0, 0, WETASPHALT, 255, 60, 85, '関数', 40, WHITE, 255)
+    this.i04_rect2 = getPG_rect(200, 150, 10, TRANSPARENT, 0, 0, POMEGRANATE, 255, 60, 85, '関数', 40, WHITE, 255)
+    drawPG_text(pgs, 420, 270, '処理', 32, MIDNIGHTBLUE, 255)
+    drawPG_text(pgs, 310, 320, '(リスト長を求める)', 32, MIDNIGHTBLUE, 255)
+
+    this.i04_arrowRight1 = getPG_bigArrowR(200, 120, 60, 30, TRANSPARENT, 10, 255, WETASPHALT, 255, false,
+    30, 70, '返り値', 32, WHITE, 255)
+    this.i04_arrowRight2 = getPG_bigArrowR(200, 120, 60, 30, TRANSPARENT, 10, 255, POMEGRANATE, 255, false,
+    30, 70, '返り値', 32, WHITE, 255)
+    drawPG_text(pgs, 645, 270, '出力', 32, MIDNIGHTBLUE, 255)
+
+    let text1 = `>>> a = len(['a', 'b', 'c'])
+>>> print(a)
+3
+>>>`
+
+    let columns = 35
+    let rows = 5
+    let title = 'Python Interpriter'
+    let titleX = Python_editor.get_titleX(title, 20, columns)
+    this.i04_editor1 = Python_editor.get_Font20(text1, columns, rows, titleX + 10, title, false)
 
     this.i04_pgb = pgb
+    this.i04_pgs = pgs
   }
 
   static getDrawPG_image04(){
     let pgb = this.i04_pgb
+    pgb.clear()
+    pgb.background(255)
+    pgb.image(this.i04_pgs, 0, 0)
+
+    let count = frameCount % 500
+
+    stayPG_corner(pgb, this.i04_arrowLeft1, 100, 65, count, 0, 100)
+    stayPG_corner(pgb, this.i04_arrowLeft2, 100, 65, count, 100, 200)
+    stayPG_corner(pgb, this.i04_arrowLeft1, 100, 65, count, 200, 500)
+
+    stayPG_corner(pgb, this.i04_rect1, 350, 50, count, 0, 250)
+    stayPG_corner(pgb, this.i04_rect2, 350, 50, count, 250, 350)
+    stayPG_corner(pgb, this.i04_rect1, 350, 50, count, 350, 500)
+
+    stayPG_corner(pgb, this.i04_arrowRight1, 600, 65, count, 0, 400)
+    stayPG_corner(pgb, this.i04_arrowRight2, 600, 65, count, 400, 500)
+
+    let e1 = this.i04_editor1
+    if(count == 100){
+      // left arrow
+      e1.highLight([[[1,1],[13, 27]]])
+    }else if(count == 200){
+      e1.unhighLight()
+    }else if(count == 250){
+      // center box
+      e1.highLight([[[1,1],[9, 12]], [[1,1],[28, 28]]])
+    }else if(count == 350){
+      e1.unhighLight()
+    }else if(count == 400){
+      // right arrow
+      e1.highLight([[[1,1],[5, 8]]])
+    }else if(count == 499){
+      e1.unhighLight()
+    }
+    pgb.image(e1.getPG(), 150, 400)
+
+    drawPG_textAtFrame(pgb, 600, 455, '引数', 32, POMEGRANATE, 255, count, 100, 200)
+    drawPG_textAtFrame(pgb, 600, 455, '関数', 32, POMEGRANATE, 255, count, 250, 350)
+    drawPG_textAtFrame(pgb, 600, 455, '返り値', 32, POMEGRANATE, 255, count, 400, 500)
+
+    //savePG(pgb, 'image4_', 0, 499)
+
     return pgb
   }
 
@@ -298,12 +371,49 @@ print('end')`
   **/
 
   static setup_image05(){
-    let pgb = createGraphics(width, height)
-    this.i05_pgb = pgb
+    this.i05_pgb = createGraphics(600, 620)
+
+    this.i05_cons = Python_console.get500_300()
+
+    this.i05_list1 = Python.getPG_list(75, 75, MIDNIGHTBLUE, 2, BELIZEHOLE, [28, 28, 28], 47, ['1', '2', '3'], 32, WHITE)
+    this.i05_list2 = Python.getPG_list(75, 75, MIDNIGHTBLUE, 2, BELIZEHOLE, [28, 28, 28, 28], 47, ['1', '2', '3', '4'], 32, WHITE)
+
+    let pgs = createGraphics(this.i05_pgb.width, this.i05_pgb.height)
+    pgs.clear()
+    pgs.background(255)
+    drawPG_text(pgs, 50, 447, 'index', 32, MIDNIGHTBLUE, 255)
+    let indexPG = Python.getPG_list(75, 75, TRANSPARENT, 0, TRANSPARENT, [28, 28, 28, 28], 47, ['0', '1', '2', '3'], 32, MIDNIGHTBLUE)
+    pgs.image(indexPG, 200, 400)
+    drawPG_text(pgs, 50, 547, 'list', 32, MIDNIGHTBLUE, 255)
+    this.i05_pgs = pgs
   }
 
   static getDrawPG_image05(){
     let pgb = this.i05_pgb
+    pgb.clear()
+    pgb.background(255)
+    pgb.image(this.i05_pgs, 0, 0)
+
+    let count = frameCount % 1600
+
+    let cons = this.i05_cons
+    cons.command("a = [1, 2, 3]", '', count, 100, 200)
+    cons.command("print(a)", '[1, 2, 3]', count, 300, 400)
+    cons.command('a.append(4)', "", count, 500, 600)
+    cons.command('print(a)', "[1, 2, 3, 4]", count, 700, 800)
+    cons.command('b = a.pop()', "", count, 900, 1000)
+    cons.command("print(b)", '4', count, 1100, 1200)
+    cons.command("print(a)", "[1, 2, 3]", count, 1300, 1400)
+    cons.flush(count, 1599)
+    pgb.image(cons.getPG(count), 50, 50)
+
+    // list
+    stayPG_corner(pgb, this.i05_list1, 200, 500, count, 200, 600)
+    stayPG_corner(pgb, this.i05_list2, 200, 500, count, 600, 1000)
+    stayPG_corner(pgb, this.i05_list1, 200, 500, count, 1000, 1600)
+
+    //savePG(pgb, 'image5_', 0, 1599)
+
     return pgb
   }
 
